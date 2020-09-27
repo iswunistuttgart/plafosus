@@ -107,6 +107,66 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'datefmt': "%d/%b/%Y %H:%M:%S",
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file_handler': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filters': ['require_debug_false'],
+            'filename': os.path.join('logs', 'WarningsAndErrors.log'),
+            'when': "D",
+            'interval': 1,
+            'backupCount': 5,
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'eopp.deployment': {
+            'handlers': ['console', 'file_handler'],
+            'level': 'WARNING',
+            'filters': ['require_debug_false']
+        },
+        'eopp.development': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'filters': ['require_debug_true']
+        }
+    }
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -125,3 +185,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = os.path.join(BASE_DIR, 'templates'),
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# URL Handling
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

@@ -1,8 +1,16 @@
-# PyCharm
+# PyCharm.
 .idea/
 __pycache__/
 *.pyc
 
-# Virtual environment
+# Virtual environment.
 venv/
 
+# Don't upload the log files but keep the log folder.
+logs/*
+!logs/.gitkeep
+*.log
+
+# Media files.
+media/uploads/parts/*
+!media/uploads/parts/.gitkeep

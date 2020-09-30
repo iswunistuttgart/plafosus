@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 @receiver(post_save, sender=models.Part)
 def analyze_part(sender, instance, created, **kwargs):
     """
-    This method gets triggered when a part object is uploaded/saved
+    This function gets triggered when a part object is uploaded/saved
     and analyzes the part and fills the respective fields.
 
     Projects for analyzing meshes:
@@ -37,7 +37,7 @@ def analyze_part(sender, instance, created, **kwargs):
         - 3DXML
         Import geometry files using the GMSH SDK if installed (BREP, STEP, IGES, INP, BDF, etc)
         """
-        # TODO: test different formats
+        # TODO: Test different formats
         try:
             mesh = trimesh.load(str(instance.part.path))
 
@@ -67,3 +67,17 @@ def analyze_part(sender, instance, created, **kwargs):
 
         except Exception as e:
             logger.error("Could not analyze and save information about 3d part in the data base.", exc_info=True)
+
+
+@receiver(post_save, sender=models.Part)
+def select_machines_to_manufacture(sender, instance, created, **kwargs):
+    """
+
+    This function gets triggered when a part object is uploaded/saved
+    and selects the 'best' machines to manufacture the part.
+    """
+    try:
+        pass
+        # TODO
+    except Exception as e:
+        logger.error("Could not select the best machines to manufacture the part.", exc_info=True)

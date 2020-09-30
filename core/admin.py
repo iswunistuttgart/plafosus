@@ -4,8 +4,15 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
-class AppliedSkillInline(admin.TabularInline):
-    model = models.AppliedSkill
+class MachineSkillInline(admin.TabularInline):
+    model = models.MachineSkill
+    extra = 1
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+
+
+class PartSkillInline(admin.TabularInline):
+    model = models.PartSkill
     extra = 1
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
@@ -15,9 +22,11 @@ class AppliedSkillInline(admin.TabularInline):
 class PartAdmin(admin.ModelAdmin):
     model = models.Part
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['is_valid', 'volume', 'bounding_box_x', 'bounding_box_y', 'bounding_box_z',
+                       'created_at', 'updated_at']
     search_fields = ['part']
     list_filter = ['is_valid']
+    inlines = [PartSkillInline]
 
 
 @admin.register(models.Skill)
@@ -34,12 +43,12 @@ class MachineAdmin(admin.ModelAdmin):
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'manufacturer']
-    inlines = [AppliedSkillInline]
+    inlines = [MachineSkillInline]
 
 
-@admin.register(models.AppliedSkill)
+@admin.register(models.MachineSkill)
 class SkillAdmin(admin.ModelAdmin):
-    model = models.AppliedSkill
+    model = models.MachineSkill
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
     list_display.remove('machine')

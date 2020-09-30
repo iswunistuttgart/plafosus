@@ -4,11 +4,52 @@ import uuid
 from eopp import validations
 from django.core.validators import MinValueValidator
 
+# Third party packages
+from django_countries.fields import CountryField
+
 
 # Method for uploading parts.
 def model_upload_path(instance, filename):
     # File will be uploaded to MEDIA_ROOT/<filename>
     return 'uploads/parts/{0}'.format(filename)
+
+
+class Skill(models.Model):
+    """
+    An base skill.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    name = models.CharField(max_length=254,
+                            help_text="The skill name.")
+    description = models.CharField(max_length=254,
+                                   help_text="Description of the skill.",
+                                   blank=True)
+
+    manufacturing_process = models.CharField(max_length=254,
+                                             help_text="The manufacturing process according to DIN 8580.")
+
+    quantity_description = models.CharField(max_length=254,
+                                            help_text="Description of the skill quantity (e.g. painting of 1 mm^2. "
+                                                      "Using the quantity, we calculate the costs and CO2-e. "
+                                                      "For example to paint 4 mm^2 the costs are "
+                                                      "4*quantity_costs of the machine in €).")
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('skill-detail', args=[str(self.id)])
 
 
 class Part(models.Model):
@@ -48,7 +89,10 @@ class Part(models.Model):
                                        editable=False)
 
     # Required skills to manufacture the part.
-    # TODO
+    skills = models.ManyToManyField(Skill,
+                                    through='PartSkill',
+                                    related_name='Parts',
+                                    help_text="Required skills to manufacture the part.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -64,38 +108,6 @@ class Part(models.Model):
 
     def get_absolute_url(self):
         return reverse('part-detail', args=[str(self.id)])
-
-
-class Skill(models.Model):
-    """
-    An base skill.
-    """
-    id = models.UUIDField(primary_key=True,
-                          default=uuid.uuid4,
-                          editable=False)
-    name = models.CharField(max_length=254,
-                            help_text="The skill name.")
-    description = models.CharField(max_length=254,
-                                   help_text="Description of the skill.",
-                                   blank=True)
-    quantity_description = models.CharField(max_length=254,
-                                            help_text="Description of the skill quantity (e.g. unit).",
-                                            blank=True)
-
-    # Meta.
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      editable=False)
-    updated_at = models.DateTimeField(auto_now=True,
-                                      editable=False)
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('skill-detail', args=[str(self.id)])
 
 
 class Machine(models.Model):
@@ -115,6 +127,16 @@ class Machine(models.Model):
                                    help_text="Description of the machine e.g. machine type.",
                                    blank=True)
 
+    # Address
+    postal_code = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                              help_text="Postal code.")
+    street = models.CharField(max_length=254,
+                              help_text="Street.")
+    city = models.CharField(max_length=254,
+                            help_text="City.")
+    country = CountryField(blank_label='(Select your country)',
+                           help_text="Country.")
+
     # Machine properties.
     build_space_x = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                 help_text="Build space in x-axis in mm.",
@@ -128,7 +150,7 @@ class Machine(models.Model):
 
     # Skills of the machine.
     skills = models.ManyToManyField(Skill,
-                                    through='AppliedSkill',
+                                    through='MachineSkill',
                                     related_name='Machines',
                                     help_text="Skills of the machine.")
 
@@ -148,7 +170,7 @@ class Machine(models.Model):
         return reverse('machine-detail', args=[str(self.id)])
 
 
-class AppliedSkill(models.Model):
+class MachineSkill(models.Model):
     """
     Through model for a specific skill of a machine.
     """
@@ -157,16 +179,20 @@ class AppliedSkill(models.Model):
                           editable=False)
     skill = models.ForeignKey(Skill,
                               on_delete=models.CASCADE,
-                              related_name='AppliedSkill')
+                              related_name='MachineSkill')
     machine = models.ForeignKey(Machine,
                                 on_delete=models.CASCADE,
-                                related_name='AppliedSkill')
+                                related_name='MachineSkill')
 
-    # Costs per skill quantity. TODO: specify the costs (€, CO2, ...)
+    # Costs per skill quantity.
     quantity_costs = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                 help_text="The costs to use the skill for one unit of the skill "
-                                                           "specific quantity.",
+                                                 help_text="The costs in € to use the skill for one unit of the"
+                                                           "skill specific quantity.",
                                                  default=0)
+    quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                               help_text="The required CO2-e to use the skill for one unit of the "
+                                                         "skill specific quantity.",
+                                               default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -181,4 +207,48 @@ class AppliedSkill(models.Model):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('appliedskill-detail', args=[str(self.id)])
+        return reverse('machineskill-detail', args=[str(self.id)])
+
+
+class PartSkill(models.Model):
+    """
+    Through model for a required specific skill of a part.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    skill = models.ForeignKey(Skill,
+                              on_delete=models.CASCADE,
+                              related_name='PartSkill')
+    part = models.ForeignKey(Part,
+                             on_delete=models.CASCADE,
+                             related_name='PartSkill')
+    description = models.CharField(max_length=254,
+                                   help_text="Description of this manufacturing step.",
+                                   blank=True)
+
+    # Costs per skill quantity.
+    required_quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                    help_text="The required quantity of the skill to "
+                                                              "manufacture the part.",
+                                                    default=0)
+
+    manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                            help_text="The number of the manufacturing "
+                                                                      "possibility this skill belongs.",
+                                                            default=0)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['part']
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('partskill-detail', args=[str(self.id)])

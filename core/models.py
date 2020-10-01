@@ -236,7 +236,7 @@ class PartSkill(models.Model):
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility this skill belongs.",
-                                                            default=0)
+                                                            default=1)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,

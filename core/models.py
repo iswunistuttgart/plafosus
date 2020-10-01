@@ -94,6 +94,10 @@ class Part(models.Model):
                                     related_name='Parts',
                                     help_text="Required skills to manufacture the part.")
 
+    # TODO: Add skill specific requirements. E.g. Oberflächengüte
+
+    # TODO: Add component (Halbzeug) and component state (z.B: Oberflächengüte nach Schnitt)
+
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -185,14 +189,20 @@ class MachineSkill(models.Model):
                                 related_name='MachineSkill')
 
     # Costs per skill quantity.
-    quantity_costs = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+    quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                  help_text="The costs in € to use the skill for one unit of the"
                                                            "skill specific quantity.",
                                                  default=0)
+    quantity_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                help_text="The required time in s to apply the skill for one unit "
+                                                          "of the skill specific quantity.",
+                                                default=0)
     quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                help_text="The required CO2-e to use the skill for one unit of the "
                                                          "skill specific quantity.",
                                                default=0)
+
+    # TODO: LCI Usage (Energy Consumption, Fluids, Gases, Waste, etc.)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -237,6 +247,8 @@ class PartSkill(models.Model):
                                                             help_text="The number of the manufacturing "
                                                                       "possibility this skill belongs.",
                                                             default=1)
+
+    # TODO: Add order of skill (sequence) and also parallel sequences of components
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,

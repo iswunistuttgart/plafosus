@@ -174,6 +174,39 @@ class Machine(models.Model):
         return reverse('machine-detail', args=[str(self.id)])
 
 
+class Consumable(models.Model):
+    """
+    Consumable which can be required by a MachineSkill.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    name = models.CharField(max_length=254,
+                            help_text="The consumable name.",
+                            unique=True)
+    unit = models.CharField(max_length=254,
+                            help_text="The unit of the consumable.",
+                            unique=True)
+    description = models.CharField(max_length=254,
+                                   help_text="Description of this consumable.",
+                                   blank=True)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('consumable-detail', args=[str(self.id)])
+
+
 class MachineSkill(models.Model):
     """
     Through model for a specific skill of a machine.
@@ -187,7 +220,10 @@ class MachineSkill(models.Model):
     machine = models.ForeignKey(Machine,
                                 on_delete=models.CASCADE,
                                 related_name='MachineSkill')
-
+    description = models.CharField(max_length=254,
+                                   help_text="Specific description of this machine skill "
+                                             "(e.g. level/quality of the skill).",
+                                   blank=True)
     # Costs per skill quantity.
     quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                  help_text="The costs in € to use the skill for one unit of the"
@@ -199,10 +235,13 @@ class MachineSkill(models.Model):
                                                 default=0)
     quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                help_text="The required CO2-e to use the skill for one unit of the "
-                                                         "skill specific quantity.",
+                                                         "skill specific quantity. Including required consumables.",
                                                default=0)
 
-    # TODO: LCI Usage (Energy Consumption, Fluids, Gases, Waste, etc.)
+    consumables = models.ManyToManyField(Consumable,
+                                         through='SkillConsumable',
+                                         related_name='MachineSkill',
+                                         help_text="Consumables of the specific machine skill.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -218,6 +257,40 @@ class MachineSkill(models.Model):
 
     def get_absolute_url(self):
         return reverse('machineskill-detail', args=[str(self.id)])
+
+
+class SkillConsumable(models.Model):
+    """
+    Through model for the required consumables for applying a specific skill of a specific machine (MachineSkill).
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    machine_skill = models.ForeignKey(MachineSkill,
+                                      on_delete=models.CASCADE,
+                                      related_name='SkillConsumable')
+    consumable = models.ForeignKey(Consumable,
+                                   on_delete=models.CASCADE,
+                                   related_name='SkillConsumable')
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                           help_text="The required quantity of the consumable to "
+                                                     "apply the skill.",
+                                           default=0)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('skillconsumable-detail', args=[str(self.id)])
 
 
 class PartSkill(models.Model):
@@ -247,8 +320,11 @@ class PartSkill(models.Model):
                                                             help_text="The number of the manufacturing "
                                                                       "possibility this skill belongs.",
                                                             default=1)
-
-    # TODO: Add order of skill (sequence) and also parallel sequences of components
+    manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                                help_text="The number of the manufacturing "
+                                                                          "sequence this skill belongs. "
+                                                                          "Starting from 1.",
+                                                                default=1)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,

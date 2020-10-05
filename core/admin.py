@@ -17,11 +17,12 @@ class MachineSkillInline(admin.TabularInline):
                                                   instance._meta.model_name),
                           args=[instance.pk])
             if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
-                return mark_safe(u'<a href="{u}">Edit details</a>'.format(u=url))
+                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
             else:
                 return '-'
         except:
             return '-'
+    edit_link.short_description = 'Edit details'
 
 
 class PartSkillInline(admin.TabularInline):

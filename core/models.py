@@ -7,6 +7,16 @@ from django.core.validators import MinValueValidator
 # Third party packages
 from django_countries.fields import CountryField
 
+# Constants
+MANUFACTURING_PROCESSES = (
+    ('P', 'Primary shaping'),
+    ('F', 'Forming'),
+    ('S', 'Separation'),
+    ('J', 'Joining'),
+    ('C', 'Coating'),
+    ('M', 'Changing material properties'),
+)
+
 
 # Method for uploading parts.
 def model_upload_path(instance, filename):
@@ -27,7 +37,8 @@ class Skill(models.Model):
                                    help_text="Description of the skill.",
                                    blank=True)
 
-    manufacturing_process = models.CharField(max_length=254,
+    manufacturing_process = models.CharField(max_length=1,
+                                             choices=MANUFACTURING_PROCESSES,
                                              help_text="The manufacturing process according to DIN 8580.")
 
     quantity_description = models.CharField(max_length=254,
@@ -89,8 +100,8 @@ class Part(models.Model):
                                        editable=False)
 
     # Required skills to manufacture the part.
-    skills = models.ManyToManyField(Skill,
-                                    through='PartSkill',
+    skills = models.ManyToManyField(MANUFACTURING_PROCESSES,
+                                    through='PartManufacturingProcess',
                                     related_name='Parts',
                                     help_text="Required skills to manufacture the part.")
 
@@ -207,6 +218,82 @@ class Consumable(models.Model):
         return reverse('consumable-detail', args=[str(self.id)])
 
 
+class Ability(models.Model):
+    """
+    TODO
+    The ability of a MachineSkill to fulfill specific requirement (e.g. processable material).
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "Abilities"
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('ability-detail', args=[str(self.id)])
+
+
+class Requirement(models.Model):
+    """
+    TODO
+    Requirements of a PartManufacturingProcess which have to be fulfilled.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('requirement-detail', args=[str(self.id)])
+
+
+class Constraint(models.Model):
+    """
+    TODO
+    Eine ausschließende Anforderung (True/False). Brauchen wir das überhaupt?
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('constraint-detail', args=[str(self.id)])
+
+
 class MachineSkill(models.Model):
     """
     Through model for a specific skill of a machine.
@@ -242,6 +329,11 @@ class MachineSkill(models.Model):
                                          through='SkillConsumable',
                                          related_name='MachineSkill',
                                          help_text="Consumables of the specific machine skill.")
+    # TODO
+    ability = models.ManyToManyField(Ability,
+                                     through='SkillAbility',
+                                     related_name='MachineSkill',
+                                     help_text="Abilities of the specific machine skill.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -293,19 +385,19 @@ class SkillConsumable(models.Model):
         return reverse('skillconsumable-detail', args=[str(self.id)])
 
 
-class PartSkill(models.Model):
+class PartManufacturingProcess(models.Model):
     """
-    Through model for a required specific skill of a part.
+    Through model for a required specific manufacturing process of a part.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    skill = models.ForeignKey(Skill,
-                              on_delete=models.CASCADE,
-                              related_name='PartSkill')
+    manufacturing_process = models.CharField(max_length=1,
+                                             choices=MANUFACTURING_PROCESSES,
+                                             help_text="The manufacturing process according to DIN 8580.")
     part = models.ForeignKey(Part,
                              on_delete=models.CASCADE,
-                             related_name='PartSkill')
+                             related_name='PartManufacturingProcess')
     description = models.CharField(max_length=254,
                                    help_text="Description of this manufacturing step.",
                                    blank=True)
@@ -339,4 +431,36 @@ class PartSkill(models.Model):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('partskill-detail', args=[str(self.id)])
+        return reverse('partmanufacturingprocess-detail', args=[str(self.id)])
+
+
+class SkillAbility(models.Model):
+    """
+    TODO
+    Through model for a specific ability of a skill.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    ability = models.ForeignKey(Ability,
+                                on_delete=models.CASCADE,
+                                related_name='SkillAbility')
+    machine_skill = models.ForeignKey(MachineSkill,
+                                      on_delete=models.CASCADE,
+                                      related_name='SkillAbility')
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "SkillAbilities"
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('skillability-detail', args=[str(self.id)])

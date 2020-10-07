@@ -25,9 +25,9 @@ class MachineSkillInline(admin.TabularInline):
     edit_link.short_description = 'Edit details'
 
 
-class PartSkillInline(admin.TabularInline):
+class PartManufacturingProcessInline(admin.TabularInline):
     view_on_site = False
-    model = models.PartSkill
+    model = models.PartManufacturingProcess
     extra = 0
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
@@ -50,7 +50,7 @@ class PartAdmin(admin.ModelAdmin):
                        'created_at', 'updated_at']
     search_fields = ['part']
     list_filter = ['is_valid']
-    inlines = [PartSkillInline]
+    inlines = [PartManufacturingProcessInline]
 
 
 @admin.register(models.Skill)
@@ -117,10 +117,10 @@ class MachineSkillAdmin(admin.ModelAdmin):
     skill_link.short_description = 'Skill'
 
 
-@admin.register(models.PartSkill)
-class PartSkillAdmin(admin.ModelAdmin):
+@admin.register(models.PartManufacturingProcess)
+class PartManufacturingProcessAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.PartSkill
+    model = models.PartManufacturingProcess
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
     list_display.remove('part')

@@ -4,9 +4,9 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
-class MachineSkillInline(admin.TabularInline):
+class ResourceSkillInline(admin.TabularInline):
     view_on_site = False
-    model = models.MachineSkill
+    model = models.ResourceSkill
     extra = 0
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['edit_link', 'created_at', 'updated_at']
@@ -22,6 +22,7 @@ class MachineSkillInline(admin.TabularInline):
                 return '-'
         except:
             return '-'
+
     edit_link.short_description = 'Edit details'
 
 
@@ -39,6 +40,15 @@ class SkillConsumableInline(admin.TabularInline):
     extra = 0
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(models.ProcessStep)
+class ProcessStepAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.ProcessStep
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['manufacturing_process']
 
 
 @admin.register(models.Part)
@@ -71,40 +81,40 @@ class ConsumableAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
-@admin.register(models.Machine)
-class MachineAdmin(admin.ModelAdmin):
+@admin.register(models.Resource)
+class ReosurceAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.Machine
+    model = models.Resource
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'manufacturer', 'description']
-    inlines = [MachineSkillInline]
+    inlines = [ResourceSkillInline]
 
 
-@admin.register(models.MachineSkill)
-class MachineSkillAdmin(admin.ModelAdmin):
+@admin.register(models.ResourceSkill)
+class ResourceSkillAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.MachineSkill
+    model = models.ResourceSkill
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
-    list_display.remove('machine')
-    list_display.insert(1, 'machine_link')
+    list_display.remove('resource')
+    list_display.insert(1, 'resource_link')
     list_display.remove('skill')
     list_display.insert(2, 'skill_link')
 
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['machine__name', 'skill__name']
+    search_fields = ['resource__name', 'skill__name']
     inlines = [SkillConsumableInline]
 
-    def machine_link(self, machine):
+    def resource_link(self, resource):
         try:
-            url = reverse("admin:core_machine_change", args=[machine.machine.id])
-            link = '<a href="%s">%s</a>' % (url, machine.machine.name)
+            url = reverse("admin:core_resource_change", args=[resource.resource.id])
+            link = '<a href="%s">%s</a>' % (url, resource.resource.name)
             return mark_safe(link)
         except:
             return "-"
 
-    machine_link.short_description = 'Machine'
+    resource_link.short_description = 'Resource'
 
     def skill_link(self, skill):
         try:
@@ -125,11 +135,11 @@ class PartManufacturingProcessAdmin(admin.ModelAdmin):
     # Remove the old element and replace it with a link.
     list_display.remove('part')
     list_display.insert(1, 'part_link')
-    list_display.remove('skill')
-    list_display.insert(2, 'skill_link')
+    list_display.remove('process_step')
+    list_display.insert(2, 'process_step_link')
 
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['skill__name']
+    search_fields = ['process_step__manufacturing_process']
 
     def part_link(self, part):
         try:
@@ -141,15 +151,15 @@ class PartManufacturingProcessAdmin(admin.ModelAdmin):
 
     part_link.short_description = 'Part'
 
-    def skill_link(self, skill):
+    def process_step_link(self, process_step):
         try:
-            url = reverse("admin:core_skill_change", args=[skill.skill.id])
-            link = '<a href="%s">%s</a>' % (url, skill.skill.name)
+            url = reverse("admin:core_skill_change", args=[process_step.process_step.id])
+            link = '<a href="%s">%s</a>' % (url, process_step.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
-    skill_link.short_description = 'Skill'
+    process_step_link.short_description = 'Process Step'
 
 
 @admin.register(models.SkillConsumable)
@@ -158,23 +168,23 @@ class SkillConsumableAdmin(admin.ModelAdmin):
     model = models.SkillConsumable
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
-    list_display.remove('machine_skill')
-    list_display.insert(1, 'machine_skill_link')
+    list_display.remove('resource_skill')
+    list_display.insert(1, 'resource_skill_link')
     list_display.remove('consumable')
     list_display.insert(2, 'consumable_link')
 
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['machine__name', 'skill__name']
+    search_fields = ['resource__name', 'skill__name']
 
-    def machine_skill_link(self, machineskill):
+    def resource_skill_link(self, resourceskill):
         try:
-            url = reverse("admin:core_machineskill_change", args=[machineskill.machineskill.id])
-            link = '<a href="%s">%s</a>' % (url, machineskill.machineskill.name)
+            url = reverse("admin:core_resourceskill_change", args=[resourceskill.resourceskill.id])
+            link = '<a href="%s">%s</a>' % (url, resourceskill.resourceskill.name)
             return mark_safe(link)
         except:
             return "-"
 
-    machine_skill_link.short_description = 'Machine Skill'
+    resource_skill_link.short_description = 'Resource Skill'
 
     def consumable_link(self, consumable):
         try:

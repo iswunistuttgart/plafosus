@@ -9,12 +9,12 @@ from django_countries.fields import CountryField
 
 # Constants
 MANUFACTURING_PROCESSES = (
-    ('P', 'Primary shaping'),
-    ('F', 'Forming'),
-    ('S', 'Separation'),
-    ('J', 'Joining'),
-    ('C', 'Coating'),
-    ('M', 'Changing material properties'),
+    ('Primary shaping', 'Primary shaping'),
+    ('Forming', 'Forming'),
+    ('Separation', 'Separation'),
+    ('Joining', 'Joining'),
+    ('Coating', 'Coating'),
+    ('Changing material properties', 'Changing material properties'),
 )
 
 
@@ -37,7 +37,7 @@ class Skill(models.Model):
                                    help_text="Description of the skill.",
                                    blank=True)
 
-    manufacturing_process = models.CharField(max_length=1,
+    manufacturing_process = models.CharField(max_length=50,
                                              choices=MANUFACTURING_PROCESSES,
                                              help_text="The manufacturing process according to DIN 8580.")
 
@@ -45,7 +45,7 @@ class Skill(models.Model):
                                             help_text="Description of the skill quantity (e.g. painting of 1 mm^2. "
                                                       "Using the quantity, we calculate the costs and CO2-e. "
                                                       "For example to paint 4 mm^2 the costs are "
-                                                      "4*quantity_costs of the machine in €).")
+                                                      "4*quantity_costs of the resource in €).")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -61,6 +61,33 @@ class Skill(models.Model):
 
     def get_absolute_url(self):
         return reverse('skill-detail', args=[str(self.id)])
+
+
+class ProcessStep(models.Model):
+    """
+    A single process step to manufacture a part.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    manufacturing_process = models.CharField(max_length=50,
+                                             choices=MANUFACTURING_PROCESSES,
+                                             help_text="The manufacturing process according to DIN 8580.",
+                                             unique=True)
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['manufacturing_process']
+
+    def __str__(self):
+        return self.manufacturing_process
+
+    def get_absolute_url(self):
+        return reverse('processstep-detail', args=[str(self.id)])
 
 
 class Part(models.Model):
@@ -100,12 +127,10 @@ class Part(models.Model):
                                        editable=False)
 
     # Required skills to manufacture the part.
-    skills = models.ManyToManyField(MANUFACTURING_PROCESSES,
-                                    through='PartManufacturingProcess',
-                                    related_name='Parts',
-                                    help_text="Required skills to manufacture the part.")
-
-    # TODO: Add skill specific requirements. E.g. Oberflächengüte
+    process_steps = models.ManyToManyField(ProcessStep,
+                                           through='PartManufacturingProcess',
+                                           related_name='Parts',
+                                           help_text="Required skills to manufacture the part.")
 
     # TODO: Add component (Halbzeug) and component state (z.B: Oberflächengüte nach Schnitt)
 
@@ -125,21 +150,21 @@ class Part(models.Model):
         return reverse('part-detail', args=[str(self.id)])
 
 
-class Machine(models.Model):
+class Resource(models.Model):
     """
-    Machine.
+    Resource.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
     name = models.CharField(max_length=254,
-                            help_text="The machine name.",
+                            help_text="The resource name.",
                             unique=True)
     manufacturer = models.CharField(max_length=254,
-                                    help_text="Manufacturer of the machine.",
+                                    help_text="Manufacturer of the resource.",
                                     blank=True)
     description = models.CharField(max_length=254,
-                                   help_text="Description of the machine e.g. machine type.",
+                                   help_text="Description of the resource e.g. machine type.",
                                    blank=True)
 
     # Address
@@ -152,22 +177,11 @@ class Machine(models.Model):
     country = CountryField(blank_label='(Select your country)',
                            help_text="Country.")
 
-    # Machine properties.
-    build_space_x = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                help_text="Build space in x-axis in mm.",
-                                                default=0)
-    build_space_y = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                help_text="Build space in y-axis in mm.",
-                                                default=0)
-    build_space_z = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                help_text="Build space in z-axis in mm.",
-                                                default=0)
-
-    # Skills of the machine.
+    # Skills of the resource.
     skills = models.ManyToManyField(Skill,
-                                    through='MachineSkill',
-                                    related_name='Machines',
-                                    help_text="Skills of the machine.")
+                                    through='ResourceSkill',
+                                    related_name='Resource',
+                                    help_text="Skills of the resource.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -182,12 +196,12 @@ class Machine(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('machine-detail', args=[str(self.id)])
+        return reverse('resource-detail', args=[str(self.id)])
 
 
 class Consumable(models.Model):
     """
-    Consumable which can be required by a MachineSkill.
+    Consumable which can be required by a ResourceSkill.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -221,7 +235,7 @@ class Consumable(models.Model):
 class Ability(models.Model):
     """
     TODO
-    The ability of a MachineSkill to fulfill specific requirement (e.g. processable material).
+    The ability of a ResourceSkill to fulfill specific requirement (e.g. processable material).
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -247,7 +261,7 @@ class Ability(models.Model):
 class Requirement(models.Model):
     """
     TODO
-    Requirements of a PartManufacturingProcess which have to be fulfilled.
+    Requirement of a PartManufacturingProcess or an SkillAbility, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -272,7 +286,7 @@ class Requirement(models.Model):
 class Constraint(models.Model):
     """
     TODO
-    Eine ausschließende Anforderung (True/False). Brauchen wir das überhaupt?
+    Constraint of a PartManufacturingProcess, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -294,21 +308,21 @@ class Constraint(models.Model):
         return reverse('constraint-detail', args=[str(self.id)])
 
 
-class MachineSkill(models.Model):
+class ResourceSkill(models.Model):
     """
-    Through model for a specific skill of a machine.
+    Through model for a specific skill of a resource.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
     skill = models.ForeignKey(Skill,
                               on_delete=models.CASCADE,
-                              related_name='MachineSkill')
-    machine = models.ForeignKey(Machine,
-                                on_delete=models.CASCADE,
-                                related_name='MachineSkill')
+                              related_name='ResourceSkill')
+    resource = models.ForeignKey(Resource,
+                                 on_delete=models.CASCADE,
+                                 related_name='ResourceSkill')
     description = models.CharField(max_length=254,
-                                   help_text="Specific description of this machine skill "
+                                   help_text="Specific description of this resource skill "
                                              "(e.g. level/quality of the skill).",
                                    blank=True)
     # Costs per skill quantity.
@@ -327,13 +341,13 @@ class MachineSkill(models.Model):
 
     consumables = models.ManyToManyField(Consumable,
                                          through='SkillConsumable',
-                                         related_name='MachineSkill',
-                                         help_text="Consumables of the specific machine skill.")
+                                         related_name='ResourceSkill',
+                                         help_text="Consumables of the specific resource skill.")
     # TODO
-    ability = models.ManyToManyField(Ability,
-                                     through='SkillAbility',
-                                     related_name='MachineSkill',
-                                     help_text="Abilities of the specific machine skill.")
+    abilities = models.ManyToManyField(Ability,
+                                       through='SkillAbility',
+                                       related_name='ResourceSkill',
+                                       help_text="Abilities of the specific resource skill.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -342,25 +356,25 @@ class MachineSkill(models.Model):
                                       editable=False)
 
     class Meta:
-        ordering = ['machine']
+        ordering = ['resource']
 
     def __str__(self):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('machineskill-detail', args=[str(self.id)])
+        return reverse('resourceskill-detail', args=[str(self.id)])
 
 
 class SkillConsumable(models.Model):
     """
-    Through model for the required consumables for applying a specific skill of a specific machine (MachineSkill).
+    Through model for the required consumables for applying a specific skill of a specific resource (ResourceSkill).
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    machine_skill = models.ForeignKey(MachineSkill,
-                                      on_delete=models.CASCADE,
-                                      related_name='SkillConsumable')
+    resource_skill = models.ForeignKey(ResourceSkill,
+                                       on_delete=models.CASCADE,
+                                       related_name='SkillConsumable')
     consumable = models.ForeignKey(Consumable,
                                    on_delete=models.CASCADE,
                                    related_name='SkillConsumable')
@@ -387,21 +401,21 @@ class SkillConsumable(models.Model):
 
 class PartManufacturingProcess(models.Model):
     """
-    Through model for a required specific manufacturing process of a part.
+    Through model for a required specific manufacturing process step of a part.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    manufacturing_process = models.CharField(max_length=1,
-                                             choices=MANUFACTURING_PROCESSES,
-                                             help_text="The manufacturing process according to DIN 8580.")
     part = models.ForeignKey(Part,
                              on_delete=models.CASCADE,
                              related_name='PartManufacturingProcess')
+    process_step = models.ForeignKey(ProcessStep,
+                                     on_delete=models.CASCADE,
+                                     related_name='PartManufacturingProcess')
     description = models.CharField(max_length=254,
                                    help_text="Description of this manufacturing step.",
                                    blank=True)
-
+    # TODO: Problem: We don't know the unit of the later skill, which will be used.
     # Costs per skill quantity.
     required_quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                     help_text="The required quantity of the skill to "
@@ -417,6 +431,12 @@ class PartManufacturingProcess(models.Model):
                                                                           "sequence this skill belongs. "
                                                                           "Starting from 1.",
                                                                 default=1)
+
+    # TODO
+    constraints = models.ManyToManyField(Constraint,
+                                         through='PartManufacturingProcessConstraint',
+                                         related_name='ResourceSkill',
+                                         help_text="Constraints of the specific part manufacturing process step.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -434,6 +454,40 @@ class PartManufacturingProcess(models.Model):
         return reverse('partmanufacturingprocess-detail', args=[str(self.id)])
 
 
+class PartManufacturingProcessConstraint(models.Model):
+    """
+
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    part_manufacturing_process = models.ForeignKey(PartManufacturingProcess,
+                                                   on_delete=models.CASCADE,
+                                                   related_name='PartManufacturingProcessConstraint')
+    constraint = models.ForeignKey(Constraint,
+                                   on_delete=models.CASCADE,
+                                   related_name='PartManufacturingProcessConstraint')
+    value = models.CharField(max_length=254,
+                             help_text="Value of the specific constraint. "
+                                       "Please see the description of the selected constraint for information.",
+                             blank=False)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('partmanufacturingprocesssconstraint-detail', args=[str(self.id)])
+
+
 class SkillAbility(models.Model):
     """
     TODO
@@ -445,9 +499,9 @@ class SkillAbility(models.Model):
     ability = models.ForeignKey(Ability,
                                 on_delete=models.CASCADE,
                                 related_name='SkillAbility')
-    machine_skill = models.ForeignKey(MachineSkill,
-                                      on_delete=models.CASCADE,
-                                      related_name='SkillAbility')
+    resource_skill = models.ForeignKey(ResourceSkill,
+                                       on_delete=models.CASCADE,
+                                       related_name='SkillAbility')
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,

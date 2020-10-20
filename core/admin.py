@@ -72,6 +72,42 @@ class SkillAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
+@admin.register(models.Ability)
+class AbilityAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Ability
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = []
+
+
+@admin.register(models.Requirement)
+class RequirementAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Requirement
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = []
+
+
+@admin.register(models.Constraint)
+class ConstraintAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Constraint
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = []
+
+
+@admin.register(models.SkillAbility)
+class SkillAbilityAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.SkillAbility
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = []
+
+
 @admin.register(models.Consumable)
 class ConsumableAdmin(admin.ModelAdmin):
     view_on_site = False
@@ -89,6 +125,15 @@ class ReosurceAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'manufacturer', 'description']
     inlines = [ResourceSkillInline]
+
+
+@admin.register(models.PartManufacturingProcessConstraint)
+class PartManufacturingProcessConstraintAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.PartManufacturingProcessConstraint
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = []
 
 
 @admin.register(models.ResourceSkill)

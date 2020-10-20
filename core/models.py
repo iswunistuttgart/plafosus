@@ -234,13 +234,12 @@ class Consumable(models.Model):
 
 class Ability(models.Model):
     """
-    TODO
     The ability of a ResourceSkill to fulfill specific requirement (e.g. processable material).
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-
+    # TODO: link to requirement quantity/amount/limits? (Has to match constraint from part)
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -260,13 +259,12 @@ class Ability(models.Model):
 
 class Requirement(models.Model):
     """
-    TODO
     Requirement of a PartManufacturingProcess or an SkillAbility, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-
+    # TODO: Type?, Unit?
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -285,13 +283,12 @@ class Requirement(models.Model):
 
 class Constraint(models.Model):
     """
-    TODO
     Constraint of a PartManufacturingProcess, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-
+    # TODO: Link to requirement, quantity/amount/limits?
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -343,7 +340,7 @@ class ResourceSkill(models.Model):
                                          through='SkillConsumable',
                                          related_name='ResourceSkill',
                                          help_text="Consumables of the specific resource skill.")
-    # TODO
+
     abilities = models.ManyToManyField(Ability,
                                        through='SkillAbility',
                                        related_name='ResourceSkill',
@@ -397,6 +394,39 @@ class SkillConsumable(models.Model):
 
     def get_absolute_url(self):
         return reverse('skillconsumable-detail', args=[str(self.id)])
+
+
+class SkillAbility(models.Model):
+    """
+    Through model for a specific ability of a skill.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    ability = models.ForeignKey(Ability,
+                                on_delete=models.CASCADE,
+                                related_name='SkillAbility')
+    resource_skill = models.ForeignKey(ResourceSkill,
+                                       on_delete=models.CASCADE,
+                                       related_name='SkillAbility')
+
+    # TODO: How much does this skill has the ability (somehow give a quantity/level).
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "SkillAbilities"
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        return reverse('skillability-detail', args=[str(self.id)])
 
 
 class PartManufacturingProcess(models.Model):
@@ -486,35 +516,3 @@ class PartManufacturingProcessConstraint(models.Model):
 
     def get_absolute_url(self):
         return reverse('partmanufacturingprocesssconstraint-detail', args=[str(self.id)])
-
-
-class SkillAbility(models.Model):
-    """
-    TODO
-    Through model for a specific ability of a skill.
-    """
-    id = models.UUIDField(primary_key=True,
-                          default=uuid.uuid4,
-                          editable=False)
-    ability = models.ForeignKey(Ability,
-                                on_delete=models.CASCADE,
-                                related_name='SkillAbility')
-    resource_skill = models.ForeignKey(ResourceSkill,
-                                       on_delete=models.CASCADE,
-                                       related_name='SkillAbility')
-
-    # Meta.
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      editable=False)
-    updated_at = models.DateTimeField(auto_now=True,
-                                      editable=False)
-
-    class Meta:
-        ordering = ['id']
-        verbose_name_plural = "SkillAbilities"
-
-    def __str__(self):
-        return str(self.id)
-
-    def get_absolute_url(self):
-        return reverse('skillability-detail', args=[str(self.id)])

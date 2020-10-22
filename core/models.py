@@ -33,9 +33,70 @@ def model_upload_path(instance, filename):
     return 'uploads/parts/{0}'.format(filename)
 
 
+class Unit(models.Model):
+    """
+    Unit of a requirement.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    name = models.CharField(max_length=254,
+                            help_text="The unit name.",
+                            unique=True)
+    description = models.CharField(max_length=254,
+                                   help_text="Description of the unit.",
+                                   blank=True)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('unit-detail', args=[str(self.id)])
+
+
+class Category(models.Model):
+    """
+    Category of a requirement.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    name = models.CharField(max_length=254,
+                            help_text="The category name.",
+                            unique=True)
+    description = models.CharField(max_length=254,
+                                   help_text="Description of the category.",
+                                   blank=True)
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('category-detail', args=[str(self.id)])
+
+
 class Skill(models.Model):
     """
-    An base skill.
+    A base skill.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -50,11 +111,13 @@ class Skill(models.Model):
                                              choices=MANUFACTURING_PROCESSES,
                                              help_text="The manufacturing process according to DIN 8580.")
 
-    quantity_description = models.CharField(max_length=254,
-                                            help_text="Description of the skill quantity (e.g. painting of 1 mm^2. "
-                                                      "Using the quantity, we calculate the costs and CO2-e. "
-                                                      "For example to paint 4 mm^2 the costs are "
-                                                      "4*quantity_costs of the resource in €).")
+    unit = models.ForeignKey(Unit,
+                             on_delete=models.CASCADE,
+                             related_name='Skill',
+                             help_text="Description of the skill unit (e.g. painting of 1 mm^2. "
+                                       "Using the unit, we calculate the meta data (costs, CO2-e etc.). "
+                                       "For example to paint 4 mm^2 the costs are "
+                                       "4*unit of the resource in €).")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -86,6 +149,11 @@ class ProcessStep(models.Model):
     description = models.CharField(max_length=254,
                                    help_text="Description of the manufacturing process.",
                                    blank=True)
+    unit = models.ForeignKey(Unit,
+                             on_delete=models.CASCADE,
+                             related_name='ProcessStep',
+                             help_text="The unit of the process step.")
+
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -221,9 +289,10 @@ class Consumable(models.Model):
     name = models.CharField(max_length=254,
                             help_text="The consumable name.",
                             unique=True)
-    unit = models.CharField(max_length=254,
-                            help_text="The unit of the consumable.",
-                            unique=True)
+    unit = models.ForeignKey(Unit,
+                             on_delete=models.CASCADE,
+                             related_name='Consumable',
+                             help_text="The unit of the consumable.")
     description = models.CharField(max_length=254,
                                    help_text="Description of the consumable.",
                                    blank=True)
@@ -238,7 +307,7 @@ class Consumable(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return str(self.id)
+        return str(self.name)
 
     def get_absolute_url(self):
         return reverse('consumable-detail', args=[str(self.id)])
@@ -254,13 +323,14 @@ class Requirement(models.Model):
     name = models.CharField(max_length=254,
                             help_text="The requirement name.",
                             unique=True)
-    # TODO: Make all units a foreign key.
-    unit = models.CharField(max_length=254,
-                            help_text="The unit of the requirement.")
-
-    # TODO
-    category = models.CharField(max_length=254,
-                                help_text="The category of the requirement.")
+    unit = models.ForeignKey(Unit,
+                             on_delete=models.CASCADE,
+                             related_name='Requirement',
+                             help_text="The unit of the Requirement.")
+    category = models.ForeignKey(Category,
+                             on_delete=models.CASCADE,
+                             related_name='Requirement',
+                             help_text="The category of the requirement.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -272,7 +342,7 @@ class Requirement(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return str(self.id)
+        return str(self.name)
 
     def get_absolute_url(self):
         return reverse('requirement-detail', args=[str(self.id)])
@@ -298,15 +368,15 @@ class ResourceSkill(models.Model):
     # Costs per skill quantity.
     quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                  help_text="The costs in € to use the skill for one unit of the"
-                                                           "skill specific quantity.",
+                                                           "skill (without consumables).",
                                                  default=0)
     quantity_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                 help_text="The required time in s to apply the skill for one unit "
-                                                          "of the skill specific quantity.",
+                                                          "of the skill.",
                                                 default=0)
     quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                               help_text="The required CO2-e to use the skill for one unit of the "
-                                                         "skill specific quantity. Including required consumables.",
+                                               help_text="The required CO2-e to use the skill for one unit "
+                                                         "(without consumables).",
                                                default=0)
 
     consumables = models.ManyToManyField(Consumable,
@@ -349,9 +419,16 @@ class SkillConsumable(models.Model):
                                    on_delete=models.CASCADE,
                                    related_name='SkillConsumable')
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                           help_text="The required quantity of the consumable to "
-                                                     "apply the skill.",
+                                           help_text="The quantity required in the consumable unit "
+                                                     "to use the skill for one unit.",
                                            default=0)
+    quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                 help_text="The costs in € of the consumable to use the skill for "
+                                                           "one unit.",
+                                                 default=0)
+    quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                               help_text="The CO2-e of the consumable to use the skill for one unit.",
+                                               default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -425,17 +502,17 @@ class PartManufacturingProcess(models.Model):
 
     # Costs per skill quantity.
     required_quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                    help_text="The required quantity of the skill to "
+                                                    help_text="The required quantity of this process step to "
                                                               "manufacture the part.",
                                                     default=0)
 
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
-                                                                      "possibility the skill belongs to.",
+                                                                      "possibility this process step belongs to.",
                                                             default=1)
     manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                                 help_text="The number of the manufacturing "
-                                                                          "sequence the skill belongs to. "
+                                                                          "sequence this process step belongs to. "
                                                                           "Starting from 1.",
                                                                 default=1)
 
@@ -483,8 +560,7 @@ class Constraint(models.Model):
                              blank=False)
     operator = models.CharField(max_length=50,
                                 choices=OPERATORS,
-                                help_text="Has the result to be equal, smaller, or bigger then this value.",
-                                unique=True)
+                                help_text="Has the result to be equal, smaller, or bigger then this value.")
     optional = models.BooleanField(default=False,
                                    help_text="Has this requirement to be fulfilled.")
 

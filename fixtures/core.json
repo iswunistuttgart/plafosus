@@ -1,0 +1,380 @@
+[
+{
+  "model": "core.unit",
+  "pk": "4f0d7b49-abe4-4c7f-85e1-43471261f238",
+  "fields": {
+    "name": "mm^3",
+    "description": "",
+    "created_at": "2020-10-22T09:12:06.244Z",
+    "updated_at": "2020-10-22T09:12:06.244Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "5ff7b89c-9eff-4e64-b68f-11cc620df230",
+  "fields": {
+    "name": "-",
+    "description": "",
+    "created_at": "2020-10-22T09:13:33.526Z",
+    "updated_at": "2020-10-22T09:13:33.526Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "a5f15942-01ab-4b84-9adf-d639de0aee20",
+  "fields": {
+    "name": "mm^2",
+    "description": "",
+    "created_at": "2020-10-22T09:12:31.149Z",
+    "updated_at": "2020-10-22T09:12:31.149Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "af53a81e-bcb9-4281-b8fb-31943cba5247",
+  "fields": {
+    "name": "mm",
+    "description": "",
+    "created_at": "2020-10-22T09:13:55.095Z",
+    "updated_at": "2020-10-22T09:13:55.095Z"
+  }
+},
+{
+  "model": "core.category",
+  "pk": "3514eda3-893c-49dc-a7be-55a4c90456ee",
+  "fields": {
+    "name": "Material",
+    "description": "",
+    "created_at": "2020-10-22T09:13:39.495Z",
+    "updated_at": "2020-10-22T09:13:39.495Z"
+  }
+},
+{
+  "model": "core.category",
+  "pk": "ab05df74-1db9-4e42-ae4c-4be9bbb15cd9",
+  "fields": {
+    "name": "Material Properties",
+    "description": "",
+    "created_at": "2020-10-22T09:14:04.985Z",
+    "updated_at": "2020-10-22T09:14:04.985Z"
+  }
+},
+{
+  "model": "core.skill",
+  "pk": "27d49579-c2e7-494f-99c9-c873214c9c3d",
+  "fields": {
+    "name": "Cutting Level 2",
+    "description": "",
+    "manufacturing_process": "Separation",
+    "unit": "af53a81e-bcb9-4281-b8fb-31943cba5247",
+    "created_at": "2020-10-22T09:22:21.819Z",
+    "updated_at": "2020-10-22T09:22:21.819Z"
+  }
+},
+{
+  "model": "core.skill",
+  "pk": "37b5ccf4-3a10-4956-beaf-04fb2178c396",
+  "fields": {
+    "name": "Cutting Level 1",
+    "description": "",
+    "manufacturing_process": "Separation",
+    "unit": "af53a81e-bcb9-4281-b8fb-31943cba5247",
+    "created_at": "2020-10-22T09:18:43.003Z",
+    "updated_at": "2020-10-22T09:22:01.635Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "1eb84bd3-5c96-4f83-b904-2acab93715b3",
+  "fields": {
+    "manufacturing_process": "Separation",
+    "description": "",
+    "unit": "4f0d7b49-abe4-4c7f-85e1-43471261f238",
+    "created_at": "2020-10-22T09:12:37.485Z",
+    "updated_at": "2020-10-22T09:12:37.485Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "5ce1d118-5e26-425f-a073-dcacb5ec139d",
+  "fields": {
+    "manufacturing_process": "Primary shaping",
+    "description": "",
+    "unit": "4f0d7b49-abe4-4c7f-85e1-43471261f238",
+    "created_at": "2020-10-22T09:12:09.067Z",
+    "updated_at": "2020-10-22T09:12:09.067Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "9c41f689-91b9-44c9-b785-5ac81b884faa",
+  "fields": {
+    "manufacturing_process": "Forming",
+    "description": "",
+    "unit": "a5f15942-01ab-4b84-9adf-d639de0aee20",
+    "created_at": "2020-10-22T09:12:32.736Z",
+    "updated_at": "2020-10-22T09:12:32.736Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "c440b8dc-b9a3-4b2c-91a4-60a1c49178b6",
+  "fields": {
+    "manufacturing_process": "Changing material properties",
+    "description": "",
+    "unit": "a5f15942-01ab-4b84-9adf-d639de0aee20",
+    "created_at": "2020-10-22T09:13:05.981Z",
+    "updated_at": "2020-10-22T09:13:05.981Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "e023c627-44ac-437f-a3b7-16511c8e728f",
+  "fields": {
+    "manufacturing_process": "Coating",
+    "description": "",
+    "unit": "a5f15942-01ab-4b84-9adf-d639de0aee20",
+    "created_at": "2020-10-22T09:13:01.957Z",
+    "updated_at": "2020-10-22T09:13:01.957Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "ee6699e3-3291-4d71-8b23-98c7ad4d567c",
+  "fields": {
+    "manufacturing_process": "Joining",
+    "description": "",
+    "unit": "a5f15942-01ab-4b84-9adf-d639de0aee20",
+    "created_at": "2020-10-22T09:12:58.339Z",
+    "updated_at": "2020-10-22T09:12:58.339Z"
+  }
+},
+{
+  "model": "core.part",
+  "pk": "815b39c1-226b-4ccc-9477-c91a8572f5dd",
+  "fields": {
+    "part": "uploads/parts/test_yGHHrE8.stl",
+    "is_valid": true,
+    "volume": 63993.0,
+    "bounding_box_x": 39.998,
+    "bounding_box_y": 40.0,
+    "bounding_box_z": 39.998,
+    "created_at": "2020-10-22T09:14:17.654Z",
+    "updated_at": "2020-10-22T09:17:32.139Z"
+  }
+},
+{
+  "model": "core.resource",
+  "pk": "2280550e-bcc5-47d3-af57-a8b822a53003",
+  "fields": {
+    "name": "Laserschneidmaschine ISW",
+    "manufacturer": "Trumpf",
+    "description": "",
+    "postal_code": 70174,
+    "street": "Seidenstr. 36",
+    "city": "Stuttgart",
+    "country": "DE",
+    "created_at": "2020-10-22T09:18:19.237Z",
+    "updated_at": "2020-10-22T09:22:36.073Z"
+  }
+},
+{
+  "model": "core.consumable",
+  "pk": "50ededc4-47db-4067-ba95-b9b1bb99d930",
+  "fields": {
+    "name": "Water",
+    "unit": "4f0d7b49-abe4-4c7f-85e1-43471261f238",
+    "description": "",
+    "created_at": "2020-10-22T09:19:18.019Z",
+    "updated_at": "2020-10-22T09:19:18.019Z"
+  }
+},
+{
+  "model": "core.requirement",
+  "pk": "6f2f7923-1ec1-4489-bbda-84b1fab7f788",
+  "fields": {
+    "name": "Surface roughness (Ra)",
+    "unit": "af53a81e-bcb9-4281-b8fb-31943cba5247",
+    "category": "ab05df74-1db9-4e42-ae4c-4be9bbb15cd9",
+    "created_at": "2020-10-22T09:14:06.688Z",
+    "updated_at": "2020-10-22T09:14:06.688Z"
+  }
+},
+{
+  "model": "core.requirement",
+  "pk": "a675af66-d7b2-457f-805e-63d48d6828d4",
+  "fields": {
+    "name": "Material",
+    "unit": "5ff7b89c-9eff-4e64-b68f-11cc620df230",
+    "category": "3514eda3-893c-49dc-a7be-55a4c90456ee",
+    "created_at": "2020-10-22T09:13:41.037Z",
+    "updated_at": "2020-10-22T09:13:41.037Z"
+  }
+},
+{
+  "model": "core.resourceskill",
+  "pk": "34bae5fa-b674-40a3-9c46-f25a7f15683f",
+  "fields": {
+    "skill": "27d49579-c2e7-494f-99c9-c873214c9c3d",
+    "resource": "2280550e-bcc5-47d3-af57-a8b822a53003",
+    "description": "",
+    "quantity_price": 5,
+    "quantity_time": 4,
+    "quantity_co2": 8,
+    "created_at": "2020-10-22T09:22:36.075Z",
+    "updated_at": "2020-10-22T09:23:01.633Z"
+  }
+},
+{
+  "model": "core.resourceskill",
+  "pk": "a4e1d341-0c8d-49fb-9bf2-fdb5d6eb9d48",
+  "fields": {
+    "skill": "37b5ccf4-3a10-4956-beaf-04fb2178c396",
+    "resource": "2280550e-bcc5-47d3-af57-a8b822a53003",
+    "description": "",
+    "quantity_price": 3,
+    "quantity_time": 2,
+    "quantity_co2": 5,
+    "created_at": "2020-10-22T09:18:48.736Z",
+    "updated_at": "2020-10-22T09:21:29.023Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "4ad0b821-2520-417a-82cd-3611a0a9d31b",
+  "fields": {
+    "resource_skill": "a4e1d341-0c8d-49fb-9bf2-fdb5d6eb9d48",
+    "consumable": "50ededc4-47db-4067-ba95-b9b1bb99d930",
+    "quantity": 1,
+    "quantity_price": 3,
+    "quantity_co2": 8,
+    "created_at": "2020-10-22T09:19:29.177Z",
+    "updated_at": "2020-10-22T09:19:29.177Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "e9534935-af49-4a12-8d84-e64f2bd6888e",
+  "fields": {
+    "resource_skill": "34bae5fa-b674-40a3-9c46-f25a7f15683f",
+    "consumable": "50ededc4-47db-4067-ba95-b9b1bb99d930",
+    "quantity": 8,
+    "quantity_price": 9,
+    "quantity_co2": 10,
+    "created_at": "2020-10-22T09:22:54.311Z",
+    "updated_at": "2020-10-22T09:22:54.311Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "142bf36d-4543-4210-b2d7-10dd66127a75",
+  "fields": {
+    "requirement": "6f2f7923-1ec1-4489-bbda-84b1fab7f788",
+    "resource_skill": "a4e1d341-0c8d-49fb-9bf2-fdb5d6eb9d48",
+    "value": "30",
+    "created_at": "2020-10-22T09:19:44.264Z",
+    "updated_at": "2020-10-22T09:19:44.264Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "782eecff-edc8-4969-b92a-c2b7190b094d",
+  "fields": {
+    "requirement": "a675af66-d7b2-457f-805e-63d48d6828d4",
+    "resource_skill": "a4e1d341-0c8d-49fb-9bf2-fdb5d6eb9d48",
+    "value": "metal",
+    "created_at": "2020-10-22T09:21:29.026Z",
+    "updated_at": "2020-10-22T09:21:29.026Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "aa4ba5d2-9a64-45c4-882e-572f2bfe5b36",
+  "fields": {
+    "requirement": "6f2f7923-1ec1-4489-bbda-84b1fab7f788",
+    "resource_skill": "34bae5fa-b674-40a3-9c46-f25a7f15683f",
+    "value": "10",
+    "created_at": "2020-10-22T09:22:54.312Z",
+    "updated_at": "2020-10-22T09:22:54.312Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "e542cdc8-164a-43e7-8654-4fb539fcc81c",
+  "fields": {
+    "requirement": "a675af66-d7b2-457f-805e-63d48d6828d4",
+    "resource_skill": "34bae5fa-b674-40a3-9c46-f25a7f15683f",
+    "value": "metal",
+    "created_at": "2020-10-22T09:23:01.636Z",
+    "updated_at": "2020-10-22T09:23:01.636Z"
+  }
+},
+{
+  "model": "core.partmanufacturingprocess",
+  "pk": "08effa5e-bbab-4941-8503-8b156ac977d3",
+  "fields": {
+    "part": "815b39c1-226b-4ccc-9477-c91a8572f5dd",
+    "process_step": "5ce1d118-5e26-425f-a073-dcacb5ec139d",
+    "description": "Creating the initial geometry",
+    "required_quantity": 63993,
+    "manufacturing_possibility": 1,
+    "manufacturing_sequence_number": 1,
+    "created_at": "2020-10-22T09:14:30.943Z",
+    "updated_at": "2020-10-22T09:14:43.840Z"
+  }
+},
+{
+  "model": "core.partmanufacturingprocess",
+  "pk": "43ef8207-6598-46f3-a90a-853439915452",
+  "fields": {
+    "part": "815b39c1-226b-4ccc-9477-c91a8572f5dd",
+    "process_step": "1eb84bd3-5c96-4f83-b904-2acab93715b3",
+    "description": "Remove material inside",
+    "required_quantity": 20000,
+    "manufacturing_possibility": 2,
+    "manufacturing_sequence_number": 2,
+    "created_at": "2020-10-22T09:17:32.143Z",
+    "updated_at": "2020-10-22T09:17:41.274Z"
+  }
+},
+{
+  "model": "core.partmanufacturingprocess",
+  "pk": "c0ca9f3a-93ce-4ade-8a7f-5dab7fa9f0df",
+  "fields": {
+    "part": "815b39c1-226b-4ccc-9477-c91a8572f5dd",
+    "process_step": "5ce1d118-5e26-425f-a073-dcacb5ec139d",
+    "description": "Creating the initial geometry",
+    "required_quantity": 55000,
+    "manufacturing_possibility": 2,
+    "manufacturing_sequence_number": 1,
+    "created_at": "2020-10-22T09:16:05.364Z",
+    "updated_at": "2020-10-22T09:16:05.364Z"
+  }
+},
+{
+  "model": "core.constraint",
+  "pk": "322ffb1c-838a-45c5-bdaf-4782c0653936",
+  "fields": {
+    "requirement": "6f2f7923-1ec1-4489-bbda-84b1fab7f788",
+    "part_manufacturing_process": "43ef8207-6598-46f3-a90a-853439915452",
+    "value": "25",
+    "operator": "<",
+    "optional": false,
+    "created_at": "2020-10-22T09:17:41.278Z",
+    "updated_at": "2020-10-22T09:17:41.278Z"
+  }
+},
+{
+  "model": "core.constraint",
+  "pk": "f659f745-138c-4e84-9445-84d1ab035632",
+  "fields": {
+    "requirement": "a675af66-d7b2-457f-805e-63d48d6828d4",
+    "part_manufacturing_process": "08effa5e-bbab-4941-8503-8b156ac977d3",
+    "value": "metal",
+    "operator": "=",
+    "optional": false,
+    "created_at": "2020-10-22T09:14:43.862Z",
+    "updated_at": "2020-10-22T09:14:43.862Z"
+  }
+}
+]

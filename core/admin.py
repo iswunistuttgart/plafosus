@@ -53,21 +53,7 @@ class ConstraintInline(admin.TabularInline):
     model = models.Constraint
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['edit_link', 'created_at', 'updated_at']
-
-    def edit_link(self, instance):
-        try:
-            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
-                                                  instance._meta.model_name),
-                          args=[instance.pk])
-            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
-                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
-            else:
-                return '-'
-        except:
-            return '-'
-
-    edit_link.short_description = 'Edit details'
+    readonly_fields = ['created_at', 'updated_at']
 
 
 class SkillConsumableInline(admin.TabularInline):
@@ -75,21 +61,7 @@ class SkillConsumableInline(admin.TabularInline):
     model = models.SkillConsumable
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['edit_link', 'created_at', 'updated_at']
-
-    def edit_link(self, instance):
-        try:
-            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
-                                                  instance._meta.model_name),
-                          args=[instance.pk])
-            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
-                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
-            else:
-                return '-'
-        except:
-            return '-'
-
-    edit_link.short_description = 'Edit details'
+    readonly_fields = ['created_at', 'updated_at']
 
 
 class AbilityInline(admin.TabularInline):
@@ -97,21 +69,46 @@ class AbilityInline(admin.TabularInline):
     model = models.Ability
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']
 
-    def edit_link(self, instance):
+
+@admin.register(models.Unit)
+class UnitAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Unit
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['name', 'description']
+
+
+@admin.register(models.Category)
+class UnitAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Category
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['name', 'description']
+
+
+@admin.register(models.Skill)
+class SkillAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Skill
+    list_display = [field.name for field in model._meta.fields]
+    list_display.remove('unit')
+    list_display.insert(1, 'unit_link')
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['name', 'description']
+
+    def unit_link(self, unit):
         try:
-            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
-                                                  instance._meta.model_name),
-                          args=[instance.pk])
-            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
-                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
-            else:
-                return '-'
+            url = reverse("admin:core_unit_change", args=[unit.unit.id])
+            link = '<a href="%s">%s</a>' % (url, unit.unit.name)
+            return mark_safe(link)
         except:
-            return '-'
+            return "-"
 
-    edit_link.short_description = 'Edit details'
+    unit_link.short_description = 'Unit'
 
 
 @admin.register(models.ProcessStep)
@@ -151,9 +148,21 @@ class ConsumableAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.Consumable
     list_display = [field.name for field in model._meta.fields]
+    list_display.remove('unit')
+    list_display.insert(1, 'unit_link')
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'description']
-    list_filter = ['unit']
+    list_filter = ['unit__name']
+
+    def unit_link(self, unit):
+        try:
+            url = reverse("admin:core_unit_change", args=[unit.unit.id])
+            link = '<a href="%s">%s</a>' % (url, unit.unit.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 @admin.register(models.Requirement)
@@ -161,9 +170,33 @@ class RequirementAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.Requirement
     list_display = [field.name for field in model._meta.fields]
+    list_display.remove('unit')
+    list_display.insert(1, 'unit_link')
+    list_display.remove('category')
+    list_display.insert(1, 'category_link')
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name']
-    list_filter = ['unit']
+    list_filter = ['unit__name']
+
+    def unit_link(self, unit):
+        try:
+            url = reverse("admin:core_unit_change", args=[unit.unit.id])
+            link = '<a href="%s">%s</a>' % (url, unit.unit.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
+
+    def category_link(self, category):
+        try:
+            url = reverse("admin:core_category_change", args=[category.category.id])
+            link = '<a href="%s">%s</a>' % (url, category.category.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    category_link.short_description = 'Category'
 
 
 @admin.register(models.ResourceSkill)
@@ -345,12 +378,3 @@ class ConstraintAdmin(admin.ModelAdmin):
             return "-"
 
     requirement_link.short_description = 'Requirement'
-
-
-@admin.register(models.Skill)
-class SkillAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.Skill
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['name', 'description']

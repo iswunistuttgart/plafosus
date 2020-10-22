@@ -31,7 +31,43 @@ class PartManufacturingProcessInline(admin.TabularInline):
     model = models.PartManufacturingProcess
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+
+    def edit_link(self, instance):
+        try:
+            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
+                                                  instance._meta.model_name),
+                          args=[instance.pk])
+            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
+                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
+            else:
+                return '-'
+        except:
+            return '-'
+
+    edit_link.short_description = 'Edit details'
+
+
+class ConstraintInline(admin.TabularInline):
+    view_on_site = False
+    model = models.Constraint
+    extra = 0
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+
+    def edit_link(self, instance):
+        try:
+            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
+                                                  instance._meta.model_name),
+                          args=[instance.pk])
+            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
+                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
+            else:
+                return '-'
+        except:
+            return '-'
+
+    edit_link.short_description = 'Edit details'
 
 
 class SkillConsumableInline(admin.TabularInline):
@@ -39,7 +75,43 @@ class SkillConsumableInline(admin.TabularInline):
     model = models.SkillConsumable
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+
+    def edit_link(self, instance):
+        try:
+            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
+                                                  instance._meta.model_name),
+                          args=[instance.pk])
+            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
+                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
+            else:
+                return '-'
+        except:
+            return '-'
+
+    edit_link.short_description = 'Edit details'
+
+
+class AbilityInline(admin.TabularInline):
+    view_on_site = False
+    model = models.Ability
+    extra = 0
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+
+    def edit_link(self, instance):
+        try:
+            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
+                                                  instance._meta.model_name),
+                          args=[instance.pk])
+            if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
+                return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
+            else:
+                return '-'
+        except:
+            return '-'
+
+    edit_link.short_description = 'Edit details'
 
 
 @admin.register(models.ProcessStep)
@@ -63,49 +135,15 @@ class PartAdmin(admin.ModelAdmin):
     inlines = [PartManufacturingProcessInline]
 
 
-@admin.register(models.Skill)
-class SkillAdmin(admin.ModelAdmin):
+@admin.register(models.Resource)
+class ResourceAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.Skill
+    model = models.Resource
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['name', 'description']
-
-
-@admin.register(models.Ability)
-class AbilityAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.Ability
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = []
-
-
-@admin.register(models.Requirement)
-class RequirementAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.Requirement
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = []
-
-
-@admin.register(models.Constraint)
-class ConstraintAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.Constraint
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = []
-
-
-@admin.register(models.SkillAbility)
-class SkillAbilityAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.SkillAbility
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = []
+    search_fields = ['name', 'manufacturer', 'description']
+    list_filter = ['manufacturer']
+    inlines = [ResourceSkillInline]
 
 
 @admin.register(models.Consumable)
@@ -115,25 +153,17 @@ class ConsumableAdmin(admin.ModelAdmin):
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'description']
+    list_filter = ['unit']
 
 
-@admin.register(models.Resource)
-class ReosurceAdmin(admin.ModelAdmin):
+@admin.register(models.Requirement)
+class RequirementAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.Resource
+    model = models.Requirement
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['name', 'manufacturer', 'description']
-    inlines = [ResourceSkillInline]
-
-
-@admin.register(models.PartManufacturingProcessConstraint)
-class PartManufacturingProcessConstraintAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.PartManufacturingProcessConstraint
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = []
+    search_fields = ['name']
+    list_filter = ['unit']
 
 
 @admin.register(models.ResourceSkill)
@@ -149,7 +179,7 @@ class ResourceSkillAdmin(admin.ModelAdmin):
 
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['resource__name', 'skill__name']
-    inlines = [SkillConsumableInline]
+    inlines = [SkillConsumableInline, AbilityInline]
 
     def resource_link(self, resource):
         try:
@@ -172,6 +202,78 @@ class ResourceSkillAdmin(admin.ModelAdmin):
     skill_link.short_description = 'Skill'
 
 
+@admin.register(models.SkillConsumable)
+class SkillConsumableAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.SkillConsumable
+    list_display = [field.name for field in model._meta.fields]
+    # Remove the old element and replace it with a link.
+    list_display.remove('resource_skill')
+    list_display.insert(1, 'resource_skill_link')
+    list_display.remove('consumable')
+    list_display.insert(2, 'consumable_link')
+
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['resource_skill__resource__name',
+                     'resource_skill__skill__name',
+                     'consumable__name']
+
+    def resource_skill_link(self, resourceskill):
+        try:
+            url = reverse("admin:core_resourceskill_change", args=[resourceskill.resourceskill.id])
+            link = '<a href="%s">%s</a>' % (url, resourceskill.resourceskill.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    resource_skill_link.short_description = 'Resource Skill'
+
+    def consumable_link(self, consumable):
+        try:
+            url = reverse("admin:core_consumable_change", args=[consumable.consumable.id])
+            link = '<a href="%s">%s</a>' % (url, consumable.consumable.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    consumable_link.short_description = 'Consumable'
+
+
+@admin.register(models.Ability)
+class AbilityAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Ability
+    list_display = [field.name for field in model._meta.fields]
+    # Remove the old element and replace it with a link.
+    list_display.remove('resource_skill')
+    list_display.insert(1, 'resource_skill_link')
+    list_display.remove('requirement')
+    list_display.insert(2, 'requirement_link')
+
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['resource_skill__skill__name', 'resource_skill__resource__name', 'requirement__name']
+
+    def resource_skill_link(self, resourceskill):
+        try:
+            url = reverse("admin:core_resourceskill_change", args=[resourceskill.resourceskill.id])
+            link = '<a href="%s">%s</a>' % (url, resourceskill.resourceskill.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    resource_skill_link.short_description = 'Resource Skill'
+
+    def requirement_link(self, requirement):
+        try:
+            url = reverse("admin:core_requirement_change", args=[requirement.requirement.id])
+            link = '<a href="%s">%s</a>' % (url, requirement.requirement.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    requirement_link.short_description = 'Requirement'
+
+
 @admin.register(models.PartManufacturingProcess)
 class PartManufacturingProcessAdmin(admin.ModelAdmin):
     view_on_site = False
@@ -185,6 +287,7 @@ class PartManufacturingProcessAdmin(admin.ModelAdmin):
 
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['process_step__manufacturing_process']
+    inlines = [ConstraintInline]
 
     def part_link(self, part):
         try:
@@ -207,36 +310,47 @@ class PartManufacturingProcessAdmin(admin.ModelAdmin):
     process_step_link.short_description = 'Process Step'
 
 
-@admin.register(models.SkillConsumable)
-class SkillConsumableAdmin(admin.ModelAdmin):
+@admin.register(models.Constraint)
+class ConstraintAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.SkillConsumable
+    model = models.Constraint
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
-    list_display.remove('resource_skill')
-    list_display.insert(1, 'resource_skill_link')
-    list_display.remove('consumable')
-    list_display.insert(2, 'consumable_link')
+    list_display.remove('part_manufacturing_process')
+    list_display.insert(1, 'part_manufacturing_process_link')
+    list_display.remove('requirement')
+    list_display.insert(2, 'requirement_link')
 
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['resource__name', 'skill__name']
+    search_fields = ['part_manufacturing_process__process_step__manufacturing_process', 'requirement__name']
 
-    def resource_skill_link(self, resourceskill):
+    def part_manufacturing_process_link(self, part_manufacturing_process):
         try:
-            url = reverse("admin:core_resourceskill_change", args=[resourceskill.resourceskill.id])
-            link = '<a href="%s">%s</a>' % (url, resourceskill.resourceskill.name)
+            url = reverse("admin:core_part_manufacturing_process_change",
+                          args=[part_manufacturing_process.part_manufacturing_process.id])
+            link = '<a href="%s">%s</a>' % (url,
+                                            part_manufacturing_process.part_manufacturing_process.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
-    resource_skill_link.short_description = 'Resource Skill'
+    part_manufacturing_process_link.short_description = 'Part Manufacturing Process'
 
-    def consumable_link(self, consumable):
+    def requirement_link(self, requirement):
         try:
-            url = reverse("admin:core_consumable_change", args=[consumable.consumable.id])
-            link = '<a href="%s">%s</a>' % (url, consumable.consumable.name)
+            url = reverse("admin:core_requirement_change", args=[requirement.requirement.id])
+            link = '<a href="%s">%s</a>' % (url, requirement.requirement.name)
             return mark_safe(link)
         except:
             return "-"
 
-    consumable_link.short_description = 'Consumable'
+    requirement_link.short_description = 'Requirement'
+
+
+@admin.register(models.Skill)
+class SkillAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.Skill
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['name', 'description']

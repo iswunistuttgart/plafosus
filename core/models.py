@@ -17,6 +17,15 @@ MANUFACTURING_PROCESSES = (
     ('Changing material properties', 'Changing material properties'),
 )
 
+OPERATORS = (
+    ('=', '='),
+    ('<', '<'),
+    ('!=', '!='),
+    ('>', '>'),
+    ('>=', '>='),
+    ('<=', '<='),
+)
+
 
 # Method for uploading parts.
 def model_upload_path(instance, filename):
@@ -74,6 +83,9 @@ class ProcessStep(models.Model):
                                              choices=MANUFACTURING_PROCESSES,
                                              help_text="The manufacturing process according to DIN 8580.",
                                              unique=True)
+    description = models.CharField(max_length=254,
+                                   help_text="Description of the manufacturing process.",
+                                   blank=True)
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -213,7 +225,7 @@ class Consumable(models.Model):
                             help_text="The unit of the consumable.",
                             unique=True)
     description = models.CharField(max_length=254,
-                                   help_text="Description of this consumable.",
+                                   help_text="Description of the consumable.",
                                    blank=True)
 
     # Meta.
@@ -232,39 +244,24 @@ class Consumable(models.Model):
         return reverse('consumable-detail', args=[str(self.id)])
 
 
-class Ability(models.Model):
-    """
-    The ability of a ResourceSkill to fulfill specific requirement (e.g. processable material).
-    """
-    id = models.UUIDField(primary_key=True,
-                          default=uuid.uuid4,
-                          editable=False)
-    # TODO: link to requirement quantity/amount/limits? (Has to match constraint from part)
-    # Meta.
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      editable=False)
-    updated_at = models.DateTimeField(auto_now=True,
-                                      editable=False)
-
-    class Meta:
-        ordering = ['id']
-        verbose_name_plural = "Abilities"
-
-    def __str__(self):
-        return str(self.id)
-
-    def get_absolute_url(self):
-        return reverse('ability-detail', args=[str(self.id)])
-
-
 class Requirement(models.Model):
     """
-    Requirement of a PartManufacturingProcess or an SkillAbility, which has to be fulfilled.
+    Requirement of a PartManufacturingProcess or a SkillAbility, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    # TODO: Type?, Unit?
+    name = models.CharField(max_length=254,
+                            help_text="The requirement name.",
+                            unique=True)
+    # TODO: Make all units a foreign key.
+    unit = models.CharField(max_length=254,
+                            help_text="The unit of the requirement.")
+
+    # TODO
+    category = models.CharField(max_length=254,
+                                help_text="The category of the requirement.")
+
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -281,30 +278,6 @@ class Requirement(models.Model):
         return reverse('requirement-detail', args=[str(self.id)])
 
 
-class Constraint(models.Model):
-    """
-    Constraint of a PartManufacturingProcess, which has to be fulfilled.
-    """
-    id = models.UUIDField(primary_key=True,
-                          default=uuid.uuid4,
-                          editable=False)
-    # TODO: Link to requirement, quantity/amount/limits?
-    # Meta.
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      editable=False)
-    updated_at = models.DateTimeField(auto_now=True,
-                                      editable=False)
-
-    class Meta:
-        ordering = ['id']
-
-    def __str__(self):
-        return str(self.id)
-
-    def get_absolute_url(self):
-        return reverse('constraint-detail', args=[str(self.id)])
-
-
 class ResourceSkill(models.Model):
     """
     Through model for a specific skill of a resource.
@@ -319,7 +292,7 @@ class ResourceSkill(models.Model):
                                  on_delete=models.CASCADE,
                                  related_name='ResourceSkill')
     description = models.CharField(max_length=254,
-                                   help_text="Specific description of this resource skill "
+                                   help_text="Specific description of the resource skill "
                                              "(e.g. level/quality of the skill).",
                                    blank=True)
     # Costs per skill quantity.
@@ -341,8 +314,8 @@ class ResourceSkill(models.Model):
                                          related_name='ResourceSkill',
                                          help_text="Consumables of the specific resource skill.")
 
-    abilities = models.ManyToManyField(Ability,
-                                       through='SkillAbility',
+    abilities = models.ManyToManyField(Requirement,
+                                       through='Ability',
                                        related_name='ResourceSkill',
                                        help_text="Abilities of the specific resource skill.")
 
@@ -396,22 +369,26 @@ class SkillConsumable(models.Model):
         return reverse('skillconsumable-detail', args=[str(self.id)])
 
 
-class SkillAbility(models.Model):
+class Ability(models.Model):
     """
     Through model for a specific ability of a skill.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    ability = models.ForeignKey(Ability,
-                                on_delete=models.CASCADE,
-                                related_name='SkillAbility')
+    requirement = models.ForeignKey(Requirement,
+                                    on_delete=models.CASCADE,
+                                    related_name='Ability')
     resource_skill = models.ForeignKey(ResourceSkill,
                                        on_delete=models.CASCADE,
-                                       related_name='SkillAbility')
+                                       related_name='Ability')
 
-    # TODO: How much does this skill has the ability (somehow give a quantity/level).
-
+    value = models.CharField(max_length=254,
+                             help_text="Value of the specific requirement describing "
+                                       "how much this requirement can be fulfilled. "
+                                       "Please see the description and unit of the selected "
+                                       "requirement for information.",
+                             blank=False)
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -420,13 +397,13 @@ class SkillAbility(models.Model):
 
     class Meta:
         ordering = ['id']
-        verbose_name_plural = "SkillAbilities"
+        verbose_name_plural = "Abilities"
 
     def __str__(self):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('skillability-detail', args=[str(self.id)])
+        return reverse('ability-detail', args=[str(self.id)])
 
 
 class PartManufacturingProcess(models.Model):
@@ -443,9 +420,9 @@ class PartManufacturingProcess(models.Model):
                                      on_delete=models.CASCADE,
                                      related_name='PartManufacturingProcess')
     description = models.CharField(max_length=254,
-                                   help_text="Description of this manufacturing step.",
+                                   help_text="Description of the manufacturing step.",
                                    blank=True)
-    # TODO: Problem: We don't know the unit of the later skill, which will be used.
+
     # Costs per skill quantity.
     required_quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                     help_text="The required quantity of the skill to "
@@ -454,18 +431,17 @@ class PartManufacturingProcess(models.Model):
 
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
-                                                                      "possibility this skill belongs.",
+                                                                      "possibility the skill belongs to.",
                                                             default=1)
     manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                                 help_text="The number of the manufacturing "
-                                                                          "sequence this skill belongs. "
+                                                                          "sequence the skill belongs to. "
                                                                           "Starting from 1.",
                                                                 default=1)
 
-    # TODO
-    constraints = models.ManyToManyField(Constraint,
-                                         through='PartManufacturingProcessConstraint',
-                                         related_name='ResourceSkill',
+    constraints = models.ManyToManyField(Requirement,
+                                         through='Constraint',
+                                         related_name='PartManufacturingProcess',
                                          help_text="Constraints of the specific part manufacturing process step.")
 
     # Meta.
@@ -476,6 +452,7 @@ class PartManufacturingProcess(models.Model):
 
     class Meta:
         ordering = ['part']
+        verbose_name_plural = "Part manufacturing processes"
 
     def __str__(self):
         return str(self.id)
@@ -484,23 +461,32 @@ class PartManufacturingProcess(models.Model):
         return reverse('partmanufacturingprocess-detail', args=[str(self.id)])
 
 
-class PartManufacturingProcessConstraint(models.Model):
+class Constraint(models.Model):
     """
-
+    Constraint of a PartManufacturingProcess, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
+    requirement = models.ForeignKey(Requirement,
+                                    on_delete=models.CASCADE,
+                                    related_name='Constraint')
     part_manufacturing_process = models.ForeignKey(PartManufacturingProcess,
                                                    on_delete=models.CASCADE,
-                                                   related_name='PartManufacturingProcessConstraint')
-    constraint = models.ForeignKey(Constraint,
-                                   on_delete=models.CASCADE,
-                                   related_name='PartManufacturingProcessConstraint')
+                                                   related_name='Constraint')
+
     value = models.CharField(max_length=254,
-                             help_text="Value of the specific constraint. "
-                                       "Please see the description of the selected constraint for information.",
+                             help_text="Value of the specific requirement describing "
+                                       "how much this requirement has to be fulfilled. "
+                                       "Please see the description and unit of the selected "
+                                       "requirement for information.",
                              blank=False)
+    operator = models.CharField(max_length=50,
+                                choices=OPERATORS,
+                                help_text="Has the result to be equal, smaller, or bigger then this value.",
+                                unique=True)
+    optional = models.BooleanField(default=False,
+                                   help_text="Has this requirement to be fulfilled.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -515,4 +501,4 @@ class PartManufacturingProcessConstraint(models.Model):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('partmanufacturingprocesssconstraint-detail', args=[str(self.id)])
+        return reverse('constraint-detail', args=[str(self.id)])

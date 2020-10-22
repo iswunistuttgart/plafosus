@@ -72,12 +72,11 @@ def analyze_part(sender, instance, created, **kwargs):
 @receiver(post_save, sender=models.Part)
 def select_machines_to_manufacture(sender, instance, created, **kwargs):
     """
-
     This function gets triggered when a part object is uploaded/saved
     and selects the 'best' machines to manufacture the part.
     """
     try:
         pass
-        # TODO
+        # TODO: Do the magic here.
     except Exception as e:
-        logger.error("Could not select the best machines to manufacture the part.", exc_info=True)
+        logger.error("Could not do the magic for part '{0}'.".format(str(sender)), exc_info=True)

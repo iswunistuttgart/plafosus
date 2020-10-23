@@ -35,7 +35,7 @@ def model_upload_path(instance, filename):
 
 class Unit(models.Model):
     """
-    Unit of a requirement.
+    Unit of a requirement or a skill.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -94,50 +94,9 @@ class Category(models.Model):
         return reverse('category-detail', args=[str(self.id)])
 
 
-class Skill(models.Model):
-    """
-    A base skill.
-    """
-    id = models.UUIDField(primary_key=True,
-                          default=uuid.uuid4,
-                          editable=False)
-    name = models.CharField(max_length=254,
-                            help_text="The skill name.")
-    description = models.CharField(max_length=254,
-                                   help_text="Description of the skill.",
-                                   blank=True)
-
-    manufacturing_process = models.CharField(max_length=50,
-                                             choices=MANUFACTURING_PROCESSES,
-                                             help_text="The manufacturing process according to DIN 8580.")
-
-    unit = models.ForeignKey(Unit,
-                             on_delete=models.CASCADE,
-                             related_name='Skill',
-                             help_text="Description of the skill unit (e.g. painting of 1 mm^2. "
-                                       "Using the unit, we calculate the meta data (costs, CO2-e etc.). "
-                                       "For example to paint 4 mm^2 the costs are "
-                                       "4*unit of the resource in €).")
-
-    # Meta.
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      editable=False)
-    updated_at = models.DateTimeField(auto_now=True,
-                                      editable=False)
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('skill-detail', args=[str(self.id)])
-
-
 class ProcessStep(models.Model):
     """
-    A single process step to manufacture a part.
+    Generic representation of a manufacturing process (DIN 8580).
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -170,9 +129,52 @@ class ProcessStep(models.Model):
         return reverse('processstep-detail', args=[str(self.id)])
 
 
+class Skill(models.Model):
+    """
+    A skill is the general capability of a resource to perform a certain process step.
+    """
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
+                          editable=False)
+    name = models.CharField(max_length=254,
+                            help_text="The skill name.")
+    description = models.CharField(max_length=254,
+                                   help_text="Description of the skill.",
+                                   blank=True)
+
+    process_step = models.ForeignKey(ProcessStep,
+                                     on_delete=models.CASCADE,
+                                     related_name='Skill')
+
+    unit = models.ForeignKey(Unit,
+                             on_delete=models.CASCADE,
+                             related_name='Skill',
+                             help_text="Description of the skill unit (e.g. painting of 1 mm^2. "
+                                       "Using the unit, we calculate the meta data (costs, CO2-e etc.). "
+                                       "For example to paint 4 mm^2 the costs are "
+                                       "4*unit of the resource in €).")
+
+    # Meta.
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('skill-detail', args=[str(self.id)])
+
+
 class Part(models.Model):
     """
-    The uploaded 3d part of the session.
+    A part is the abstract description of an object to be manufactured.
+    The object is defined by process steps and constraints
+    (which are in combination a part manufacturing process step) to be performed.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -208,11 +210,11 @@ class Part(models.Model):
 
     # Required skills to manufacture the part.
     process_steps = models.ManyToManyField(ProcessStep,
-                                           through='PartManufacturingProcess',
+                                           through='core.models.PartManufacturingProcessStep',
                                            related_name='Parts',
                                            help_text="Required skills to manufacture the part.")
 
-    # TODO: Add component (Halbzeug) and component state (z.B: Oberflächengüte nach Schnitt)
+    # TODO: Add component (Halbzeug)?
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -232,7 +234,8 @@ class Part(models.Model):
 
 class Resource(models.Model):
     """
-    Resource.
+    A resource is an abstract representation of a machine or similar object in a production environment,
+    which has the skills (with abilities and skill consumables) to perform part manufacturing process steps.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -281,7 +284,7 @@ class Resource(models.Model):
 
 class Consumable(models.Model):
     """
-    Consumable which can be required by a ResourceSkill.
+    A consumable is the abstract representation of a medium consumed by a resource to perform a skill (ResourceSkill).
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -315,7 +318,12 @@ class Consumable(models.Model):
 
 class Requirement(models.Model):
     """
-    Requirement of a PartManufacturingProcess or a SkillAbility, which has to be fulfilled.
+    A requirement describes abstract properties (without defining a specific value)
+    of part manufacturing process steps (constraints) or skills (abilities).
+
+    E.g. the requirement is 'material' -
+    the constraint of the part is consequently material = metal,
+    and a resource has the ability to process the material = metal.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -328,9 +336,9 @@ class Requirement(models.Model):
                              related_name='Requirement',
                              help_text="The unit of the Requirement.")
     category = models.ForeignKey(Category,
-                             on_delete=models.CASCADE,
-                             related_name='Requirement',
-                             help_text="The category of the requirement.")
+                                 on_delete=models.CASCADE,
+                                 related_name='Requirement',
+                                 help_text="The category of the requirement.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -351,6 +359,8 @@ class Requirement(models.Model):
 class ResourceSkill(models.Model):
     """
     Through model for a specific skill of a resource.
+
+    The resource skill is a specific skill of a resource. Resource skills can have specific abilities.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -408,6 +418,9 @@ class ResourceSkill(models.Model):
 class SkillConsumable(models.Model):
     """
     Through model for the required consumables for applying a specific skill of a specific resource (ResourceSkill).
+
+    Skill consumables are the specific consumables (with defined quantities per unit)
+    required by skill to perform his abilities.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -449,6 +462,8 @@ class SkillConsumable(models.Model):
 class Ability(models.Model):
     """
     Through model for a specific ability of a skill.
+
+    The ability of a skill is the possibility of a resource to fulfill requirements to a certain level/value.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -483,19 +498,21 @@ class Ability(models.Model):
         return reverse('ability-detail', args=[str(self.id)])
 
 
-class PartManufacturingProcess(models.Model):
+class PartManufacturingProcessStep(models.Model):
     """
-    Through model for a required specific manufacturing process step of a part.
+    Through model for a specific process step of a part.
+
+    A process step with specific constraints to create a part.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
     part = models.ForeignKey(Part,
                              on_delete=models.CASCADE,
-                             related_name='PartManufacturingProcess')
+                             related_name='PartManufacturingProcessStep')
     process_step = models.ForeignKey(ProcessStep,
                                      on_delete=models.CASCADE,
-                                     related_name='PartManufacturingProcess')
+                                     related_name='PartManufacturingProcessStep')
     description = models.CharField(max_length=254,
                                    help_text="Description of the manufacturing step.",
                                    blank=True)
@@ -518,7 +535,7 @@ class PartManufacturingProcess(models.Model):
 
     constraints = models.ManyToManyField(Requirement,
                                          through='Constraint',
-                                         related_name='PartManufacturingProcess',
+                                         related_name='PartManufacturingProcessStep',
                                          help_text="Constraints of the specific part manufacturing process step.")
 
     # Meta.
@@ -530,17 +547,18 @@ class PartManufacturingProcess(models.Model):
     class Meta:
         ordering = ['part']
         verbose_name_plural = "Part manufacturing processes"
+        unique_together = [['manufacturing_possibility', 'manufacturing_sequence_number']]
 
     def __str__(self):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('partmanufacturingprocess-detail', args=[str(self.id)])
+        return reverse('partmanufacturingprocessstep-detail', args=[str(self.id)])
 
 
 class Constraint(models.Model):
     """
-    Constraint of a PartManufacturingProcess, which has to be fulfilled.
+    A constraint is the specific requirement of a part manufacturing process step, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -548,7 +566,7 @@ class Constraint(models.Model):
     requirement = models.ForeignKey(Requirement,
                                     on_delete=models.CASCADE,
                                     related_name='Constraint')
-    part_manufacturing_process = models.ForeignKey(PartManufacturingProcess,
+    part_manufacturing_process = models.ForeignKey(PartManufacturingProcessStep,
                                                    on_delete=models.CASCADE,
                                                    related_name='Constraint')
 

@@ -9,7 +9,7 @@ class ResourceSkillInline(admin.TabularInline):
     model = models.ResourceSkill
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+    readonly_fields = ['unit_link', 'edit_link']
 
     def edit_link(self, instance):
         try:
@@ -24,14 +24,24 @@ class ResourceSkillInline(admin.TabularInline):
             return '-'
 
     edit_link.short_description = 'Edit details'
+
+    def unit_link(self, instance):
+        try:
+            print(str(instance))
+            unit = str(instance.skill.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 class PartManufacturingProcessInline(admin.TabularInline):
     view_on_site = False
-    model = models.PartManufacturingProcess
+    model = models.PartManufacturingProcessStep
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['edit_link', 'created_at', 'updated_at']
+    readonly_fields = ['unit_link', 'edit_link']
 
     def edit_link(self, instance):
         try:
@@ -46,6 +56,16 @@ class PartManufacturingProcessInline(admin.TabularInline):
             return '-'
 
     edit_link.short_description = 'Edit details'
+
+    def unit_link(self, instance):
+        try:
+            print(str(instance))
+            unit = str(instance.process_step.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 class ConstraintInline(admin.TabularInline):
@@ -53,7 +73,17 @@ class ConstraintInline(admin.TabularInline):
     model = models.Constraint
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['unit_link']
+
+    def unit_link(self, instance):
+        try:
+            print(str(instance))
+            unit = str(instance.requirement.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 class SkillConsumableInline(admin.TabularInline):
@@ -61,7 +91,17 @@ class SkillConsumableInline(admin.TabularInline):
     model = models.SkillConsumable
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['unit_link']
+
+    def unit_link(self, instance):
+        try:
+            print(str(instance))
+            unit = str(instance.consumable.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 class AbilityInline(admin.TabularInline):
@@ -69,7 +109,17 @@ class AbilityInline(admin.TabularInline):
     model = models.Ability
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['unit_link']
+
+    def unit_link(self, instance):
+        try:
+            print(str(instance))
+            unit = str(instance.requirement.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 @admin.register(models.Unit)
@@ -82,12 +132,21 @@ class UnitAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Category)
-class UnitAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.Category
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'description']
+
+
+@admin.register(models.ProcessStep)
+class ProcessStepAdmin(admin.ModelAdmin):
+    view_on_site = False
+    model = models.ProcessStep
+    list_display = [field.name for field in model._meta.fields]
+    readonly_fields = ['created_at', 'updated_at']
+    search_fields = ['manufacturing_process']
 
 
 @admin.register(models.Skill)
@@ -109,15 +168,6 @@ class SkillAdmin(admin.ModelAdmin):
             return "-"
 
     unit_link.short_description = 'Unit'
-
-
-@admin.register(models.ProcessStep)
-class ProcessStepAdmin(admin.ModelAdmin):
-    view_on_site = False
-    model = models.ProcessStep
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['manufacturing_process']
 
 
 @admin.register(models.Part)
@@ -307,10 +357,10 @@ class AbilityAdmin(admin.ModelAdmin):
     requirement_link.short_description = 'Requirement'
 
 
-@admin.register(models.PartManufacturingProcess)
+@admin.register(models.PartManufacturingProcessStep)
 class PartManufacturingProcessAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.PartManufacturingProcess
+    model = models.PartManufacturingProcessStep
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
     list_display.remove('part')

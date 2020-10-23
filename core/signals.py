@@ -78,5 +78,10 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
     try:
         pass
         # TODO: Do the magic here.
+    # We can select, which abilities (and consequently which skills and more consequently which resource) is used
+    # to perform a part manufacturing process step.
+
+    # 1. Search the skills which are the same manufacturing process
+    # 2. Search the skills with the ability to fulfill the part manufacturing process step.
     except Exception as e:
         logger.error("Could not do the magic for part '{0}'.".format(str(sender)), exc_info=True)

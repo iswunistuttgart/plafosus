@@ -27,7 +27,6 @@ class ResourceSkillInline(admin.TabularInline):
 
     def unit_link(self, instance):
         try:
-            print(str(instance))
             unit = str(instance.skill.process_step.unit)
             return unit
         except:
@@ -59,7 +58,6 @@ class PartManufacturingProcessInline(admin.TabularInline):
 
     def unit_link(self, instance):
         try:
-            print(str(instance))
             unit = str(instance.process_step.unit)
             return unit
         except:
@@ -77,7 +75,6 @@ class ConstraintInline(admin.TabularInline):
 
     def unit_link(self, instance):
         try:
-            print(str(instance))
             unit = str(instance.requirement.unit)
             return unit
         except:
@@ -95,7 +92,6 @@ class SkillConsumableInline(admin.TabularInline):
 
     def unit_link(self, instance):
         try:
-            print(str(instance))
             unit = str(instance.consumable.unit)
             return unit
         except:
@@ -113,7 +109,6 @@ class AbilityInline(admin.TabularInline):
 
     def unit_link(self, instance):
         try:
-            print(str(instance))
             unit = str(instance.requirement.unit)
             return unit
         except:
@@ -187,7 +182,7 @@ class ConsumableAdmin(admin.ModelAdmin):
     model = models.Consumable
     list_display = [field.name for field in model._meta.fields]
     list_display.remove('unit')
-    list_display.insert(1, 'unit_link')
+    list_display.insert(2, 'unit_link')
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'description']
     list_filter = ['unit__name']
@@ -247,8 +242,9 @@ class ResourceSkillAdmin(admin.ModelAdmin):
     list_display.insert(1, 'resource_link')
     list_display.remove('skill')
     list_display.insert(2, 'skill_link')
+    list_display.insert(3, 'unit_link')
 
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['unit_link', 'created_at', 'updated_at']
     search_fields = ['resource__name', 'skill__name']
     inlines = [SkillConsumableInline, AbilityInline]
 
@@ -271,6 +267,15 @@ class ResourceSkillAdmin(admin.ModelAdmin):
             return "-"
 
     skill_link.short_description = 'Skill'
+
+    def unit_link(self, instance):
+        try:
+            unit = str(instance.skill.process_step.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 @admin.register(models.SkillConsumable)

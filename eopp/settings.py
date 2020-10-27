@@ -113,12 +113,12 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'format': '{asctime} - {levelname} - {name}:{lineno} - {message}',
             'datefmt': "%d/%b/%Y %H:%M:%S",
             'style': '{',
         },
         'simple': {
-            'format': '{levelname} {message}',
+            'format': '{levelname} - {message}',
             'style': '{',
         },
     },
@@ -133,14 +133,14 @@ LOGGING = {
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            'filters': ['require_debug_true'],
+            # 'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
         'file_handler': {
             'level': 'WARNING',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filters': ['require_debug_false'],
+            # 'filters': ['require_debug_false'],
             'filename': os.path.join('logs', 'WarningsAndErrors.log'),
             'when': "D",
             'interval': 1,
@@ -150,19 +150,13 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['console', 'file_handler'],
+            'level': 'WARNING',  # Change back to INFO.
             'propagate': True,
         },
-        'eopp.deployment': {
+        'core': {
             'handlers': ['console', 'file_handler'],
-            'level': 'WARNING',
-            'filters': ['require_debug_false']
-        },
-        'eopp.development': {
-            'handlers': ['console'],
             'level': 'DEBUG',
-            'filters': ['require_debug_true']
         }
     }
 }

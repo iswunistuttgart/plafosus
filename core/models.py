@@ -428,11 +428,10 @@ class SkillConsumable(models.Model):
                                                      "to use the skill for one unit.",
                                            default=0)
     quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                 help_text="The costs in € of the consumable to use the skill for "
-                                                           "one unit.",
+                                                 help_text="The costs in € for one unit of this consumable.",
                                                  default=0)
     quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                               help_text="The CO2-e of the consumable to use the skill for one unit.",
+                                               help_text="The CO2-e for one unit of this consumable.",
                                                default=0)
 
     # Meta.

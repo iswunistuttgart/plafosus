@@ -19,8 +19,8 @@ MANUFACTURING_PROCESSES = (
 
 OPERATORS = (
     ('=', '='),
-    ('<', '<'),
     ('!=', '!='),
+    ('<', '<'),
     ('>', '>'),
     ('>=', '>='),
     ('<=', '<='),
@@ -103,8 +103,7 @@ class ProcessStep(models.Model):
                           editable=False)
     manufacturing_process = models.CharField(max_length=50,
                                              choices=MANUFACTURING_PROCESSES,
-                                             help_text="The manufacturing process according to DIN 8580.",
-                                             unique=True)
+                                             help_text="The manufacturing process according to DIN 8580.")
     description = models.CharField(max_length=254,
                                    help_text="Description of the manufacturing process.",
                                    blank=True)
@@ -121,9 +120,10 @@ class ProcessStep(models.Model):
 
     class Meta:
         ordering = ['manufacturing_process']
+        unique_together = [['manufacturing_process', 'unit']]
 
     def __str__(self):
-        return self.manufacturing_process
+        return self.manufacturing_process + " [" + self.unit.name + "]"
 
     def get_absolute_url(self):
         return reverse('processstep-detail', args=[str(self.id)])
@@ -145,14 +145,6 @@ class Skill(models.Model):
     process_step = models.ForeignKey(ProcessStep,
                                      on_delete=models.CASCADE,
                                      related_name='Skill')
-
-    unit = models.ForeignKey(Unit,
-                             on_delete=models.CASCADE,
-                             related_name='Skill',
-                             help_text="Description of the skill unit (e.g. painting of 1 mm^2. "
-                                       "Using the unit, we calculate the meta data (costs, CO2-e etc.). "
-                                       "For example to paint 4 mm^2 the costs are "
-                                       "4*unit of the resource in €).")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -210,7 +202,7 @@ class Part(models.Model):
 
     # Required skills to manufacture the part.
     process_steps = models.ManyToManyField(ProcessStep,
-                                           through='core.models.PartManufacturingProcessStep',
+                                           through='PartManufacturingProcessStep',
                                            related_name='Parts',
                                            help_text="Required skills to manufacture the part.")
 
@@ -450,7 +442,7 @@ class SkillConsumable(models.Model):
                                       editable=False)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-created_at']
 
     def __str__(self):
         return str(self.id)
@@ -488,7 +480,7 @@ class Ability(models.Model):
                                       editable=False)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-created_at']
         verbose_name_plural = "Abilities"
 
     def __str__(self):
@@ -545,8 +537,7 @@ class PartManufacturingProcessStep(models.Model):
                                       editable=False)
 
     class Meta:
-        ordering = ['part']
-        verbose_name_plural = "Part manufacturing processes"
+        ordering = ['-created_at']
         unique_together = [['manufacturing_possibility', 'manufacturing_sequence_number']]
 
     def __str__(self):
@@ -566,9 +557,9 @@ class Constraint(models.Model):
     requirement = models.ForeignKey(Requirement,
                                     on_delete=models.CASCADE,
                                     related_name='Constraint')
-    part_manufacturing_process = models.ForeignKey(PartManufacturingProcessStep,
-                                                   on_delete=models.CASCADE,
-                                                   related_name='Constraint')
+    part_manufacturing_process_step = models.ForeignKey(PartManufacturingProcessStep,
+                                                        on_delete=models.CASCADE,
+                                                        related_name='Constraint')
 
     value = models.CharField(max_length=254,
                              help_text="Value of the specific requirement describing "
@@ -589,7 +580,7 @@ class Constraint(models.Model):
                                       editable=False)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-created_at']
 
     def __str__(self):
         return str(self.id)

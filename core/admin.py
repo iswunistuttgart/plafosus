@@ -28,7 +28,7 @@ class ResourceSkillInline(admin.TabularInline):
     def unit_link(self, instance):
         try:
             print(str(instance))
-            unit = str(instance.skill.unit)
+            unit = str(instance.skill.process_step.unit)
             return unit
         except:
             return "-"
@@ -154,20 +154,8 @@ class SkillAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.Skill
     list_display = [field.name for field in model._meta.fields]
-    list_display.remove('unit')
-    list_display.insert(1, 'unit_link')
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['name', 'description']
-
-    def unit_link(self, unit):
-        try:
-            url = reverse("admin:core_unit_change", args=[unit.unit.id])
-            link = '<a href="%s">%s</a>' % (url, unit.unit.name)
-            return mark_safe(link)
-        except:
-            return "-"
-
-    unit_link.short_description = 'Unit'
 
 
 @admin.register(models.Part)
@@ -399,25 +387,25 @@ class ConstraintAdmin(admin.ModelAdmin):
     model = models.Constraint
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
-    list_display.remove('part_manufacturing_process')
-    list_display.insert(1, 'part_manufacturing_process_link')
+    list_display.remove('part_manufacturing_process_step')
+    list_display.insert(1, 'part_manufacturing_process_step_link')
     list_display.remove('requirement')
     list_display.insert(2, 'requirement_link')
 
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['part_manufacturing_process__process_step__manufacturing_process', 'requirement__name']
+    search_fields = ['part_manufacturing_process_step__process_step__manufacturing_process', 'requirement__name']
 
-    def part_manufacturing_process_link(self, part_manufacturing_process):
+    def part_manufacturing_process_step_link(self, part_manufacturing_process_step):
         try:
-            url = reverse("admin:core_part_manufacturing_process_change",
-                          args=[part_manufacturing_process.part_manufacturing_process.id])
+            url = reverse("admin:core_part_manufacturing_process_step_change",
+                          args=[part_manufacturing_process_step.part_manufacturing_process_step.id])
             link = '<a href="%s">%s</a>' % (url,
-                                            part_manufacturing_process.part_manufacturing_process.process_step.manufacturing_process)
+                                            part_manufacturing_process_step.part_manufacturing_process_step.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
-    part_manufacturing_process_link.short_description = 'Part Manufacturing Process'
+    part_manufacturing_process_step_link.short_description = 'Part Manufacturing Process Step'
 
     def requirement_link(self, requirement):
         try:

@@ -2,8 +2,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import logging
 
-# Core.
+# App imports.
 from core import models as core_models
+from solutions import models as solutions_models
 
 # Model analysis.
 import trimesh
@@ -11,7 +12,6 @@ import trimesh
 # Calculation.
 import json
 import itertools
-import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -243,8 +243,7 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
         # for each single resource skill and subsequently for each solution
         # (unique combination of single resource skills for each manufacturing possibility).
 
-        solution_space = []
-        """List of all possible solutions (see below)."""
+        solution_space = solutions_models.SolutionSpace.objects.create(part=instance)
 
         # Now we try to create and calculate the single solutions.
         for manufacturing_possibility, process_steps_with_resource_skills in manufacturing_possibilities.items():
@@ -269,184 +268,130 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
             # on the same place in part_manufacturing_process_steps as the permutation in possible_permutations.
             possible_permutations = list(itertools.product(*all_resource_skills_per_manufacturing_process_step))
 
-            for permutation in possible_permutations:
+            for possible_permutation in possible_permutations:
                 i = 0
                 """The current index of the possible_permutations list. 
                 Used for finding the according part_manufacturing_process_step."""
 
-                solution = {}
-                """
-                A solution is a unique combination of resource skills for one manufacturing possibility.
-                Example:
-
-                {   
-                    "uuid": uuid.uuid4(),
-                    "part": Part,
-                    "manufacturing_possibility": manufacturing_possibility,
-                    "price": "price in €",
-                    "time": "time in s",
-                    "co2": "co2 in co2-e",
-                    "consumables": 
-                        [
-                            {
-                                consumable: "name1",
-                                quantity: "quantity2",
-                                price: "price in €",
-                                co2: "co2 in co2-e"
-                            }
-                        ],
-                    "solution": [
-                                    {
-                                        "part_manufacturing_process_step": part_manufacturing_process_step1,
-                                        "resource_skill": resource_skill,
-                                        "price": "price in €",
-                                        "time": "time in s",
-                                        "co2":  "co2 in co2-e",
-                                        "consumables": 
-                                            [
-                                                {
-                                                    consumable: "name1",
-                                                    quantity: "quantity2",
-                                                    price: "price in €",
-                                                    co2: "co2 in co2-e"
-                                                }
-                                            ]
-                                    },   
-                                    {
-                                        "part_manufacturing_process_step": part_manufacturing_process_step2,
-                                        "resource_skill": resource_skill,
-                                        "price": "price in €",
-                                        "time": "time in s",
-                                        "co2":  "co2 in co2-e",
-                                        "consumables": 
-                                            [
-                                                {
-                                                    consumable: "name1",
-                                                    quantity: "quantity2",
-                                                    price: "price in €",
-                                                    co2: "co2 in co2-e"
-                                                }
-                                            ]
-                                    },   
-                                ] 
-                }       
-                """
-
-                # Initialization.
-                solution["uuid"] = str(uuid.uuid4())
-                solution["part"] = instance
-                solution["manufacturing_possibility"] = manufacturing_possibility
-                solution["price"] = 0
-                solution["time"] = 0
-                solution["co2"] = 0
-                solution["consumables"] = []
-                solution["solution"] = []
+                permutation = solutions_models.Permutation(
+                    manufacturing_possibility=manufacturing_possibility)
+                permutation.save()
 
                 # Initial meta data. Will be filled below.
-                price_sum = 0
-                time_sum = 0
-                co2_sum = 0
+                permutation_price = 0
+                permutation_time = 0
+                permutation_co2 = 0
 
-                # Contains all consumables with the overall quantities.
-                for consumable in core_models.Consumable.objects.all():
-                    consumable_dict = {
-                        "consumable": consumable,
-                        "quantity": 0,
-                        "price": 0,
-                        "co2": 0
-                    }
-                    solution["consumables"].append(consumable_dict)
+                # Create a ConsumableCost object for each existing consumable.
+                # These are the overall consumables of one permutation.
+                overall_consumable = []
+                for consumable_object in core_models.Consumable.objects.all():
+                    consumable = solutions_models.ConsumableCost(
+                        consumable=consumable_object,
+                        is_overall=True)
+                    consumable.save()
+                    permutation.consumables.add(consumable)
+                    overall_consumable.append(consumable)
 
-                for resource_skill in permutation:
+                for resource_skill in possible_permutation:
                     # Calculate the meta data for this resource skill.
                     resource_skill_price = part_manufacturing_process_steps[
                                                i].required_quantity * resource_skill.quantity_price
-                    price_sum = price_sum + resource_skill_price
+                    permutation_price = permutation_price + resource_skill_price
 
                     resource_skill_time = part_manufacturing_process_steps[
                                               i].required_quantity * resource_skill.quantity_time
-                    time_sum = time_sum + resource_skill_time
+                    permutation_time = permutation_time + resource_skill_time
 
                     resource_skill_co2 = part_manufacturing_process_steps[
                                              i].required_quantity * resource_skill.quantity_co2
-                    co2_sum = co2_sum + resource_skill_co2
+                    permutation_co2 = permutation_co2 + resource_skill_co2
 
                     # Add the consumables for one resource skill.
                     consumables = []
                     # Get all registered consumables.
-                    for consumable in core_models.Consumable.objects.all():
+                    for consumable_object in core_models.Consumable.objects.all():
                         # Check if this consumable is defined in the resource_skill.
-                        if consumable in resource_skill.consumables.all():
+                        if consumable_object in resource_skill.consumables.all():
                             consumable_quantity = resource_skill.SkillConsumable.all().get(
-                                consumable=consumable).quantity * part_manufacturing_process_steps[
+                                consumable=consumable_object).quantity * part_manufacturing_process_steps[
                                                    i].required_quantity
 
                             consumable_price = resource_skill.SkillConsumable.all().get(
-                                consumable=consumable).quantity * part_manufacturing_process_steps[
+                                consumable=consumable_object).quantity * part_manufacturing_process_steps[
                                                    i].required_quantity * resource_skill.SkillConsumable.all().get(
-                                consumable=consumable).quantity_price
+                                consumable=consumable_object).quantity_price
 
                             consumable_co2 = resource_skill.SkillConsumable.all().get(
-                                consumable=consumable).quantity * part_manufacturing_process_steps[
+                                consumable=consumable_object).quantity * part_manufacturing_process_steps[
                                                    i].required_quantity * resource_skill.SkillConsumable.all().get(
-                                consumable=consumable).quantity_co2
+                                consumable=consumable_object).quantity_co2
                         else:
                             consumable_quantity = 0
                             consumable_price = 0
                             consumable_co2 = 0
 
-                        consumable_dict = {
-                            "consumable": consumable,
-                            "quantity": consumable_quantity,
-                            "price": consumable_price,
-                            "co2": consumable_co2
-                        }
+                        consumable = solutions_models.ConsumableCost(
+                            consumable=consumable_object,
+                            is_overall=False,
+                            quantity=consumable_quantity,
+                            price=consumable_price,
+                            co2=consumable_co2)
+                        consumable.save()
                         # Add the consumable to the consumable list of this resource skill.
-                        consumables.append(consumable_dict)
+                        consumables.append(consumable)
+
+                        # Add the calculated meta data of the consumable to the resource sums.
+                        resource_skill_price = resource_skill_price + consumable_price
+                        resource_skill_co2 = resource_skill_co2 + consumable_co2
 
                         # Add the calculated meta data of the consumable to the overall sums.
-                        price_sum = price_sum + consumable_price
-                        co2_sum = co2_sum + consumable_co2
+                        permutation_price = permutation_price + consumable_price
+                        permutation_co2 = permutation_co2 + consumable_co2
 
-                        # Add the calculated meta data to the overall consumables overview.
-                        updated_consumable = {}
-                        for j in range(len(solution["consumables"])):
-                            if solution["consumables"][j]['consumable'] == consumable:
-                                updated_consumable["consumable"] = solution["consumables"][
-                                                                    j]["consumable"]
-                                updated_consumable["quantity"] = solution["consumables"][
-                                                                    j]["quantity"] + consumable_quantity
-                                updated_consumable["price"] = solution["consumables"][
-                                                                    j]["price"] + consumable_price
-                                updated_consumable["co2"] = solution["consumables"][
-                                                                    j]["co2"] + consumable_co2
-                                # Replace the old entry with the updated dict.
-                                solution["consumables"][j] = updated_consumable
+                        # Update the overall consumables.
+                        for overall_consumable_object in overall_consumable:
+                            if overall_consumable_object.consumable == consumable_object:
+                                new_co2 = overall_consumable_object.co2 + consumable_co2
+                                new_price = overall_consumable_object.price + consumable_price
+                                new_quantity = overall_consumable_object.quantity + consumable_quantity
 
-                    resource_skill_solution = {
-                        "part_manufacturing_process_step": part_manufacturing_process_steps[i],
-                        "manufacturing_sequence_number": part_manufacturing_process_steps[
-                            i].manufacturing_sequence_number,
-                        "resource_skill": resource_skill,
-                        "price": resource_skill_price,
-                        "time": resource_skill_time,
-                        "co2": resource_skill_co2,
-                        "consumables": consumables
-                    }
-                    # Add entry of this resource skill to the solution list.
-                    solution["solution"].append(resource_skill_solution)
+                                overall_consumable_object.quantity = new_quantity
+                                overall_consumable_object.price = new_price
+                                overall_consumable_object.co2 = new_co2
+
+                                overall_consumable_object.save()
+
+                    solution = solutions_models.Solution(
+                        part_manufacturing_process_step=part_manufacturing_process_steps[i],
+                        resource_skill=resource_skill,
+                        manufacturing_sequence_number=part_manufacturing_process_steps[i].manufacturing_sequence_number,
+                        price=resource_skill_price,
+                        time=resource_skill_time,
+                        co2=resource_skill_co2)
+                    solution.save()
+
+                    # Add the solution to the permutation.
+                    permutation.solutions.add(solution)
+
+                    # Add all consumables to the many2many field of the solution.
+                    for consumable in consumables:
+                        solution.consumables.add(consumable)
+
+                    # Count further.
                     i = i + 1
 
-                # Add the calculated sums to the solution dict.
-                solution["price"] = price_sum
-                solution["time"] = time_sum
-                solution["co2"] = co2_sum
+                # Add the calculated sums to the permutation.
+                permutation.price = permutation_price
+                permutation.time = permutation_time
+                permutation.co2 = permutation_co2
+                # Save the permutation object.
+                permutation.save()
 
-                # Add the created solution to the overall list.
-                solution_space.append(solution)
+                # Add the created permutation object to the solution_space.
+                solution_space.permutations.add(permutation)
 
-        logger.debug("Solution space: " + str(solution_space))
-        # Compare the single manufacturing_possibilities.
+        # TODO: Compare the single permutations and mark one as is_optimal.
 
     except Exception as e:
         logger.error("Could not do the magic for part '{0}'.".format(str(instance.pk)), exc_info=True)

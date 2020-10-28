@@ -9,11 +9,13 @@ class PermutationConsumableCostInline(admin.TabularInline):
     model = models.Permutation.consumables.through
     extra = 0
     can_delete = False
+    can_add = False
     list_display = [field.name for field in model._meta.fields]
     list_display.remove("id")
     readonly_fields = list_display
-    readonly_fields.append('is_overall_link')
+    readonly_fields.append('name_link')
     readonly_fields.append('quantity_link')
+    readonly_fields.append('unit_link')
     readonly_fields.append('price_link')
     readonly_fields.append('co2_link')
     readonly_fields.append('show_link')
@@ -32,14 +34,24 @@ class PermutationConsumableCostInline(admin.TabularInline):
 
     show_link.short_description = 'Show details'
 
-    def is_overall_link(self, instance):
+    def name_link(self, instance):
         try:
-            is_overall = str(instance.consumablecost.is_overall)
-            return is_overall
+            url = reverse("admin:core_consumable_change", args=[instance.consumablecost.consumable.id])
+            link = '<a href="%s">%s</a>' % (url, instance.consumablecost.consumable.name)
+            return mark_safe(link)
         except:
             return "-"
 
-    is_overall_link.short_description = 'Is Overall'
+    name_link.short_description = 'Consumable'
+
+    def unit_link(self, instance):
+        try:
+            unit = str(instance.consumablecost.consumable.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
     def price_link(self, instance):
         try:
@@ -74,11 +86,13 @@ class SolutionConsumableCostInline(admin.TabularInline):
     model = models.Solution.consumables.through
     extra = 0
     can_delete = False
+    can_add = False
     list_display = [field.name for field in model._meta.fields]
     list_display.remove("id")
     readonly_fields = list_display
-    readonly_fields.append('is_overall_link')
+    readonly_fields.append('name_link')
     readonly_fields.append('quantity_link')
+    readonly_fields.append('unit_link')
     readonly_fields.append('price_link')
     readonly_fields.append('co2_link')
     readonly_fields.append('show_link')
@@ -97,14 +111,24 @@ class SolutionConsumableCostInline(admin.TabularInline):
 
     show_link.short_description = 'Show details'
 
-    def is_overall_link(self, instance):
+    def name_link(self, instance):
         try:
-            is_overall = str(instance.consumablecost.is_overall)
-            return is_overall
+            url = reverse("admin:core_consumable_change", args=[instance.consumablecost.consumable.id])
+            link = '<a href="%s">%s</a>' % (url, instance.consumablecost.consumable.name)
+            return mark_safe(link)
         except:
             return "-"
 
-    is_overall_link.short_description = 'Is Overall'
+    name_link.short_description = 'Consumable'
+
+    def unit_link(self, instance):
+        try:
+            unit = str(instance.consumablecost.consumable.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
     def price_link(self, instance):
         try:
@@ -139,10 +163,11 @@ class SolutionSpacePermutationsInline(admin.TabularInline):
     model = models.SolutionSpace.permutations.through
     extra = 0
     can_delete = False
+    can_add = False
     list_display = [field.name for field in model._meta.fields]
     list_display.remove("id")
     readonly_fields = list_display
-    readonly_fields.append('is_optimal_link')
+    readonly_fields.append('rank_link')
     readonly_fields.append('manufacturing_possibility_link')
     readonly_fields.append('price_link')
     readonly_fields.append('time_link')
@@ -163,14 +188,14 @@ class SolutionSpacePermutationsInline(admin.TabularInline):
 
     show_link.short_description = 'Show details'
 
-    def is_optimal_link(self, instance):
+    def rank_link(self, instance):
         try:
-            is_optimal = str(instance.permutation.is_optimal)
-            return is_optimal
+            rank = str(instance.permutation.rank)
+            return rank
         except:
             return "-"
 
-    is_optimal_link.short_description = 'Is Optimal'
+    rank_link.short_description = 'Rank'
 
     def manufacturing_possibility_link(self, instance):
         try:
@@ -217,11 +242,66 @@ class PermutationSolutionsInline(admin.TabularInline):
     list_display = [field.name for field in model._meta.fields]
     list_display.remove("id")
     readonly_fields = list_display
+    readonly_fields.append('resource_link')
+    readonly_fields.append('resource_skill_link')
+    readonly_fields.append('part_manufacturing_process_step_link')
+    readonly_fields.append('quantity_link')
+    readonly_fields.append('unit_link')
     readonly_fields.append('price_link')
     readonly_fields.append('time_link')
     readonly_fields.append('co2_link')
     readonly_fields.append('manufacturing_sequence_number_link')
     readonly_fields.append('show_link')
+
+    def quantity_link(self, instance):
+        try:
+            quantity = str(instance.solution.quantity)
+            return quantity
+        except:
+            return "-"
+
+    quantity_link.short_description = 'Quantity'
+
+    def unit_link(self, instance):
+        try:
+            unit = str(instance.solution.resource_skill.skill.process_step.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
+
+    def resource_link(self, instance):
+        try:
+            url = reverse("admin:core_resource_change", args=[instance.solution.resource_skill.resource.id])
+            link = '<a href="%s">%s</a>' % (url, instance.solution.resource_skill.resource.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    resource_link.short_description = 'Resource'
+
+    def resource_skill_link(self, instance):
+        try:
+            url = reverse("admin:core_resourceskill_change", args=[instance.solution.resource_skill.id])
+            link = '<a href="%s">%s</a>' % (url, instance.solution.resource_skill.skill.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    resource_skill_link.short_description = 'Resource Skill'
+
+    def part_manufacturing_process_step_link(self, instance):
+        try:
+            url = reverse("admin:core_partmanufacturingprocessstep_change",
+                          args=[instance.solution.part_manufacturing_process_step.id])
+            link = '<a href="%s">%s</a>' % (
+            url, instance.solution.part_manufacturing_process_step.process_step.manufacturing_process)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    part_manufacturing_process_step_link.short_description = 'Part Manufacturing Process Step'
 
     def show_link(self, instance):
         try:
@@ -278,35 +358,173 @@ class PermutationSolutionsInline(admin.TabularInline):
 class ConsumableCostAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.ConsumableCost
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = list_display
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    list_display = ['id', 'consumable_link', 'is_overall', 'quantity', 'price', 'co2', 'created_at', 'updated_at']
+    readonly_fields = ['consumable_link', 'is_overall', 'quantity', 'price', 'co2', 'created_at', 'updated_at']
+
+    fieldsets = (
+        ('Consumable Cost', {
+            'fields': ('consumable_link', 'is_overall', 'quantity', 'price', 'co2',)
+        }),
+        ('Optional Information', {
+
+            'classes': ('collapse',),
+
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+    def consumable_link(self, instance):
+        try:
+            url = reverse("admin:core_consumable_change", args=[instance.consumable.id])
+            link = '<a href="%s">%s</a>' % (url, instance.consumable.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    consumable_link.short_description = 'Consumable'
 
 
 @admin.register(models.Solution)
 class SolutionAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.Solution
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = list_display
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    list_display = ['id', 'resource_skill_link', 'part_manufacturing_process_step_link', 'quantity', 'price', 'time',
+                    'co2','unit_link', 'created_at', 'updated_at']
+    readonly_fields = ['part_manufacturing_process_step_link', 'resource_link', 'resource_skill_link', 'quantity',
+                       'unit_link', 'price', 'time', 'co2', 'manufacturing_sequence_number', 'created_at', 'updated_at']
+
+    fieldsets = (
+        ('Solution', {
+            'fields': ('resource_link', 'resource_skill_link', 'part_manufacturing_process_step_link',
+                       'manufacturing_sequence_number', 'quantity', 'unit_link', 'price', 'time', 'co2',)
+        }),
+        ('Optional Information', {
+
+            'classes': ('collapse',),
+
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
     inlines = [SolutionConsumableCostInline]
+
+    def unit_link(self, instance):
+        try:
+            unit = str(instance.resource_skill.skill.process_step.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
+
+    def resource_link(self, instance):
+        try:
+            url = reverse("admin:core_resource_change", args=[instance.resource_skill.resource.id])
+            link = '<a href="%s">%s</a>' % (url, instance.resource_skill.resource.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    resource_link.short_description = 'Resource'
+
+    def resource_skill_link(self, instance):
+        try:
+            url = reverse("admin:core_resourceskill_change", args=[instance.resource_skill.id])
+            link = '<a href="%s">%s</a>' % (url, instance.resource_skill.skill.name)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    resource_skill_link.short_description = 'Resource Skill'
+
+    def part_manufacturing_process_step_link(self, instance):
+        try:
+            url = reverse("admin:core_partmanufacturingprocessstep_change",
+                          args=[instance.part_manufacturing_process_step.id])
+            link = '<a href="%s">%s</a>' % (
+            url, instance.part_manufacturing_process_step.process_step.manufacturing_process)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    part_manufacturing_process_step_link.short_description = 'Part Manufacturing Process Step'
 
 
 @admin.register(models.Permutation)
 class PermutationAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.Permutation
-    list_display = [field.name for field in model._meta.fields]
-    # list_display.remove('solutions')
-    readonly_fields = list_display
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    list_display = ['id', 'rank', 'manufacturing_possibility', 'price', 'time', 'co2', 'created_at', 'updated_at']
+    readonly_fields = ['rank', 'manufacturing_possibility', 'price', 'time', 'co2', 'created_at', 'updated_at']
     inlines = [PermutationConsumableCostInline, PermutationSolutionsInline]
+
+    fieldsets = (
+        ('Solution Space', {
+            'fields': ('rank', 'manufacturing_possibility', 'price', 'time', 'co2',)
+        }),
+        ('Optional Information', {
+
+            'classes': ('collapse',),
+
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
 
 
 @admin.register(models.SolutionSpace)
 class SolutionSpaceAdmin(admin.ModelAdmin):
     view_on_site = False
     model = models.SolutionSpace
-    list_display = [field.name for field in model._meta.fields]
-    readonly_fields = list_display
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    list_display = ['id', 'part_link', 'created_at', 'updated_at']
+    readonly_fields = ['part_link', 'created_at', 'updated_at']
     inlines = [SolutionSpacePermutationsInline]
 
-# TODO: Display the names of the consumables in the single inlines.
+    fieldsets = (
+        ('Solution Space', {
+            'fields': ('part_link',)
+        }),
+        ('Optional Information', {
+
+            'classes': ('collapse',),
+
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+    def part_link(self, instance):
+        try:
+            url = reverse("admin:core_part_change", args=[instance.part.id])
+            link = '<a href="%s">%s</a>' % (url, instance.part.id)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    part_link.short_description = 'Part'

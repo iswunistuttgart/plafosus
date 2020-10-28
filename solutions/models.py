@@ -63,6 +63,9 @@ class Solution(models.Model):
     manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                                 help_text="The sequence number of the part "
                                                                           "manufacturing process step.")
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                           help_text="The required quantity in the skill unit to manufacture the part.",
+                                           default=0)
     price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                         help_text="The overall costs in € to manufacture the part.",
                                         default=0)
@@ -100,8 +103,9 @@ class Permutation(models.Model):
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    is_optimal = models.BooleanField(help_text="Is this the best permutation in the solution space?",
-                                     default=False)
+    rank = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                       help_text="The rank of this permutation after evaluation.",
+                                       default=0)
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility the process steps belong to.")
@@ -130,7 +134,7 @@ class Permutation(models.Model):
                                       editable=False)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ('rank', '-created_at')
 
     def __str__(self):
         return str(self.id)

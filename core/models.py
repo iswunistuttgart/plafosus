@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 import uuid
 from eopp import validations
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Third party packages
 from django_countries.fields import CountryField
@@ -199,6 +199,19 @@ class Part(models.Model):
                                        blank=True,
                                        null=True,
                                        editable=False)
+
+    price_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
+                                           help_text="The importance (weight) of the price for the "
+                                                     "evaluation of the solutions.",
+                                           default=1)
+    time_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
+                                          help_text="The importance (weight) of the time for the "
+                                                    "evaluation of the solutions.",
+                                          default=1)
+    co2_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
+                                         help_text="The importance (weight) of the co2 for the "
+                                                   "evaluation of the solutions.",
+                                         default=1)
 
     # Required skills to manufacture the part.
     process_steps = models.ManyToManyField(ProcessStep,

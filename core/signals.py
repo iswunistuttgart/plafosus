@@ -296,6 +296,12 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                 permutation_time = 0
                 permutation_co2 = 0
 
+                # TODO: Add further permutation properties for the later evaluation. E.g.:
+                #       - Required Machine Changes
+                #       - Distance Part has to travel (Does this make sense?)
+                #       - Consumables
+                #       - ???
+
                 # Create a ConsumableCost object for each existing consumable.
                 # These are the overall consumables of one permutation.
                 overall_consumable = []

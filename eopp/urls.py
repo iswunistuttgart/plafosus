@@ -3,6 +3,10 @@ from django.urls import path, re_path, reverse_lazy
 from django.views.generic import RedirectView
 
 
+admin.site.site_header = 'EOPP'
+admin.site.site_title = 'EOPP'
+admin.site.index_title = 'EOPP administration'
+
 urlpatterns = [
 
     # The Django admin page.

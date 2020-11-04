@@ -297,7 +297,7 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                 permutation_co2 = 0
 
                 # TODO: Add further permutation properties for the later evaluation. E.g.:
-                #       - Required Machine Changes
+                #       - Number of required resources
                 #       - Distance Part has to travel (Does this make sense?)
                 #       - Consumables
                 #       - ???
@@ -482,7 +482,7 @@ def weighted_field_evaluation(solution_space: solutions_models.SolutionSpace,
     :param co2_weight: The weights of the co2.
     """
     try:
-        # 1. Normalization:
+        # 1. Min-Max-Normalization:
         # Get the max and min value for price, time and co2 of all permutations.
 
         # Price.

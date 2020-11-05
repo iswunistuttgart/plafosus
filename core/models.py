@@ -219,7 +219,7 @@ class Part(models.Model):
                                            related_name='Parts',
                                            help_text="Required skills to manufacture the part.")
 
-    # TODO: Add component (Halbzeug)?
+    # TODO: Add component (Halbzeug)? A ProcessStep can be a component? Think about this.
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -393,7 +393,7 @@ class ResourceSkill(models.Model):
                                                help_text="The required CO2-e to use the skill for one unit "
                                                          "(without consumables).",
                                                default=0)
-
+    # TODO: Add idle steps? Maschinerüsten usw.
     consumables = models.ManyToManyField(Consumable,
                                          through='SkillConsumable',
                                          related_name='ResourceSkill',
@@ -440,9 +440,11 @@ class SkillConsumable(models.Model):
                                            help_text="The quantity required in the consumable unit "
                                                      "to use the skill for one unit.",
                                            default=0)
+    # TODO: Das sollte dem consumable zu geordnet sein (eine Ebene tiefer)
     quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                  help_text="The costs in € for one unit of this consumable.",
                                                  default=0)
+    # TODO: Das sollte dem consumable zu geordnet sein (eine Ebene tiefer)
     quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                help_text="The CO2-e for one unit of this consumable.",
                                                default=0)
@@ -526,7 +528,7 @@ class PartManufacturingProcessStep(models.Model):
                                                     help_text="The required quantity of this process step to "
                                                               "manufacture the part.",
                                                     default=0)
-
+    # TODO: Add higher level. For parallel processing. Additional number. How to abbild a component.
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility this process step belongs to.",

@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import logging
+from django.db.models import Avg
 
 # App imports.
 from core import models as core_models
@@ -449,9 +450,9 @@ def field_evaluation(solution_space: solutions_models.SolutionSpace, fields: [st
     Gives ranks to the permutations of a solution_space with regard to the value of the given fields.
     The order of given fields decides, which is the first, second etc. field to be evaluated.
 
-    :param solution_space:  The solution space, which shall be evaluated.
-    :param fields:  List of fields of the permutation, which shall be used for the evaluation.
-                    Can be: 'price', 'time' or 'co2'. Add '-' of descending order e.g. '-price'.
+    :param solution_space: The solution space, which shall be evaluated.
+    :param fields: List of fields of the permutation, which shall be used for the evaluation.
+    Can be: 'price', 'time' or 'co2'. Add '-' of descending order e.g. '-price'.
     """
     try:
         # Order the permutations of the solution_space with the given fields.
@@ -476,7 +477,7 @@ def weighted_field_evaluation(solution_space: solutions_models.SolutionSpace,
     Gives ranks to the permutations of a solution_space with regard to the weighted value of the given fields.
     The order of given fields decides, which is the first, second etc. field to be evaluated.
 
-    :param solution_space:  The solution space, which shall be evaluated.
+    :param solution_space: The solution space, which shall be evaluated.
     :param price_weight: The weights of the price.
     :param time_weight: The weights of the time.
     :param co2_weight: The weights of the co2.
@@ -490,45 +491,91 @@ def weighted_field_evaluation(solution_space: solutions_models.SolutionSpace,
         permutations_price = solution_space.permutations.all().order_by('price')
         price_min = permutations_price.first().price
         price_max = permutations_price.last().price
+        price_mean = list(solution_space.permutations.aggregate(Avg('price')).values())[0]
 
         # Time.
         # First entry is the permutation with the minimal and the last with the maximal time.
         permutations_time = solution_space.permutations.all().order_by('time')
         time_min = permutations_time.first().time
         time_max = permutations_time.last().time
+        time_mean = list(solution_space.permutations.aggregate(Avg('time')).values())[0]
 
         # CO2.
         # First entry is the permutation with the minimal and the last with the maximal co2.
         permutations_co2 = solution_space.permutations.all().order_by('co2')
         co2_min = permutations_co2.first().co2
         co2_max = permutations_co2.last().co2
+        co2_mean = list(solution_space.permutations.aggregate(Avg('co2')).values())[0]
 
         rank_values = []
         for permutation in permutations_price:
-            # Calculate the normalized value and weight it for each permutation.
-            price_norm = (permutation.price - price_min) / (price_max - price_min)
+            # Calculate the normalized value using the min-max normalization and weight it for each permutation.
+            # In this case: 1 is "best" and 0 is "worst".
+
+            # TODO: Would be better to calculate the norm value, when min == max,
+            #  based on the average norm value of the other two.
+            if price_min == price_max:
+                price_norm = 0.5
+            else:
+                price_norm = (permutation.price - price_max) / (price_min - price_max)
             price_weighted = price_norm * price_weight
 
-            time_norm = (permutation.time - time_min) / (time_max - time_min)
+            if time_min == time_max:
+                time_norm = 0.5
+            else:
+                time_norm = (permutation.time - time_max) / (time_min - time_max)
             time_weighted = time_norm * time_weight
 
-            co2_norm = (permutation.co2 - co2_min) / (co2_max - co2_min)
+            if co2_min == co2_max:
+                co2_norm = 0.5
+            else:
+                co2_norm = (permutation.co2 - co2_max) / (co2_min - co2_max)
+
             co2_weighted = co2_norm * co2_weight
 
             value = sum([price_weighted, time_weighted, co2_weighted])
             rank_values.append(value)
 
         # Sort the permutation list in dependence of the rank_values.
-        sorted_permutations = [x for _, x in sorted(zip(rank_values, list(permutations_price)))]
+        # The greater the value, the better is the permutation.
+        sorted_permutations = [[val, per] for val, per in sorted(zip(rank_values, list(permutations_price)),
+                                                                 reverse=True)]
 
         i = 1
         """The rank number."""
-        for permutation in sorted_permutations:
-            # Write the ranks in dependence of the permutations queryset.
-            permutation.rank = i
-            permutation.save()
-            i += 1
+        previous_value = None
+        """The previous ranked value, used for checking, if the comparison value was the same."""
+        for ranked_permutation in sorted_permutations:
+            value = ranked_permutation[0]
+            permutation = ranked_permutation[1]
+            # Check if it has the same value (and consequently the same rank).
+            if value == previous_value:
+                # Write the ranks in dependence of the permutations queryset.
+                permutation.rank = i - 1
+                permutation.comparison_value = value
+                permutation.save()
+            # Not the same value. Not so good, as the previous one. Consequently next rank value.
+            else:
+                # Write the ranks in dependence of the permutations queryset.
+                permutation.rank = i
+                permutation.comparison_value = value
+                permutation.save()
+                i += 1
+
+            previous_value = value
 
     except Exception as e:
         logger.error("Could not do execute the weighted field evaluation for solution_space '{0}'."
                      .format(str(solution_space)), exc_info=True)
+
+
+def critic_evaluation(solution_space: solutions_models.SolutionSpace):
+    """
+    Gives ranks to the permutations of a solution_space using the
+    CRiteria Importance Through Intercriteria Correlation (CRITIC) method (Multi Criteria Decision Analysis).
+
+    :param solution_space: The solution space, which shall be evaluated.
+    """
+    # Get all permutations of this solution space.
+    permutations = solution_space.permutations.all()
+    # TODO: implement this

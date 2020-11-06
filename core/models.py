@@ -393,7 +393,7 @@ class ResourceSkill(models.Model):
                                                help_text="The required CO2-e to use the skill for one unit "
                                                          "(without consumables).",
                                                default=0)
-    # TODO: Add idle steps? Maschinerüsten usw.
+    # TODO: Add idle steps? Maschinerüsten usw. (Can this no be included into the values already)
     consumables = models.ManyToManyField(Consumable,
                                          through='SkillConsumable',
                                          related_name='ResourceSkill',
@@ -441,6 +441,7 @@ class SkillConsumable(models.Model):
                                                      "to use the skill for one unit.",
                                            default=0)
     # TODO: Das sollte dem consumable zu geordnet sein (eine Ebene tiefer)
+    #  -> Aber Preis kann halt auch Nutzerabhängig sein.
     quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                  help_text="The costs in € for one unit of this consumable.",
                                                  default=0)

@@ -168,6 +168,7 @@ class SolutionSpacePermutationsInline(admin.TabularInline):
     list_display.remove("id")
     readonly_fields = list_display
     readonly_fields.append('rank_link')
+    readonly_fields.append('comparison_value_link')
     readonly_fields.append('manufacturing_possibility_link')
     readonly_fields.append('price_link')
     readonly_fields.append('time_link')
@@ -196,6 +197,15 @@ class SolutionSpacePermutationsInline(admin.TabularInline):
             return "-"
 
     rank_link.short_description = 'Rank'
+
+    def comparison_value_link(self, instance):
+        try:
+            comparison_value = str(instance.permutation.comparison_value)
+            return comparison_value
+        except:
+            return "-"
+
+    comparison_value_link.short_description = 'Comparison Value'
 
     def manufacturing_possibility_link(self, instance):
         try:
@@ -475,13 +485,14 @@ class PermutationAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
-    list_display = ['id', 'rank', 'manufacturing_possibility', 'price', 'time', 'co2', 'created_at', 'updated_at']
+    list_display = ['id', 'rank', 'comparison_value', 'manufacturing_possibility', 'price', 'time', 'co2',
+                    'created_at', 'updated_at']
     readonly_fields = ['rank', 'manufacturing_possibility', 'price', 'time', 'co2', 'created_at', 'updated_at']
     inlines = [PermutationConsumableCostInline, PermutationSolutionsInline]
 
     fieldsets = (
         ('Solution Space', {
-            'fields': ('rank', 'manufacturing_possibility', 'price', 'time', 'co2',)
+            'fields': ('rank', 'comparison_value', 'manufacturing_possibility', 'price', 'time', 'co2',)
         }),
         ('Optional Information', {
 

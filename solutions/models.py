@@ -106,6 +106,9 @@ class Permutation(models.Model):
     rank = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                        help_text="The rank of this permutation after evaluation.",
                                        default=0)
+    comparison_value = models.PositiveIntegerField(help_text="The comparison value of this permutation.",
+                                                   blank=True,
+                                                   null=True)
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility the process steps belong to.")

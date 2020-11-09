@@ -529,7 +529,7 @@ class PartManufacturingProcessStep(models.Model):
                                                     help_text="The required quantity of this process step to "
                                                               "manufacture the part.",
                                                     default=0)
-    # TODO: Add higher level. For parallel processing. Additional number. How to abbild a component.
+    # TODO: Add higher level. For parallel processing. Additional number. How to model a component?
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility this process step belongs to.",

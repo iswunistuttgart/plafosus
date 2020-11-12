@@ -9,7 +9,7 @@ class ResourceSkillInline(admin.TabularInline):
     model = models.ResourceSkill
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['unit_link', 'edit_link']
+    readonly_fields = ['unit_link', 'edit_link', 'description']
 
     def edit_link(self, instance):
         try:

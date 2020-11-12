@@ -274,7 +274,7 @@ class PermutationSolutionsInline(admin.TabularInline):
 
     def unit_link(self, instance):
         try:
-            unit = str(instance.solution.resource_skill.skill.process_step.unit)
+            unit = str(instance.solution.resource_skill.skill.process_step.unit.name)
             return unit
         except:
             return "-"

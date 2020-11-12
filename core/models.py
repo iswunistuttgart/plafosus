@@ -199,18 +199,29 @@ class Part(models.Model):
                                        blank=True,
                                        null=True,
                                        editable=False)
-
+    evaluation_method = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)],
+                                            help_text="The evaluation method. "
+                                                      "1: Ranking regarding single field values (e.g. price). "
+                                                      "The highest importance weight is considered first. "
+                                                      "2: Ranking regarding normalized and weighted criteria "
+                                                      "(price, time and co2). "
+                                                      "3: Ranking using the CRITIC method. "
+                                                      "The importance weights are not considered.",
+                                            default=3)
     price_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
                                            help_text="The importance (weight) of the price for the "
-                                                     "evaluation of the solutions.",
+                                                     "evaluation of the solutions. "
+                                                     "Only used for evaluation method '2'.",
                                            default=1)
     time_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
                                           help_text="The importance (weight) of the time for the "
-                                                    "evaluation of the solutions.",
+                                                    "evaluation of the solutions. "
+                                                    "Only used for evaluation method '2'.",
                                           default=1)
     co2_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
                                          help_text="The importance (weight) of the co2 for the "
-                                                   "evaluation of the solutions.",
+                                                   "evaluation of the solutions. "
+                                                   "Only used for evaluation method '2'.",
                                          default=1)
 
     # Required skills to manufacture the part.
@@ -380,20 +391,28 @@ class ResourceSkill(models.Model):
                                    help_text="Specific description of the resource skill "
                                              "(e.g. level/quality of the skill).",
                                    blank=True)
-    # Costs per skill quantity.
-    quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                 help_text="The costs in € to use the skill for one unit of the"
-                                                           "skill (without consumables).",
+    # Fixed costs.
+    fixed_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                              help_text="The fixed costs in € to use the skill.",
+                                              default=0)
+    fixed_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                             help_text="The fixed time in s to use the skill "
+                                                       "(e.g. initial machine preparation).",
+                                             default=0)
+    fixed_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                            help_text="The fixed CO2-e to use the skill.",
+                                            default=0)
+    # Variable costs.
+    variable_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                 help_text="The variable costs in € to use the skill.",
                                                  default=0)
-    quantity_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                help_text="The required time in s to apply the skill for one unit "
-                                                          "of the skill.",
+    variable_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                                help_text="The variable time in s to use the skill.",
                                                 default=0)
-    quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                               help_text="The required CO2-e to use the skill for one unit "
-                                                         "(without consumables).",
+    variable_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                               help_text="The variable CO2-e to use the skill.",
                                                default=0)
-    # TODO: Add idle steps? Maschinerüsten usw. (Can this no be included into the values already)
+
     consumables = models.ManyToManyField(Consumable,
                                          through='SkillConsumable',
                                          related_name='ResourceSkill',
@@ -440,13 +459,11 @@ class SkillConsumable(models.Model):
                                            help_text="The quantity required in the consumable unit "
                                                      "to use the skill for one unit.",
                                            default=0)
-    # TODO: Das sollte dem consumable zu geordnet sein (eine Ebene tiefer)
-    #  -> Aber Preis kann halt auch Nutzerabhängig sein.
-    quantity_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+
+    variable_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                  help_text="The costs in € for one unit of this consumable.",
                                                  default=0)
-    # TODO: Das sollte dem consumable zu geordnet sein (eine Ebene tiefer)
-    quantity_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+    variable_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                help_text="The CO2-e for one unit of this consumable.",
                                                default=0)
 

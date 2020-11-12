@@ -1,11 +1,13 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import logging
-from django.db.models import Avg
+from statistics import stdev
 
 # App imports.
 from core import models as core_models
 from solutions import models as solutions_models
+from solutions import critic
+import numpy as np
 
 # Model analysis.
 import trimesh
@@ -323,17 +325,19 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                 # Iterate over all resource_skills in the permutation.
                 for resource_skill in possible_permutation:
                     # Calculate the meta data for this resource_skill.
-                    resource_skill_price = part_manufacturing_process_steps[
-                                               i].required_quantity * resource_skill.quantity_price
-                    permutation_price = permutation_price + resource_skill_price
+                    # The costs are the sum of the fixed costs and the variable costs
+                    # multiplied with the required quantity.
+                    resource_skill_price = resource_skill.fixed_price + part_manufacturing_process_steps[
+                                               i].required_quantity * resource_skill.variable_price
+                    resource_skill_time = resource_skill.fixed_co2 + part_manufacturing_process_steps[
+                                               i].required_quantity * resource_skill.variable_co2
+                    resource_skill_co2 = resource_skill.fixed_time + part_manufacturing_process_steps[
+                                               i].required_quantity * resource_skill.variable_time
 
-                    resource_skill_time = part_manufacturing_process_steps[
-                                              i].required_quantity * resource_skill.quantity_time
-                    permutation_time = permutation_time + resource_skill_time
-
-                    resource_skill_co2 = part_manufacturing_process_steps[
-                                             i].required_quantity * resource_skill.quantity_co2
-                    permutation_co2 = permutation_co2 + resource_skill_co2
+                    # Add the costs of this resource to the permutation metadata.
+                    permutation_price += resource_skill_price
+                    permutation_time += resource_skill_time
+                    permutation_co2 += resource_skill_co2
 
                     # Add the consumables for one resource_skill.
                     resource_skill_consumables = []
@@ -350,12 +354,12 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                             consumable_price = resource_skill.SkillConsumable.all().get(
                                 consumable=consumable_object).quantity * part_manufacturing_process_steps[
                                                    i].required_quantity * resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).quantity_price
+                                consumable=consumable_object).variable_price
 
                             consumable_co2 = resource_skill.SkillConsumable.all().get(
                                 consumable=consumable_object).quantity * part_manufacturing_process_steps[
                                                    i].required_quantity * resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).quantity_co2
+                                consumable=consumable_object).variable_co2
                         else:
                             # Otherwise, we set everything 0.
                             consumable_quantity = 0
@@ -374,19 +378,19 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                         resource_skill_consumables.append(consumable)
 
                         # Add the calculated meta data of the consumable to the resource sums.
-                        resource_skill_price = resource_skill_price + consumable_price
-                        resource_skill_co2 = resource_skill_co2 + consumable_co2
+                        resource_skill_price += consumable_price
+                        resource_skill_co2 += consumable_co2
 
                         # Add the calculated meta data of the consumable to the overall permutation sums.
-                        permutation_price = permutation_price + consumable_price
-                        permutation_co2 = permutation_co2 + consumable_co2
+                        permutation_price += consumable_price
+                        permutation_co2 += consumable_co2
 
                         # Update the overall consumables.
                         for overall_consumable_object in overall_consumable:
                             if overall_consumable_object.consumable == consumable_object:
                                 # Calculate the new values.
-                                new_co2 = overall_consumable_object.co2 + consumable_co2
                                 new_price = overall_consumable_object.price + consumable_price
+                                new_co2 = overall_consumable_object.co2 + consumable_co2
                                 new_quantity = overall_consumable_object.quantity + consumable_quantity
                                 # Update the field values.
                                 overall_consumable_object.quantity = new_quantity
@@ -427,17 +431,15 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                 solution_space.permutations.add(permutation)
 
         # Call one of the evaluation methods, which rank the permutations.
-        # TODO: The method to be used shall be defined in the part.
-        method_number = 1
-        if len(solution_space.permutations.all()) <= 1:
-            logger.info("Could not evaluate the permutations, since there is only one.")
-            field_evaluation(solution_space=solution_space,
-                             fields=['price'])
-        elif method_number == 1:
-            weighted_field_evaluation(solution_space=solution_space,
-                                      price_weight=solution_space.part.price_importance,
-                                      time_weight=solution_space.part.time_importance,
-                                      co2_weight=solution_space.part.co2_importance)
+        method_number = solution_space.part.evaluation_method
+        if method_number == 1 or len(solution_space.permutations.all()) <= 1:
+            if len(solution_space.permutations.all()) <= 1:
+                logger.warning("Could not evaluate the permutations, since there is only one.")
+            field_evaluation(solution_space=solution_space)
+        elif method_number == 2:
+            weighted_field_evaluation(solution_space=solution_space)
+        elif method_number == 3:
+            critic_evaluation(solution_space=solution_space)
         else:
             logger.error("Given method_number '{0}' is not defined.".format(str(method_number)))
 
@@ -445,18 +447,23 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
         logger.error("Could not do the magic for part '{0}'.".format(str(instance.pk)), exc_info=True)
 
 
-def field_evaluation(solution_space: solutions_models.SolutionSpace, fields: [str]):
+def field_evaluation(solution_space: solutions_models.SolutionSpace):
     """
     Gives ranks to the permutations of a solution_space with regard to the value of the given fields.
     The order of given fields decides, which is the first, second etc. field to be evaluated.
 
     :param solution_space: The solution space, which shall be evaluated.
-    :param fields: List of fields of the permutation, which shall be used for the evaluation.
-    Can be: 'price', 'time' or 'co2'. Add '-' of descending order e.g. '-price'.
     """
     try:
+        # The fields used for ordering.
+        fields = ['price', 'time', 'co2']
+        importance = [solution_space.part.price_importance,
+                      solution_space.part.time_importance,
+                      solution_space.part.co2_importance]
+        sorted_fields = [val for _, val in sorted(zip(importance, fields), reverse=True)]
+
         # Order the permutations of the solution_space with the given fields.
-        permutations = solution_space.permutations.all().order_by(*fields)
+        permutations = solution_space.permutations.all().order_by(*sorted_fields)
 
         i = 1
         """The rank number."""
@@ -467,102 +474,52 @@ def field_evaluation(solution_space: solutions_models.SolutionSpace, fields: [st
             i += 1
 
     except Exception as e:
-        logger.error("Could not do execute the field evaluation for solution_space '{0}' and fields '{1}'."
-                     .format(str(solution_space), str(fields)), exc_info=True)
+        logger.error("Could not do execute the field evaluation for solution_space '{0}'."
+                     .format(str(solution_space)), exc_info=True)
 
 
-def weighted_field_evaluation(solution_space: solutions_models.SolutionSpace,
-                              price_weight: int, time_weight: int, co2_weight: int):
+def weighted_field_evaluation(solution_space: solutions_models.SolutionSpace):
     """
     Gives ranks to the permutations of a solution_space with regard to the weighted value of the given fields.
     The order of given fields decides, which is the first, second etc. field to be evaluated.
 
     :param solution_space: The solution space, which shall be evaluated.
-    :param price_weight: The weights of the price.
-    :param time_weight: The weights of the time.
-    :param co2_weight: The weights of the co2.
     """
     try:
-        # 1. Min-Max-Normalization:
-        # Get the max and min value for price, time and co2 of all permutations.
-
-        # Price.
-        # First entry is the permutation with the minimal and the last with the maximal price.
-        permutations_price = solution_space.permutations.all().order_by('price')
-        price_min = permutations_price.first().price
-        price_max = permutations_price.last().price
-        price_mean = list(solution_space.permutations.aggregate(Avg('price')).values())[0]
-
-        # Time.
-        # First entry is the permutation with the minimal and the last with the maximal time.
-        permutations_time = solution_space.permutations.all().order_by('time')
-        time_min = permutations_time.first().time
-        time_max = permutations_time.last().time
-        time_mean = list(solution_space.permutations.aggregate(Avg('time')).values())[0]
-
-        # CO2.
-        # First entry is the permutation with the minimal and the last with the maximal co2.
-        permutations_co2 = solution_space.permutations.all().order_by('co2')
-        co2_min = permutations_co2.first().co2
-        co2_max = permutations_co2.last().co2
-        co2_mean = list(solution_space.permutations.aggregate(Avg('co2')).values())[0]
+        # Get the weights defined by the user.
+        price_weight = solution_space.part.price_importance,
+        time_weight = solution_space.part.time_importance,
+        co2_weight = solution_space.part.co2_importance
 
         rank_values = []
-        for permutation in permutations_price:
+        """The comparison value of each permutation. The greater, the better."""
+        for permutation in solution_space.permutations.all():
             # Calculate the normalized value using the min-max normalization and weight it for each permutation.
-            # In this case: 1 is "best" and 0 is "worst".
-
-            # TODO: Would be better to calculate the norm value, when min == max,
-            #  based on the average norm value of the other two.
-            if price_min == price_max:
-                price_norm = 0.5
-            else:
-                price_norm = (permutation.price - price_max) / (price_min - price_max)
+            # 1 is "best" and 0 is "worst".
+            price_norm = critic.normalize(solution_space=solution_space,
+                                          permutation=permutation,
+                                          attribute='price',
+                                          max_best=False)
             price_weighted = price_norm * price_weight
 
-            if time_min == time_max:
-                time_norm = 0.5
-            else:
-                time_norm = (permutation.time - time_max) / (time_min - time_max)
+            time_norm = critic.normalize(solution_space=solution_space,
+                                         permutation=permutation,
+                                         attribute='time',
+                                         max_best=False)
             time_weighted = time_norm * time_weight
 
-            if co2_min == co2_max:
-                co2_norm = 0.5
-            else:
-                co2_norm = (permutation.co2 - co2_max) / (co2_min - co2_max)
-
+            co2_norm = critic.normalize(solution_space=solution_space,
+                                        permutation=permutation,
+                                        attribute='co2',
+                                        max_best=False)
             co2_weighted = co2_norm * co2_weight
 
-            value = sum([price_weighted, time_weighted, co2_weighted])
-            rank_values.append(value)
+            # Calculate the comparison value for each permutation.
+            comparison_value = sum([price_weighted, time_weighted, co2_weighted])
+            rank_values.append(comparison_value)
 
-        # Sort the permutation list in dependence of the rank_values.
-        # The greater the value, the better is the permutation.
-        sorted_permutations = [[val, per] for val, per in sorted(zip(rank_values, list(permutations_price)),
-                                                                 reverse=True)]
-
-        i = 1
-        """The rank number."""
-        previous_value = None
-        """The previous ranked value, used for checking, if the comparison value was the same."""
-        for ranked_permutation in sorted_permutations:
-            value = ranked_permutation[0]
-            permutation = ranked_permutation[1]
-            # Check if it has the same value (and consequently the same rank).
-            if value == previous_value:
-                # Write the ranks in dependence of the permutations queryset.
-                permutation.rank = i - 1
-                permutation.comparison_value = value
-                permutation.save()
-            # Not the same value. Not so good, as the previous one. Consequently next rank value.
-            else:
-                # Write the ranks in dependence of the permutations queryset.
-                permutation.rank = i
-                permutation.comparison_value = value
-                permutation.save()
-                i += 1
-
-            previous_value = value
+        # Rank the permutations in accordance to the rank_values.
+        critic.rank(solution_space=solution_space, rank_values=rank_values)
 
     except Exception as e:
         logger.error("Could not do execute the weighted field evaluation for solution_space '{0}'."
@@ -571,11 +528,87 @@ def weighted_field_evaluation(solution_space: solutions_models.SolutionSpace,
 
 def critic_evaluation(solution_space: solutions_models.SolutionSpace):
     """
-    Gives ranks to the permutations of a solution_space using the
-    CRiteria Importance Through Intercriteria Correlation (CRITIC) method (Multi Criteria Decision Analysis).
+    Gives ranks to the permutations of a solution_space using
+    the CRITIC and WASPAS method (Multi Criteria Decision Analysis).
+
+    Source: D. Diakoulaki, G. Mavrotas, and L. Papayannakis:
+            „Determining objective weights in multiple criteria problems: The CRITIC method“,
+            Comput. Oper. Res., Bd. 22, Nr. 7, S. 763–770, 1995.
 
     :param solution_space: The solution space, which shall be evaluated.
     """
-    # Get all permutations of this solution space.
-    permutations = solution_space.permutations.all()
-    # TODO: implement this
+    try:
+        x_price = []
+        """List containing all (for each permutation) normalized values of the criterion price."""
+        x_time = []
+        """List containing all (for each permutation) normalized values of the criterion time."""
+        x_co2 = []
+        """List containing all (for each permutation) normalized values of the criterion co2."""
+
+        # Get all permutations of this solution space.
+        for permutation in solution_space.permutations.all():
+            price_norm = critic.normalize(solution_space=solution_space,
+                                          permutation=permutation,
+                                          attribute='price',
+                                          max_best=False)
+            x_price.append(price_norm)
+
+            time_norm = critic.normalize(solution_space=solution_space,
+                                         permutation=permutation,
+                                         attribute='time',
+                                         max_best=False)
+            x_time.append(time_norm)
+
+            co2_norm = critic.normalize(solution_space=solution_space,
+                                        permutation=permutation,
+                                        attribute='co2',
+                                        max_best=False)
+            x_co2.append(co2_norm)
+
+        # Calculate the standard deviation of the normalized criteria values.
+        # Other index of the divergence in scores (like entropy or variance)
+        # could be used instead of the standard deviation.
+        stdev_price = stdev(x_price)
+        stdev_time = stdev(x_time)
+        stdev_co2 = stdev(x_co2)
+
+        # Calculate the correlation coefficient.
+        # It should be noticed that the Spearman rank correlation coefficient could be used instead of
+        # pearson correlation coefficient in order to provide a more general measure
+        # of the relationship connecting the rank orders of the elements included in the vectors x_j and x_k.
+        array = np.array([x_price, x_time, x_co2])
+        r_matrix = np.corrcoef(array)
+        """
+        Correlation matrix.
+        
+                    price       time        co2
+        price    [[1.         0.29361961 0.99733866]
+        time      [0.29361961 1.         0.22314368]
+        co2       [0.99733866 0.22314368 1.        ]]
+        """
+
+        # TODO: Refactor everything to make it more dynamic. a[np.triu_indices(3, k = 1)]
+        c_price = stdev_price * sum([(1 - r_matrix[0][1]), (1 - r_matrix[0][2])])
+        c_time = stdev_time * sum([(1 - r_matrix[1][0]), (1 - r_matrix[1][2])])
+        c_co2 = stdev_co2 * sum([(1 - r_matrix[2][0]), (1 - r_matrix[2][1])])
+
+        # Calculate the weights.
+        w_price = c_price / (sum([c_price, c_time, c_co2]))
+        w_time = c_time / (sum([c_price, c_time, c_co2]))
+        w_co2 = c_co2 / (sum([c_price, c_time, c_co2]))
+
+        rank_values = []
+        for i in range(len(solution_space.permutations.all())):
+            d_price = sum([(w_price * x_price[i])])
+            d_time = sum([(w_time * x_time[i])])
+            d_co2 = sum([(w_co2 * x_co2[i])])
+
+            # Add the comparison_value to the list.
+            rank_values.append(sum([d_price, d_time, d_co2]))
+
+        # Rank the permutations in accordance to the rank_values.
+        critic.rank(solution_space=solution_space, rank_values=rank_values)
+
+    except Exception as e:
+        logger.error("Could not do execute the CRITIC evaluation for solution_space '{0}'."
+                     .format(str(solution_space)), exc_info=True)

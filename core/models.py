@@ -347,6 +347,9 @@ class Requirement(models.Model):
     name = models.CharField(max_length=254,
                             help_text="The requirement name.",
                             unique=True)
+    description = models.CharField(max_length=254,
+                                   help_text="Specific description of the requirement.",
+                                   blank=True)
     unit = models.ForeignKey(Unit,
                              on_delete=models.CASCADE,
                              related_name='Requirement',
@@ -455,6 +458,9 @@ class SkillConsumable(models.Model):
     consumable = models.ForeignKey(Consumable,
                                    on_delete=models.CASCADE,
                                    related_name='SkillConsumable')
+    description = models.CharField(max_length=254,
+                                   help_text="Specific description of the used consumable.",
+                                   blank=True)
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                            help_text="The quantity required in the consumable unit "
                                                      "to use the skill for one unit.",
@@ -498,7 +504,9 @@ class Ability(models.Model):
     resource_skill = models.ForeignKey(ResourceSkill,
                                        on_delete=models.CASCADE,
                                        related_name='Ability')
-
+    description = models.CharField(max_length=254,
+                                   help_text="Specific description of the ability.",
+                                   blank=True)
     value = models.CharField(max_length=254,
                              help_text="Value of the specific requirement describing "
                                        "how much this requirement can be fulfilled. "
@@ -592,7 +600,9 @@ class Constraint(models.Model):
     part_manufacturing_process_step = models.ForeignKey(PartManufacturingProcessStep,
                                                         on_delete=models.CASCADE,
                                                         related_name='Constraint')
-
+    description = models.CharField(max_length=254,
+                                   help_text="Specific description of the constraint.",
+                                   blank=True)
     value = models.CharField(max_length=254,
                              help_text="Value of the specific requirement describing "
                                        "how much this requirement has to be fulfilled. "

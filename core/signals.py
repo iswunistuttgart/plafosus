@@ -587,24 +587,30 @@ def critic_evaluation(solution_space: solutions_models.SolutionSpace):
         co2       [0.99733866 0.22314368 1.        ]]
         """
 
-        # TODO: Refactor everything to make it more dynamic. a[np.triu_indices(3, k = 1)]
-        c_price = stdev_price * sum([(1 - r_matrix[0][1]), (1 - r_matrix[0][2])])
-        c_time = stdev_time * sum([(1 - r_matrix[1][0]), (1 - r_matrix[1][2])])
-        c_co2 = stdev_co2 * sum([(1 - r_matrix[2][0]), (1 - r_matrix[2][1])])
+        # Remove the diagonal from the correlation matrix.
+        c_matrix = r_matrix[~np.eye(r_matrix.shape[0], dtype=bool)].reshape(r_matrix.shape[0], -1)
 
-        # Calculate the weights.
+        # Calculate the amount of information c.
+        c_price = stdev_price * sum([(1 - c_matrix[0][0]), (1 - c_matrix[0][1])])
+        c_time = stdev_time * sum([(1 - c_matrix[1][0]), (1 - c_matrix[1][1])])
+        c_co2 = stdev_co2 * sum([(1 - c_matrix[2][0]), (1 - c_matrix[2][1])])
+
+        # Calculate the weights w.
         w_price = c_price / (sum([c_price, c_time, c_co2]))
         w_time = c_time / (sum([c_price, c_time, c_co2]))
         w_co2 = c_co2 / (sum([c_price, c_time, c_co2]))
 
         rank_values = []
+        # Calculate the multi criteria score d.
         for i in range(len(solution_space.permutations.all())):
             d_price = sum([(w_price * x_price[i])])
             d_time = sum([(w_time * x_time[i])])
             d_co2 = sum([(w_co2 * x_co2[i])])
 
+            d_all = sum([d_price, d_time, d_co2])
+
             # Add the comparison_value to the list.
-            rank_values.append(sum([d_price, d_time, d_co2]))
+            rank_values.append(d_all)
 
         # Rank the permutations in accordance to the rank_values.
         critic.rank(solution_space=solution_space, rank_values=rank_values)

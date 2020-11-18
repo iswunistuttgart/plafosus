@@ -465,12 +465,19 @@ class SkillConsumable(models.Model):
                                            help_text="The quantity required in the consumable unit "
                                                      "to use the skill for one unit.",
                                            default=0)
-
+    # Fixed costs.
+    fixed_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                              help_text="The fixed costs in € for this consumable.",
+                                              default=0)
+    fixed_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
+                                            help_text="The fixed CO2-e for this consumable.",
+                                            default=0)
+    # Variable Costs.
     variable_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                 help_text="The costs in € for one unit of this consumable.",
+                                                 help_text="The variable costs in € for one unit of this consumable.",
                                                  default=0)
     variable_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                               help_text="The CO2-e for one unit of this consumable.",
+                                               help_text="The variable CO2-e for one unit of this consumable.",
                                                default=0)
 
     # Meta.

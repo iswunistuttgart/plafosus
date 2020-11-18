@@ -350,16 +350,18 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                             consumable_quantity = resource_skill.SkillConsumable.all().get(
                                 consumable=consumable_object).quantity * part_manufacturing_process_steps[
                                                    i].required_quantity
-
-                            consumable_price = resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).quantity * part_manufacturing_process_steps[
-                                                   i].required_quantity * resource_skill.SkillConsumable.all().get(
+                            # Variable costs.
+                            consumable_price = consumable_quantity * resource_skill.SkillConsumable.all().get(
                                 consumable=consumable_object).variable_price
-
-                            consumable_co2 = resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).quantity * part_manufacturing_process_steps[
-                                                   i].required_quantity * resource_skill.SkillConsumable.all().get(
+                            # Fixed costs.
+                            consumable_price += resource_skill.SkillConsumable.all().get(
+                                consumable=consumable_object).fixed_price
+                            # Variable co2.
+                            consumable_co2 = consumable_quantity * resource_skill.SkillConsumable.all().get(
                                 consumable=consumable_object).variable_co2
+                            # Fixed co2.
+                            consumable_co2 += resource_skill.SkillConsumable.all().get(
+                                consumable=consumable_object).fixed_co2
                         else:
                             # Otherwise, we set everything 0.
                             consumable_quantity = 0

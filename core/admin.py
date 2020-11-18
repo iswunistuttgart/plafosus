@@ -9,7 +9,7 @@ class ResourceSkillInline(admin.TabularInline):
     model = models.ResourceSkill
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['unit_link', 'edit_link', 'description']
+    readonly_fields = ['unit_link', 'process_step_link', 'edit_link', 'description']
 
     def edit_link(self, instance):
         try:
@@ -24,6 +24,15 @@ class ResourceSkillInline(admin.TabularInline):
             return '-'
 
     edit_link.short_description = 'Edit details'
+
+    def process_step_link(self, instance):
+        try:
+            process_step = str(instance.skill.process_step.manufacturing_process)
+            return process_step
+        except:
+            return "-"
+
+    process_step_link.short_description = 'Process step'
 
     def unit_link(self, instance):
         try:
@@ -242,9 +251,10 @@ class ResourceSkillAdmin(admin.ModelAdmin):
     list_display.insert(1, 'resource_link')
     list_display.remove('skill')
     list_display.insert(2, 'skill_link')
-    list_display.insert(3, 'unit_link')
+    list_display.insert(3, 'process_step_link')
+    list_display.insert(4, 'unit_link')
 
-    readonly_fields = ['unit_link', 'created_at', 'updated_at']
+    readonly_fields = ['process_step_link', 'unit_link', 'created_at', 'updated_at']
     search_fields = ['resource__name', 'skill__name']
     inlines = [SkillConsumableInline, AbilityInline]
 
@@ -267,6 +277,16 @@ class ResourceSkillAdmin(admin.ModelAdmin):
             return "-"
 
     skill_link.short_description = 'Skill'
+
+    def process_step_link(self, processstep):
+        try:
+            url = reverse("admin:core_processstep_change", args=[processstep.skill.process_step.id])
+            link = '<a href="%s">%s</a>' % (url, processstep.skill.process_step.manufacturing_process)
+            return mark_safe(link)
+        except:
+            return "-"
+
+    process_step_link.short_description = 'Process step'
 
     def unit_link(self, instance):
         try:

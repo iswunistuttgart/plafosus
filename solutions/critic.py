@@ -6,9 +6,8 @@ Source: D. Diakoulaki, G. Mavrotas, and L. Papayannakis:
         Comput. Oper. Res., Bd. 22, Nr. 7, S. 763–770, 1995.
 """
 from django.db.models import Avg, Max, Min
-import statistics
+import operator
 import logging
-import numpy
 
 from solutions import models as solution_models
 
@@ -58,6 +57,7 @@ def rank(solution_space: solution_models.SolutionSpace,
         # The greater the value, the better is the permutation.
         sorted_permutations = [[val, per] for val, per in sorted(zip(rank_values,
                                                                      list(solution_space.permutations.all())),
+                                                                 key=operator.itemgetter(0),
                                                                  reverse=True)]
 
         i = 1

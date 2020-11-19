@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import logging
 from statistics import stdev
+import operator
 
 # App imports.
 from core import models as core_models
@@ -346,22 +347,25 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                     for consumable_object in core_models.Consumable.objects.all():
                         # Check if this consumable is defined in the resource_skill.
                         if consumable_object in resource_skill.consumables.all():
-                            # If yes, we calculate the meta data for this consumable.
-                            consumable_quantity = resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).quantity * part_manufacturing_process_steps[
-                                                   i].required_quantity
-                            # Variable costs.
-                            consumable_price = consumable_quantity * resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).variable_price
-                            # Fixed costs.
-                            consumable_price += resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).fixed_price
-                            # Variable co2.
-                            consumable_co2 = consumable_quantity * resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).variable_co2
-                            # Fixed co2.
-                            consumable_co2 += resource_skill.SkillConsumable.all().get(
-                                consumable=consumable_object).fixed_co2
+                            # Initial values.
+                            consumable_quantity = 0
+                            consumable_price = 0
+                            consumable_co2 = 0
+                            # Check how often the consumable object is given in the particular resource skill.
+                            # This is required, because we can have the same consumable multiple times.
+                            for resource_skill_consumable in resource_skill.SkillConsumable.filter(
+                                    consumable=consumable_object):
+                                # If yes, we calculate the meta data for this consumable.
+                                consumable_quantity += resource_skill_consumable.quantity * \
+                                                       part_manufacturing_process_steps[i].required_quantity
+                                # Variable costs.
+                                consumable_price += consumable_quantity * resource_skill_consumable.variable_price
+                                # Fixed costs.
+                                consumable_price += resource_skill_consumable.fixed_price
+                                # Variable co2.
+                                consumable_co2 += consumable_quantity * resource_skill_consumable.variable_co2
+                                # Fixed co2.
+                                consumable_co2 += resource_skill_consumable.fixed_co2
                         else:
                             # Otherwise, we set everything 0.
                             consumable_quantity = 0
@@ -462,7 +466,9 @@ def field_evaluation(solution_space: solutions_models.SolutionSpace):
         importance = [solution_space.part.price_importance,
                       solution_space.part.time_importance,
                       solution_space.part.co2_importance]
-        sorted_fields = [val for _, val in sorted(zip(importance, fields), reverse=True)]
+        sorted_fields = [val for _, val in sorted(zip(importance, fields),
+                                                  key=operator.itemgetter(0),
+                                                  reverse=True)]
 
         # Order the permutations of the solution_space with the given fields.
         permutations = solution_space.permutations.all().order_by(*sorted_fields)

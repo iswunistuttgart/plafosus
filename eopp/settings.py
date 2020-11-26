@@ -142,7 +142,7 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             # 'filters': ['require_debug_false'],
-            'filename': os.path.join('logs', 'WarningsAndErrors.log'),
+            'filename': os.path.join('logs', 'Logs.log'),
             'when': "D",
             'interval': 1,
             'backupCount': 5,

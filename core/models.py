@@ -395,26 +395,36 @@ class ResourceSkill(models.Model):
                                              "(e.g. level/quality of the skill).",
                                    blank=True)
     # Fixed costs.
-    fixed_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                              help_text="The fixed costs in € to use the skill.",
-                                              default=0)
-    fixed_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                             help_text="The fixed time in s to use the skill "
-                                                       "(e.g. initial machine preparation).",
-                                             default=0)
-    fixed_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                            help_text="The fixed CO2-e to use the skill.",
-                                            default=0)
+    fixed_price = models.DecimalField(validators=[MinValueValidator(0)],
+                                      decimal_places=3,
+                                      max_digits=10,
+                                      help_text="The fixed costs in € to use the skill.",
+                                      default=0)
+    fixed_time = models.DecimalField(validators=[MinValueValidator(0)],
+                                     decimal_places=3,
+                                     max_digits=10,
+                                     help_text="The fixed time in s to use the skill "
+                                               "(e.g. initial machine preparation).",
+                                     default=0)
+    fixed_co2 = models.DecimalField(decimal_places=3,
+                                    max_digits=10,
+                                    help_text="The fixed CO2-e to use the skill.",
+                                    default=0)
     # Variable costs.
-    variable_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                 help_text="The variable costs in € to use the skill.",
-                                                 default=0)
-    variable_time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                help_text="The variable time in s to use the skill.",
-                                                default=0)
-    variable_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                               help_text="The variable CO2-e to use the skill.",
-                                               default=0)
+    variable_price = models.DecimalField(validators=[MinValueValidator(0)],
+                                         decimal_places=3,
+                                         max_digits=10,
+                                         help_text="The variable costs in € to use the skill.",
+                                         default=0)
+    variable_time = models.DecimalField(validators=[MinValueValidator(0)],
+                                        decimal_places=3,
+                                        max_digits=10,
+                                        help_text="The variable time in s to use the skill.",
+                                        default=0)
+    variable_co2 = models.DecimalField(decimal_places=3,
+                                       max_digits=10,
+                                       help_text="The variable CO2-e to use the skill.",
+                                       default=0)
 
     consumables = models.ManyToManyField(Consumable,
                                          through='SkillConsumable',
@@ -461,24 +471,32 @@ class SkillConsumable(models.Model):
     description = models.CharField(max_length=254,
                                    help_text="Specific description of the used consumable.",
                                    blank=True)
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                           help_text="The quantity required in the consumable unit "
-                                                     "to use the skill for one unit.",
-                                           default=0)
+    quantity = models.DecimalField(validators=[MinValueValidator(0)],
+                                   decimal_places=3,
+                                   max_digits=10,
+                                   help_text="The quantity required in the consumable unit "
+                                             "to use the skill for one unit.",
+                                   default=0)
     # Fixed costs.
-    fixed_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                              help_text="The fixed costs in € for this consumable.",
-                                              default=0)
-    fixed_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                            help_text="The fixed CO2-e for this consumable.",
-                                            default=0)
+    fixed_price = models.DecimalField(validators=[MinValueValidator(0)],
+                                      decimal_places=3,
+                                      max_digits=10,
+                                      help_text="The fixed costs in € for this consumable.",
+                                      default=0)
+    fixed_co2 = models.DecimalField(decimal_places=3,
+                                    max_digits=10,
+                                    help_text="The fixed CO2-e for this consumable.",
+                                    default=0)
     # Variable Costs.
-    variable_price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                 help_text="The variable costs in € for one unit of this consumable.",
-                                                 default=0)
-    variable_co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                               help_text="The variable CO2-e for one unit of this consumable.",
-                                               default=0)
+    variable_price = models.DecimalField(validators=[MinValueValidator(0)],
+                                         decimal_places=3,
+                                         max_digits=10,
+                                         help_text="The variable costs in € for one unit of this consumable.",
+                                         default=0)
+    variable_co2 = models.DecimalField(decimal_places=3,
+                                       max_digits=10,
+                                       help_text="The variable CO2-e for one unit of this consumable.",
+                                       default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -557,10 +575,12 @@ class PartManufacturingProcessStep(models.Model):
                                    blank=True)
 
     # Costs per skill quantity.
-    required_quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                                    help_text="The required quantity of this process step to "
-                                                              "manufacture the part.",
-                                                    default=0)
+    required_quantity = models.DecimalField(validators=[MinValueValidator(0)],
+                                            decimal_places=3,
+                                            max_digits=10,
+                                            help_text="The required quantity of this process step to "
+                                                      "manufacture the part.",
+                                            default=0)
     # TODO: Add higher level. For parallel processing. Additional number. How to model a component?
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "

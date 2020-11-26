@@ -21,15 +21,20 @@ class ConsumableCost(models.Model):
     is_overall = models.BooleanField(help_text="Is this an overall consumable overview?",
                                      default=False)
 
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                           help_text="The quantity in consumable unit.",
-                                           default=0)
-    price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                        help_text="The costs in € for this consumable.",
-                                        default=0)
-    co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                      help_text="The co2-e for this consumable.",
-                                      default=0)
+    quantity = models.DecimalField(validators=[MinValueValidator(0)],
+                                   decimal_places=3,
+                                   max_digits=10,
+                                   help_text="The quantity in consumable unit.",
+                                   default=0)
+    price = models.DecimalField(validators=[MinValueValidator(0)],
+                                decimal_places=3,
+                                max_digits=10,
+                                help_text="The costs in € for this consumable.",
+                                default=0)
+    co2 = models.DecimalField(decimal_places=3,
+                              max_digits=10,
+                              help_text="The co2-e for this consumable.",
+                              default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -63,18 +68,25 @@ class Solution(models.Model):
     manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                                 help_text="The sequence number of the part "
                                                                           "manufacturing process step.")
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                           help_text="The required quantity in the skill unit to manufacture the part.",
-                                           default=0)
-    price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                        help_text="The overall costs in € to manufacture the part.",
-                                        default=0)
-    time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                       help_text="The overall time in s to manufacture the part.",
-                                       default=0)
-    co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                      help_text="The overall co2-e to manufacture the part.",
-                                      default=0)
+    quantity = models.DecimalField(validators=[MinValueValidator(0)],
+                                   decimal_places=3,
+                                   max_digits=10,
+                                   help_text="The required quantity in the skill unit to manufacture the part.",
+                                   default=0)
+    price = models.DecimalField(validators=[MinValueValidator(0)],
+                                decimal_places=3,
+                                max_digits=10,
+                                help_text="The overall costs in € to manufacture the part.",
+                                default=0)
+    time = models.DecimalField(validators=[MinValueValidator(0)],
+                               decimal_places=3,
+                               max_digits=10,
+                               help_text="The overall time in s to manufacture the part.",
+                               default=0)
+    co2 = models.DecimalField(decimal_places=3,
+                              max_digits=10,
+                              help_text="The overall co2-e to manufacture the part.",
+                              default=0)
     consumables = models.ManyToManyField(ConsumableCost,
                                          related_name='Solution',
                                          help_text="Required consumables for this permutation.",
@@ -114,15 +126,20 @@ class Permutation(models.Model):
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility the process steps belong to.")
-    price = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                        help_text="The overall costs in € to manufacture the part.",
-                                        default=0)
-    time = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                       help_text="The overall time in s to manufacture the part.",
-                                       default=0)
-    co2 = models.PositiveIntegerField(validators=[MinValueValidator(0)],
-                                      help_text="The overall co2-e to manufacture the part.",
-                                      default=0)
+    price = models.DecimalField(validators=[MinValueValidator(0)],
+                                decimal_places=3,
+                                max_digits=10,
+                                help_text="The overall costs in € to manufacture the part.",
+                                default=0)
+    time = models.DecimalField(validators=[MinValueValidator(0)],
+                               decimal_places=3,
+                               max_digits=10,
+                               help_text="The overall time in s to manufacture the part.",
+                               default=0)
+    co2 = models.DecimalField(decimal_places=3,
+                              max_digits=10,
+                              help_text="The overall co2-e to manufacture the part.",
+                              default=0)
     consumables = models.ManyToManyField(ConsumableCost,
                                          related_name='Permutation',
                                          help_text="Overall required consumables for this permutation.",

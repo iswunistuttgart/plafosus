@@ -180,22 +180,22 @@ class Part(models.Model):
                                    help_text="Is the 3d part valid (a closed/watertight 3d part).",
                                    editable=False)
     volume = models.FloatField(validators=[MinValueValidator(0)],
-                               help_text="Volume of the part.",
+                               help_text="Volume of the part in mm³.",
                                blank=True,
                                null=True,
                                editable=False)
     bounding_box_x = models.FloatField(validators=[MinValueValidator(0)],
-                                       help_text="Length (x-axis) of the bounding box of the part.",
+                                       help_text="Length (x-axis) of the bounding box of the part in mm.",
                                        blank=True,
                                        null=True,
                                        editable=False)
     bounding_box_y = models.FloatField(validators=[MinValueValidator(0)],
-                                       help_text="Width (y-axis) of the bounding box of the part.",
+                                       help_text="Width (y-axis) of the bounding box of the part in mm.",
                                        blank=True,
                                        null=True,
                                        editable=False)
     bounding_box_z = models.FloatField(validators=[MinValueValidator(0)],
-                                       help_text="Height (z-axis) of the bounding box of the part.",
+                                       help_text="Height (z-axis) of the bounding box of the part in mm.",
                                        blank=True,
                                        null=True,
                                        editable=False)
@@ -230,8 +230,6 @@ class Part(models.Model):
                                            related_name='Parts',
                                            help_text="Required skills to manufacture the part.")
 
-    # TODO: Add component (Halbzeug)? A ProcessStep can be a component? Think about this.
-
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -246,6 +244,13 @@ class Part(models.Model):
 
     def get_absolute_url(self):
         return reverse('part-detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        self.volume = round(self.volume, 3)
+        self.bounding_box_x = round(self.bounding_box_x, 3)
+        self.bounding_box_y = round(self.bounding_box_y, 3)
+        self.bounding_box_z = round(self.bounding_box_z, 3)
+        super(Part, self).save(*args, **kwargs)
 
 
 class Resource(models.Model):
@@ -395,36 +400,24 @@ class ResourceSkill(models.Model):
                                              "(e.g. level/quality of the skill).",
                                    blank=True)
     # Fixed costs.
-    fixed_price = models.DecimalField(validators=[MinValueValidator(0)],
-                                      decimal_places=3,
-                                      max_digits=10,
-                                      help_text="The fixed costs in € to use the skill.",
-                                      default=0)
-    fixed_time = models.DecimalField(validators=[MinValueValidator(0)],
-                                     decimal_places=3,
-                                     max_digits=10,
-                                     help_text="The fixed time in s to use the skill "
-                                               "(e.g. initial machine preparation).",
-                                     default=0)
-    fixed_co2 = models.DecimalField(decimal_places=3,
-                                    max_digits=10,
-                                    help_text="The fixed CO2-e to use the skill.",
+    fixed_price = models.FloatField(validators=[MinValueValidator(0)],
+                                    help_text="The fixed costs in € to use the skill.",
                                     default=0)
+    fixed_time = models.FloatField(validators=[MinValueValidator(0)],
+                                   help_text="The fixed time in s to use the skill "
+                                             "(e.g. initial machine preparation).",
+                                   default=0)
+    fixed_co2 = models.FloatField(help_text="The fixed CO2-e to use the skill.",
+                                  default=0)
     # Variable costs.
-    variable_price = models.DecimalField(validators=[MinValueValidator(0)],
-                                         decimal_places=3,
-                                         max_digits=10,
-                                         help_text="The variable costs in € to use the skill.",
-                                         default=0)
-    variable_time = models.DecimalField(validators=[MinValueValidator(0)],
-                                        decimal_places=3,
-                                        max_digits=10,
-                                        help_text="The variable time in s to use the skill.",
-                                        default=0)
-    variable_co2 = models.DecimalField(decimal_places=3,
-                                       max_digits=10,
-                                       help_text="The variable CO2-e to use the skill.",
+    variable_price = models.FloatField(validators=[MinValueValidator(0)],
+                                       help_text="The variable costs in € to use the skill.",
                                        default=0)
+    variable_time = models.FloatField(validators=[MinValueValidator(0)],
+                                      help_text="The variable time in s to use the skill.",
+                                      default=0)
+    variable_co2 = models.FloatField(help_text="The variable CO2-e to use the skill.",
+                                     default=0)
 
     consumables = models.ManyToManyField(Consumable,
                                          through='SkillConsumable',
@@ -451,6 +444,15 @@ class ResourceSkill(models.Model):
     def get_absolute_url(self):
         return reverse('resourceskill-detail', args=[str(self.id)])
 
+    def save(self, *args, **kwargs):
+        self.fixed_price = round(self.fixed_price, 3)
+        self.fixed_time = round(self.fixed_time, 3)
+        self.fixed_co2 = round(self.fixed_co2, 3)
+        self.variable_price = round(self.variable_price, 3)
+        self.variable_time = round(self.variable_time, 3)
+        self.variable_co2 = round(self.variable_co2, 3)
+        super(ResourceSkill, self).save(*args, **kwargs)
+
 
 class SkillConsumable(models.Model):
     """
@@ -471,32 +473,22 @@ class SkillConsumable(models.Model):
     description = models.CharField(max_length=254,
                                    help_text="Specific description of the used consumable.",
                                    blank=True)
-    quantity = models.DecimalField(validators=[MinValueValidator(0)],
-                                   decimal_places=3,
-                                   max_digits=10,
-                                   help_text="The quantity required in the consumable unit "
-                                             "to use the skill for one unit.",
-                                   default=0)
+    quantity = models.FloatField(validators=[MinValueValidator(0)],
+                                 help_text="The quantity required in the consumable unit "
+                                           "to use the skill for one unit.",
+                                 default=0)
     # Fixed costs.
-    fixed_price = models.DecimalField(validators=[MinValueValidator(0)],
-                                      decimal_places=3,
-                                      max_digits=10,
-                                      help_text="The fixed costs in € for this consumable.",
-                                      default=0)
-    fixed_co2 = models.DecimalField(decimal_places=3,
-                                    max_digits=10,
-                                    help_text="The fixed CO2-e for this consumable.",
+    fixed_price = models.FloatField(validators=[MinValueValidator(0)],
+                                    help_text="The fixed costs in € for this consumable.",
                                     default=0)
+    fixed_co2 = models.FloatField(help_text="The fixed CO2-e for this consumable.",
+                                  default=0)
     # Variable Costs.
-    variable_price = models.DecimalField(validators=[MinValueValidator(0)],
-                                         decimal_places=3,
-                                         max_digits=10,
-                                         help_text="The variable costs in € for one unit of this consumable.",
-                                         default=0)
-    variable_co2 = models.DecimalField(decimal_places=3,
-                                       max_digits=10,
-                                       help_text="The variable CO2-e for one unit of this consumable.",
+    variable_price = models.FloatField(validators=[MinValueValidator(0)],
+                                       help_text="The variable costs in € for one unit of this consumable.",
                                        default=0)
+    variable_co2 = models.FloatField(help_text="The variable CO2-e for one unit of this consumable.",
+                                     default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -512,6 +504,14 @@ class SkillConsumable(models.Model):
 
     def get_absolute_url(self):
         return reverse('skillconsumable-detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        self.quantity = round(self.quantity, 3)
+        self.fixed_price = round(self.fixed_price, 3)
+        self.fixed_co2 = round(self.fixed_co2, 3)
+        self.variable_price = round(self.variable_price, 3)
+        self.variable_co2 = round(self.variable_co2, 3)
+        super(SkillConsumable, self).save(*args, **kwargs)
 
 
 class Ability(models.Model):
@@ -575,13 +575,11 @@ class PartManufacturingProcessStep(models.Model):
                                    blank=True)
 
     # Costs per skill quantity.
-    required_quantity = models.DecimalField(validators=[MinValueValidator(0)],
-                                            decimal_places=3,
-                                            max_digits=10,
-                                            help_text="The required quantity of this process step to "
-                                                      "manufacture the part.",
-                                            default=0)
-    # TODO: Add higher level. For parallel processing. Additional number. How to model a component?
+    required_quantity = models.FloatField(validators=[MinValueValidator(0)],
+                                          help_text="The required quantity of this process step to "
+                                                    "manufacture the part.",
+                                          default=0)
+
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility this process step belongs to.",
@@ -613,6 +611,10 @@ class PartManufacturingProcessStep(models.Model):
     def get_absolute_url(self):
         return reverse('partmanufacturingprocessstep-detail', args=[str(self.id)])
 
+    def save(self, *args, **kwargs):
+        self.required_quantity = round(self.required_quantity, 3)
+        super(PartManufacturingProcessStep, self).save(*args, **kwargs)
+
 
 class Constraint(models.Model):
     """
@@ -640,7 +642,11 @@ class Constraint(models.Model):
                                 choices=OPERATORS,
                                 help_text="Has the result to be equal, smaller, or bigger then this value.")
     optional = models.BooleanField(default=False,
-                                   help_text="Has this requirement to be fulfilled.")
+                                   help_text="The optional flag is used, when one requirement must be met "
+                                             "by a selection of several identical requirements. "
+                                             "E.g. material can be plastic OR metal. "
+                                             "If only one requirement is optional and their are no alternatives, "
+                                             "it is handled like a 'normal' requirement, which has to be fulfilled.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,

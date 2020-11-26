@@ -164,12 +164,10 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                     # Check if process_step of the resource_skill skill matches the process_step of
                     # the part_manufacturing_process_step.
                     if resource_skill.skill.process_step == part_manufacturing_process_step.process_step:
+                        # If it is an optional constraint, we skip it.
                         for constraint in part_manufacturing_process_step.Constraint.all():
-                            # Check if this constraint is optional.
-                            optional = constraint.optional
-                            """Is this constraint optional."""
+                            # Is there an ability, which fulfills this constraint.
                             fulfilled = False
-                            """Is there an ability, which fulfills this constraint."""
                             for ability in resource_skill.Ability.all():
                                 # Check if the ability is based on the same requirement as the constraint.
                                 if ability.requirement == constraint.requirement:
@@ -210,8 +208,62 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                             if fulfilled:
                                 constraints_fulfilled.append(True)
                             else:
-                                constraints_fulfilled.append(False)
-                                break
+                                if not constraint.optional:
+                                    constraints_fulfilled.append(False)
+                                    break
+                                else:
+                                    # It was an optional constraint. Check if there is another constraint
+                                    # based on the same requirement, which is also optional and
+                                    # which is fulfilled by the resource.
+                                    for other_constraint in part_manufacturing_process_step.Constraint.all().filter(
+                                            requirement__pk=constraint.requirement.id).exclude(id=constraint.id):
+                                        # Since we have multiple constraints with the same requirement.id,
+                                        # these are double checked, but ok.
+                                        # Now we check, if the other constraints are fulfilled.
+                                        # Is there an ability, which fulfills this constraint.
+                                        fulfilled = False
+                                        for ability in resource_skill.Ability.all():
+                                            # Check if the ability is based on the same requirement as the constraint.
+                                            if ability.requirement == other_constraint.requirement:
+                                                # Check if the value of the ability satisfies the value
+                                                # of the constraint in dependence of the defined operator.
+                                                if other_constraint.operator == "=":
+                                                    if ability.value == other_constraint.value:
+                                                        fulfilled = True
+                                                        break
+                                                elif other_constraint.operator == "!=":
+                                                    if ability.value != other_constraint.value:
+                                                        fulfilled = True
+                                                        break
+                                                elif other_constraint.operator == "<":
+                                                    if ability.value < other_constraint.value:
+                                                        fulfilled = True
+                                                        break
+                                                elif other_constraint.operator == ">":
+                                                    if ability.value > other_constraint.value:
+                                                        fulfilled = True
+                                                        break
+                                                elif other_constraint.operator >= "<=":
+                                                    if ability.value <= other_constraint.value:
+                                                        fulfilled = True
+                                                        break
+                                                elif other_constraint.operator == ">=":
+                                                    if ability.value >= other_constraint.value:
+                                                        fulfilled = True
+                                                        break
+                                                else:
+                                                    # Operator does not exist.
+                                                    # This should never happen, since the operators are fixed.
+                                                    logger.error(
+                                                        "Could not find a matching operator for given operator '{0}' "
+                                                        "of constraint '{1}'."
+                                                        .format(str(other_constraint.operator), str(other_constraint)))
+
+                                    # Check if there was at least one ability, which fulfills the constraint.
+                                    if fulfilled:
+                                        constraints_fulfilled.append(True)
+                                    else:
+                                        constraints_fulfilled.append(False)
 
                         # Save this resource if it does not already exist and the constraints are fulfilled.
                         if False not in constraints_fulfilled:
@@ -330,9 +382,9 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                     # multiplied with the required quantity.
                     resource_skill_price = resource_skill.fixed_price + part_manufacturing_process_steps[
                                                i].required_quantity * resource_skill.variable_price
-                    resource_skill_time = resource_skill.fixed_co2 + part_manufacturing_process_steps[
+                    resource_skill_co2 = resource_skill.fixed_co2 + part_manufacturing_process_steps[
                                                i].required_quantity * resource_skill.variable_co2
-                    resource_skill_co2 = resource_skill.fixed_time + part_manufacturing_process_steps[
+                    resource_skill_time = resource_skill.fixed_time + part_manufacturing_process_steps[
                                                i].required_quantity * resource_skill.variable_time
 
                     # Add the costs of this resource to the permutation metadata.

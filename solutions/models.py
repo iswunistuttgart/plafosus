@@ -21,20 +21,14 @@ class ConsumableCost(models.Model):
     is_overall = models.BooleanField(help_text="Is this an overall consumable overview?",
                                      default=False)
 
-    quantity = models.DecimalField(validators=[MinValueValidator(0)],
-                                   decimal_places=3,
-                                   max_digits=10,
-                                   help_text="The quantity in consumable unit.",
-                                   default=0)
-    price = models.DecimalField(validators=[MinValueValidator(0)],
-                                decimal_places=3,
-                                max_digits=10,
-                                help_text="The costs in € for this consumable.",
-                                default=0)
-    co2 = models.DecimalField(decimal_places=3,
-                              max_digits=10,
-                              help_text="The co2-e for this consumable.",
+    quantity = models.FloatField(validators=[MinValueValidator(0)],
+                                 help_text="The quantity in consumable unit.",
+                                 default=0)
+    price = models.FloatField(validators=[MinValueValidator(0)],
+                              help_text="The costs in € for this consumable.",
                               default=0)
+    co2 = models.FloatField(help_text="The co2-e for this consumable.",
+                            default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -50,6 +44,15 @@ class ConsumableCost(models.Model):
 
     def get_absolute_url(self):
         return reverse('consumablecost-detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        if self.quantity:
+            self.quantity = round(self.quantity, 3)
+        if self.price:
+            self.price = round(self.price, 3)
+        if self.co2:
+            self.co2 = round(self.co2, 3)
+        super(ConsumableCost, self).save(*args, **kwargs)
 
 
 class Solution(models.Model):
@@ -68,25 +71,17 @@ class Solution(models.Model):
     manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                                 help_text="The sequence number of the part "
                                                                           "manufacturing process step.")
-    quantity = models.DecimalField(validators=[MinValueValidator(0)],
-                                   decimal_places=3,
-                                   max_digits=10,
-                                   help_text="The required quantity in the skill unit to manufacture the part.",
-                                   default=0)
-    price = models.DecimalField(validators=[MinValueValidator(0)],
-                                decimal_places=3,
-                                max_digits=10,
-                                help_text="The overall costs in € to manufacture the part.",
-                                default=0)
-    time = models.DecimalField(validators=[MinValueValidator(0)],
-                               decimal_places=3,
-                               max_digits=10,
-                               help_text="The overall time in s to manufacture the part.",
-                               default=0)
-    co2 = models.DecimalField(decimal_places=3,
-                              max_digits=10,
-                              help_text="The overall co2-e to manufacture the part.",
+    quantity = models.FloatField(validators=[MinValueValidator(0)],
+                                 help_text="The required quantity in the skill unit to manufacture the part.",
+                                 default=0)
+    price = models.FloatField(validators=[MinValueValidator(0)],
+                              help_text="The overall costs in € to manufacture the part.",
                               default=0)
+    time = models.FloatField(validators=[MinValueValidator(0)],
+                             help_text="The overall time in s to manufacture the part.",
+                             default=0)
+    co2 = models.FloatField(help_text="The overall co2-e to manufacture the part.",
+                            default=0)
     consumables = models.ManyToManyField(ConsumableCost,
                                          related_name='Solution',
                                          help_text="Required consumables for this permutation.",
@@ -107,6 +102,17 @@ class Solution(models.Model):
     def get_absolute_url(self):
         return reverse('solution-detail', args=[str(self.id)])
 
+    def save(self, *args, **kwargs):
+        if self.quantity:
+            self.quantity = round(self.quantity, 3)
+        if self.price:
+            self.price = round(self.price, 3)
+        if self.time:
+            self.time = round(self.time, 3)
+        if self.co2:
+            self.co2 = round(self.co2, 3)
+        super(Solution, self).save(*args, **kwargs)
+
 
 class Permutation(models.Model):
     """
@@ -118,28 +124,20 @@ class Permutation(models.Model):
     rank = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                        help_text="The rank of this permutation after evaluation.",
                                        default=0)
-    comparison_value = models.DecimalField(help_text="The comparison value of this permutation.",
-                                           decimal_places=3,
-                                           max_digits=5,
-                                           blank=True,
-                                           null=True)
+    comparison_value = models.FloatField(help_text="The comparison value of this permutation.",
+                                         blank=True,
+                                         null=True)
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility the process steps belong to.")
-    price = models.DecimalField(validators=[MinValueValidator(0)],
-                                decimal_places=3,
-                                max_digits=10,
-                                help_text="The overall costs in € to manufacture the part.",
-                                default=0)
-    time = models.DecimalField(validators=[MinValueValidator(0)],
-                               decimal_places=3,
-                               max_digits=10,
-                               help_text="The overall time in s to manufacture the part.",
-                               default=0)
-    co2 = models.DecimalField(decimal_places=3,
-                              max_digits=10,
-                              help_text="The overall co2-e to manufacture the part.",
+    price = models.FloatField(validators=[MinValueValidator(0)],
+                              help_text="The overall costs in € to manufacture the part.",
                               default=0)
+    time = models.FloatField(validators=[MinValueValidator(0)],
+                             help_text="The overall time in s to manufacture the part.",
+                             default=0)
+    co2 = models.FloatField(help_text="The overall co2-e to manufacture the part.",
+                            default=0)
     consumables = models.ManyToManyField(ConsumableCost,
                                          related_name='Permutation',
                                          help_text="Overall required consumables for this permutation.",
@@ -163,6 +161,17 @@ class Permutation(models.Model):
 
     def get_absolute_url(self):
         return reverse('permutation-detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        if self.comparison_value:
+            self.comparison_value = round(self.comparison_value, 3)
+        if self.price:
+            self.price = round(self.price, 3)
+        if self.time:
+            self.time = round(self.time, 3)
+        if self.co2:
+            self.co2 = round(self.co2, 3)
+        super(Permutation, self).save(*args, **kwargs)
 
 
 class SolutionSpace(models.Model):

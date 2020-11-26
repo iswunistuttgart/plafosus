@@ -1,0 +1,2630 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2020-11-26T13:53:55.066Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "ce18fd6c-f975-49c7-89c1-6872eeed179a",
+    "object_repr": "test machine",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2020-11-26T13:59:37.982Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "811e1b1f-d83d-46c9-bd2b-a3384b7d2cf8",
+    "object_repr": "mm²",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2020-11-26T13:59:42.938Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "eadf9ca3-49ff-43e3-97b1-dadbf07ba0f7",
+    "object_repr": "mm",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2020-11-26T13:59:47.248Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "dfc8db64-241e-464d-9cfa-21c5a66a7d58",
+    "object_repr": "mm³",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2020-11-26T13:59:57.216Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "88a2f9cc-904a-4f5d-9d01-3f9f0da22777",
+    "object_repr": "Primary shaping [mm³]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2020-11-26T14:00:10.700Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3196a9ab-0536-4a24-9d23-a7165b2ba8ab",
+    "object_repr": "Forming [mm]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2020-11-26T14:00:17.212Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "a95765f2-08ed-4ad0-ae35-93f458fdd004",
+    "object_repr": "Separation [mm]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2020-11-26T14:00:23.093Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "d932b075-7db7-4464-b340-c4d8b2bed3d5",
+    "object_repr": "Separation [mm³]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2020-11-26T14:00:30.204Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "11224ca2-1a77-41a6-8d08-1e27202cb7d8",
+    "object_repr": "Separation [mm²]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2020-11-26T14:00:36.340Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "d7dd9f6b-a806-4da8-810f-1f5487689cc4",
+    "object_repr": "Joining [mm]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2020-11-26T14:00:41.631Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "17e84fd0-4bd3-4870-bb15-9e417900eeb1",
+    "object_repr": "Joining [mm²]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2020-11-26T14:00:47.407Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "452dd1e3-103e-4045-a9af-752131ca4f9e",
+    "object_repr": "Coating [mm²]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2020-11-26T14:00:54.970Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3dd1b189-99e7-41e0-b66e-ff3990ec69b4",
+    "object_repr": "Changing material properties [mm²]",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2020-11-26T14:02:02.487Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "f22ccf4c-6e5c-433a-8f7b-9c5d7d553da3",
+    "object_repr": "Printing",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2020-11-26T14:02:48.189Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "ce18fd6c-f975-49c7-89c1-6872eeed179a",
+    "object_repr": "test machine",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"resource skill\", \"object\": \"0de5cd2c-5142-4022-97fe-ae0a5300854d\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2020-11-26T14:03:40.113Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "ff159bb7-f298-40d6-bf5d-bf38dad8f02c",
+    "object_repr": "l",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2020-11-26T14:03:46.174Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "cc5a2bac-8138-49b7-874e-4f8a23038d7f",
+    "object_repr": "Water",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2020-11-26T14:04:08.108Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Variable co2\"]}}, {\"added\": {\"name\": \"skill consumable\", \"object\": \"7f42a325-1e48-4c17-b1bf-21f0d159624b\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2020-11-26T14:04:21.195Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Variable co2\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2020-11-26T14:06:17.221Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "d17bd2f2-3ee3-48fe-aeb8-68e150e3e3d7",
+    "object_repr": "kWh",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2020-11-26T14:07:16.019Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "2b06d994-cc08-411a-b2ac-9ffe09410d02",
+    "object_repr": "Energy",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2020-11-26T14:10:52.683Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "1d4e1104-d194-478e-8e00-842dbd486d94",
+    "object_repr": "Compressed Air",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2020-11-26T14:15:38.232Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "1bea2af9-e3e8-4dc4-89fc-c27ae2865f78",
+    "object_repr": "Argon",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2020-11-26T14:16:07.584Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"skill consumable\", \"object\": \"bd91089c-c6d5-4980-9027-f26addce03bb\"}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"7f42a325-1e48-4c17-b1bf-21f0d159624b\", \"fields\": [\"Consumable\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2020-11-26T14:16:15.967Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"skill consumable\", \"object\": \"90e03e0d-f784-4616-b385-ad1bbdc22bc0\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2020-11-26T14:17:08.810Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"skill consumable\", \"object\": \"84d9e677-9605-4520-aa5c-fcc02104932a\"}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"90e03e0d-f784-4616-b385-ad1bbdc22bc0\", \"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"bd91089c-c6d5-4980-9027-f26addce03bb\", \"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"7f42a325-1e48-4c17-b1bf-21f0d159624b\", \"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2020-11-26T14:18:18.842Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"skill consumable\", \"object\": \"84d9e677-9605-4520-aa5c-fcc02104932a\", \"fields\": [\"Quantity\", \"Fixed price\", \"Fixed co2\", \"Variable price\", \"Variable co2\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"90e03e0d-f784-4616-b385-ad1bbdc22bc0\", \"fields\": [\"Quantity\", \"Fixed price\", \"Fixed co2\", \"Variable price\", \"Variable co2\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"bd91089c-c6d5-4980-9027-f26addce03bb\", \"fields\": [\"Quantity\", \"Fixed price\", \"Fixed co2\", \"Variable price\", \"Variable co2\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"7f42a325-1e48-4c17-b1bf-21f0d159624b\", \"fields\": [\"Quantity\", \"Fixed price\", \"Fixed co2\", \"Variable price\", \"Variable co2\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2020-11-26T14:18:53.452Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "e72f20dc-5a43-4877-87ae-7c6d56bd7631",
+    "object_repr": "Material",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2020-11-26T14:19:35.213Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "99d4dc4c-5eb6-4e81-84f6-c88315bf55e7",
+    "object_repr": "Ra",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2020-11-26T14:19:43.344Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "73c1618b-35b0-4a2b-8623-fdd30512c2c6",
+    "object_repr": "Surface roughness",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2020-11-26T14:20:37.186Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"ability\", \"object\": \"8846bbe4-530f-4730-b07a-16da5251ac3d\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2020-11-26T14:21:19.721Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"84d9e677-9605-4520-aa5c-fcc02104932a\", \"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"90e03e0d-f784-4616-b385-ad1bbdc22bc0\", \"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"bd91089c-c6d5-4980-9027-f26addce03bb\", \"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"7f42a325-1e48-4c17-b1bf-21f0d159624b\", \"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2020-11-26T14:22:42.381Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"skill consumable\", \"object\": \"6c27198b-9c86-4d5b-8c58-94d329e21d34\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2020-11-26T14:23:56.683Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "bcd2a33f-0e5a-46f8-bd61-7d3addb897ac",
+    "object_repr": "-",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2020-11-26T14:24:00.227Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "object_repr": "Metal",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2020-11-26T14:24:17.333Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "object_repr": "Material",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2020-11-26T14:24:18.890Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"ability\", \"object\": \"b419321b-9f2f-477b-8f77-56c504a3b1a8\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2020-11-26T14:25:03.154Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"ability\", \"object\": \"b419321b-9f2f-477b-8f77-56c504a3b1a8\", \"fields\": [\"Description\", \"Value\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2020-11-26T14:25:26.231Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "object_repr": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2020-11-26T14:34:37.911Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "8f6be04a-507e-4e22-b59b-0dc68e668076",
+    "object_repr": "Raw material",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2020-11-26T14:34:59.947Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "c6087674-1c8d-4469-b17f-94622fac368c",
+    "object_repr": "PLA",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"resource skill\", \"object\": \"a2669ff8-1ab5-4887-b67c-ed2327d167f6\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2020-11-26T14:35:58.816Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+    "object_repr": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"skill consumable\", \"object\": \"4c30520b-ec52-4c65-a9d9-639ea0f1efdf\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2020-11-26T14:36:38.005Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+    "object_repr": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}, {\"changed\": {\"name\": \"skill consumable\", \"object\": \"4c30520b-ec52-4c65-a9d9-639ea0f1efdf\", \"fields\": [\"Description\"]}}, {\"added\": {\"name\": \"ability\", \"object\": \"9c826b52-904e-4d2e-b589-85159c85bda7\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2020-11-26T14:37:05.696Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "object_repr": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"part manufacturing process step\", \"object\": \"6ab3c7e0-355b-45fc-b6f3-3deb987001f1\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2020-11-26T14:37:20.557Z",
+    "user": 1,
+    "content_type": 19,
+    "object_id": "6ab3c7e0-355b-45fc-b6f3-3deb987001f1",
+    "object_repr": "6ab3c7e0-355b-45fc-b6f3-3deb987001f1",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"constraint\", \"object\": \"f049380d-a753-4ce8-bef0-ec21541bd75e\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2020-11-26T14:38:17.332Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "object_repr": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"part manufacturing process step\", \"object\": \"b6d2a937-384d-483e-8f6e-5f65fa3cdce8\"}}, {\"changed\": {\"name\": \"part manufacturing process step\", \"object\": \"6ab3c7e0-355b-45fc-b6f3-3deb987001f1\", \"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2020-11-26T14:38:48.541Z",
+    "user": 1,
+    "content_type": 19,
+    "object_id": "b6d2a937-384d-483e-8f6e-5f65fa3cdce8",
+    "object_repr": "b6d2a937-384d-483e-8f6e-5f65fa3cdce8",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"constraint\", \"object\": \"2c453d72-57e1-49c0-91d2-77c4ad6deb20\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2020-11-26T14:40:07.560Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "object_repr": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"part manufacturing process step\", \"object\": \"5de25cea-9852-4dd6-bbc5-e1f1586d2237\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2020-11-26T14:40:57.294Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "object_repr": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"part manufacturing process step\", \"object\": \"5de25cea-9852-4dd6-bbc5-e1f1586d2237\", \"fields\": [\"Process step\", \"Description\", \"Required quantity\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2020-11-26T14:41:09.951Z",
+    "user": 1,
+    "content_type": 19,
+    "object_id": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+    "object_repr": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"constraint\", \"object\": \"6858ee60-47d9-4288-808f-12ec5c67abb2\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2020-11-26T14:42:21.228Z",
+    "user": 1,
+    "content_type": 19,
+    "object_id": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+    "object_repr": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"constraint\", \"object\": \"c412f2f9-2e4c-4472-bec9-7fc4c9654d06\"}}, {\"changed\": {\"name\": \"constraint\", \"object\": \"6858ee60-47d9-4288-808f-12ec5c67abb2\", \"fields\": [\"Description\", \"Optional\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2020-11-26T18:00:18.325Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "55951824-4065-44f8-9ce4-7ff4c9637ef0",
+    "object_repr": "55951824-4065-44f8-9ce4-7ff4c9637ef0",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2020-11-26T18:00:23.632Z",
+    "user": 1,
+    "content_type": 23,
+    "object_id": "7d4296a9-e9c9-4bbd-95aa-03a4d710bed2",
+    "object_repr": "7d4296a9-e9c9-4bbd-95aa-03a4d710bed2",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2020-11-26T18:00:23.642Z",
+    "user": 1,
+    "content_type": 23,
+    "object_id": "a96a7505-0f65-4e54-b563-935d1349b40f",
+    "object_repr": "a96a7505-0f65-4e54-b563-935d1349b40f",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2020-11-26T18:00:28.801Z",
+    "user": 1,
+    "content_type": 21,
+    "object_id": "24a0786a-4257-4430-86a4-e4a7a594be10",
+    "object_repr": "24a0786a-4257-4430-86a4-e4a7a594be10",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2020-11-26T18:00:28.810Z",
+    "user": 1,
+    "content_type": 21,
+    "object_id": "7d549ec5-3374-45e9-b194-0c7e132f08d0",
+    "object_repr": "7d549ec5-3374-45e9-b194-0c7e132f08d0",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.659Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "6abf5973-de85-4714-b913-9c1e64cfcef8",
+    "object_repr": "6abf5973-de85-4714-b913-9c1e64cfcef8",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.669Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "9693febf-e2d3-42d4-9012-98dc97d12001",
+    "object_repr": "9693febf-e2d3-42d4-9012-98dc97d12001",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.679Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "d8664687-07e5-42fb-8d19-1d915be9d19b",
+    "object_repr": "d8664687-07e5-42fb-8d19-1d915be9d19b",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.689Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "f128da5c-9932-4e41-bba9-b8255e859d24",
+    "object_repr": "f128da5c-9932-4e41-bba9-b8255e859d24",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.700Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "5538cd2b-3859-4ea5-8377-02cd70a2761d",
+    "object_repr": "5538cd2b-3859-4ea5-8377-02cd70a2761d",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.709Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "9a88fb07-fd61-44ed-b5b9-4a2e20248c1d",
+    "object_repr": "9a88fb07-fd61-44ed-b5b9-4a2e20248c1d",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 63,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.719Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "26c59c82-423f-46e1-8c36-90243b27a9b2",
+    "object_repr": "26c59c82-423f-46e1-8c36-90243b27a9b2",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 64,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.733Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "00f84214-c9d4-4da9-a8c1-055f1f4956ea",
+    "object_repr": "00f84214-c9d4-4da9-a8c1-055f1f4956ea",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 65,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.744Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "b0ba5090-f255-4267-923b-0673a4252974",
+    "object_repr": "b0ba5090-f255-4267-923b-0673a4252974",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 66,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.753Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "a24ea67a-316b-417b-a40a-51a7873dd9e5",
+    "object_repr": "a24ea67a-316b-417b-a40a-51a7873dd9e5",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 67,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.763Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "176702f6-dbec-419c-96c3-929af0bd1c02",
+    "object_repr": "176702f6-dbec-419c-96c3-929af0bd1c02",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 68,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.773Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "589bbec4-24d8-4313-99f8-5bfcdb8f178e",
+    "object_repr": "589bbec4-24d8-4313-99f8-5bfcdb8f178e",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 69,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.785Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "89ab25bc-9a29-4739-bfd6-33ef47067970",
+    "object_repr": "89ab25bc-9a29-4739-bfd6-33ef47067970",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 70,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.798Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "4fc06034-04b5-4251-b93b-2c84382d93d1",
+    "object_repr": "4fc06034-04b5-4251-b93b-2c84382d93d1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 71,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.809Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "2d4d2e73-b988-4f2f-ac07-067f8d7b84c3",
+    "object_repr": "2d4d2e73-b988-4f2f-ac07-067f8d7b84c3",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 72,
+  "fields": {
+    "action_time": "2020-11-26T18:00:33.818Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "38bd33b6-a868-483e-b0f5-8571910f78d3",
+    "object_repr": "38bd33b6-a868-483e-b0f5-8571910f78d3",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 73,
+  "fields": {
+    "action_time": "2020-11-26T18:01:25.189Z",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "object_repr": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"ability\", \"object\": \"b419321b-9f2f-477b-8f77-56c504a3b1a8\", \"fields\": [\"Description\", \"Value\"]}}]"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 2,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 3,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 4,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 5,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 6,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add ability",
+    "content_type": 7,
+    "codename": "add_ability"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change ability",
+    "content_type": 7,
+    "codename": "change_ability"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete ability",
+    "content_type": 7,
+    "codename": "delete_ability"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view ability",
+    "content_type": 7,
+    "codename": "view_ability"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add category",
+    "content_type": 8,
+    "codename": "add_category"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change category",
+    "content_type": 8,
+    "codename": "change_category"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete category",
+    "content_type": 8,
+    "codename": "delete_category"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view category",
+    "content_type": 8,
+    "codename": "view_category"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add constraint",
+    "content_type": 9,
+    "codename": "add_constraint"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change constraint",
+    "content_type": 9,
+    "codename": "change_constraint"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete constraint",
+    "content_type": 9,
+    "codename": "delete_constraint"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view constraint",
+    "content_type": 9,
+    "codename": "view_constraint"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add consumable",
+    "content_type": 10,
+    "codename": "add_consumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change consumable",
+    "content_type": 10,
+    "codename": "change_consumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete consumable",
+    "content_type": 10,
+    "codename": "delete_consumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view consumable",
+    "content_type": 10,
+    "codename": "view_consumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add part",
+    "content_type": 11,
+    "codename": "add_part"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change part",
+    "content_type": 11,
+    "codename": "change_part"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete part",
+    "content_type": 11,
+    "codename": "delete_part"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view part",
+    "content_type": 11,
+    "codename": "view_part"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add process step",
+    "content_type": 12,
+    "codename": "add_processstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change process step",
+    "content_type": 12,
+    "codename": "change_processstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete process step",
+    "content_type": 12,
+    "codename": "delete_processstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view process step",
+    "content_type": 12,
+    "codename": "view_processstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add requirement",
+    "content_type": 13,
+    "codename": "add_requirement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change requirement",
+    "content_type": 13,
+    "codename": "change_requirement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete requirement",
+    "content_type": 13,
+    "codename": "delete_requirement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view requirement",
+    "content_type": 13,
+    "codename": "view_requirement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add resource",
+    "content_type": 14,
+    "codename": "add_resource"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change resource",
+    "content_type": 14,
+    "codename": "change_resource"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete resource",
+    "content_type": 14,
+    "codename": "delete_resource"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view resource",
+    "content_type": 14,
+    "codename": "view_resource"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add resource skill",
+    "content_type": 15,
+    "codename": "add_resourceskill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change resource skill",
+    "content_type": 15,
+    "codename": "change_resourceskill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete resource skill",
+    "content_type": 15,
+    "codename": "delete_resourceskill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view resource skill",
+    "content_type": 15,
+    "codename": "view_resourceskill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add unit",
+    "content_type": 16,
+    "codename": "add_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change unit",
+    "content_type": 16,
+    "codename": "change_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete unit",
+    "content_type": 16,
+    "codename": "delete_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view unit",
+    "content_type": 16,
+    "codename": "view_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add skill consumable",
+    "content_type": 17,
+    "codename": "add_skillconsumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change skill consumable",
+    "content_type": 17,
+    "codename": "change_skillconsumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete skill consumable",
+    "content_type": 17,
+    "codename": "delete_skillconsumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view skill consumable",
+    "content_type": 17,
+    "codename": "view_skillconsumable"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 69,
+  "fields": {
+    "name": "Can add skill",
+    "content_type": 18,
+    "codename": "add_skill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 70,
+  "fields": {
+    "name": "Can change skill",
+    "content_type": 18,
+    "codename": "change_skill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 71,
+  "fields": {
+    "name": "Can delete skill",
+    "content_type": 18,
+    "codename": "delete_skill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 72,
+  "fields": {
+    "name": "Can view skill",
+    "content_type": 18,
+    "codename": "view_skill"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 73,
+  "fields": {
+    "name": "Can add part manufacturing process step",
+    "content_type": 19,
+    "codename": "add_partmanufacturingprocessstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 74,
+  "fields": {
+    "name": "Can change part manufacturing process step",
+    "content_type": 19,
+    "codename": "change_partmanufacturingprocessstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 75,
+  "fields": {
+    "name": "Can delete part manufacturing process step",
+    "content_type": 19,
+    "codename": "delete_partmanufacturingprocessstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 76,
+  "fields": {
+    "name": "Can view part manufacturing process step",
+    "content_type": 19,
+    "codename": "view_partmanufacturingprocessstep"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 77,
+  "fields": {
+    "name": "Can add consumable cost",
+    "content_type": 20,
+    "codename": "add_consumablecost"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 78,
+  "fields": {
+    "name": "Can change consumable cost",
+    "content_type": 20,
+    "codename": "change_consumablecost"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 79,
+  "fields": {
+    "name": "Can delete consumable cost",
+    "content_type": 20,
+    "codename": "delete_consumablecost"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 80,
+  "fields": {
+    "name": "Can view consumable cost",
+    "content_type": 20,
+    "codename": "view_consumablecost"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 81,
+  "fields": {
+    "name": "Can add permutation",
+    "content_type": 21,
+    "codename": "add_permutation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 82,
+  "fields": {
+    "name": "Can change permutation",
+    "content_type": 21,
+    "codename": "change_permutation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 83,
+  "fields": {
+    "name": "Can delete permutation",
+    "content_type": 21,
+    "codename": "delete_permutation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 84,
+  "fields": {
+    "name": "Can view permutation",
+    "content_type": 21,
+    "codename": "view_permutation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 85,
+  "fields": {
+    "name": "Can add solution space",
+    "content_type": 22,
+    "codename": "add_solutionspace"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 86,
+  "fields": {
+    "name": "Can change solution space",
+    "content_type": 22,
+    "codename": "change_solutionspace"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 87,
+  "fields": {
+    "name": "Can delete solution space",
+    "content_type": 22,
+    "codename": "delete_solutionspace"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 88,
+  "fields": {
+    "name": "Can view solution space",
+    "content_type": 22,
+    "codename": "view_solutionspace"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 89,
+  "fields": {
+    "name": "Can add solution",
+    "content_type": 23,
+    "codename": "add_solution"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 90,
+  "fields": {
+    "name": "Can change solution",
+    "content_type": 23,
+    "codename": "change_solution"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 91,
+  "fields": {
+    "name": "Can delete solution",
+    "content_type": 23,
+    "codename": "delete_solution"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 92,
+  "fields": {
+    "name": "Can view solution",
+    "content_type": 23,
+    "codename": "view_solution"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 93,
+  "fields": {
+    "name": "Can add site",
+    "content_type": 24,
+    "codename": "add_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 94,
+  "fields": {
+    "name": "Can change site",
+    "content_type": 24,
+    "codename": "change_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 95,
+  "fields": {
+    "name": "Can delete site",
+    "content_type": 24,
+    "codename": "delete_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 96,
+  "fields": {
+    "name": "Can view site",
+    "content_type": 24,
+    "codename": "view_site"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$t4oWqinGzEyG$d4xSXk6+gtUtZJNTPlgsffFB6vWiV9NvzrnYdoC/o1Y=",
+    "last_login": "2020-11-26T13:52:04.005Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@test.de",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-11-26T13:30:20.661Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "core",
+    "model": "ability"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "core",
+    "model": "category"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "core",
+    "model": "constraint"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "core",
+    "model": "consumable"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "core",
+    "model": "part"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "core",
+    "model": "processstep"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "core",
+    "model": "requirement"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "core",
+    "model": "resource"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "core",
+    "model": "resourceskill"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "core",
+    "model": "unit"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "core",
+    "model": "skillconsumable"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "core",
+    "model": "skill"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "core",
+    "model": "partmanufacturingprocessstep"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "solutions",
+    "model": "consumablecost"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "solutions",
+    "model": "permutation"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 22,
+  "fields": {
+    "app_label": "solutions",
+    "model": "solutionspace"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 23,
+  "fields": {
+    "app_label": "solutions",
+    "model": "solution"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 24,
+  "fields": {
+    "app_label": "sites",
+    "model": "site"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "1pzydfwqhpsb2rk2o0dl14tsdpsh5jb9",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAUBf-la9O0FwutS_d8Q3NfWNRAQmFl_HclYaHbMzPnZTJua8lb1SWPYi7Gm9PvRsgPnXYgd5xus-V5WpeR7K7Yg1bbz6LP6-H-HRSs5VunSBAhoqCQcuNYlUJiRW5BIYiD7tx4HAak6KQLyTNQA6KtYAIm8_4AFfw5Pw:1kiHgq:C1n3-aqZ13wlZPU6IaO42pO-i5nrQhYPY5G4JsItJ2s",
+    "expire_date": "2020-12-10T13:52:04.013Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "64kw5zggd3c8y8xt7ns94e648v1lkghd",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAUBf-la9O0FwutS_d8Q3NfWNRAQmFl_HclYaHbMzPnZTJua8lb1SWPYi7Gm9PvRsgPnXYgd5xus-V5WpeR7K7Yg1bbz6LP6-H-HRSs5VunSBAhoqCQcuNYlUJiRW5BIYiD7tx4HAak6KQLyTNQA6KtYAIm8_4AFfw5Pw:1kiHNf:m3kB8Ckz05Pjs3rtcHGbRCDQR0JGaLLqWQXBt5Jt5iQ",
+    "expire_date": "2020-12-10T13:32:15.675Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "811e1b1f-d83d-46c9-bd2b-a3384b7d2cf8",
+  "fields": {
+    "name": "mm²",
+    "description": "",
+    "created_at": "2020-11-26T13:59:37.982Z",
+    "updated_at": "2020-11-26T13:59:37.982Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "99d4dc4c-5eb6-4e81-84f6-c88315bf55e7",
+  "fields": {
+    "name": "Ra",
+    "description": "Surface roughness",
+    "created_at": "2020-11-26T14:19:35.213Z",
+    "updated_at": "2020-11-26T14:19:35.213Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "bcd2a33f-0e5a-46f8-bd61-7d3addb897ac",
+  "fields": {
+    "name": "-",
+    "description": "",
+    "created_at": "2020-11-26T14:23:56.682Z",
+    "updated_at": "2020-11-26T14:23:56.682Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "d17bd2f2-3ee3-48fe-aeb8-68e150e3e3d7",
+  "fields": {
+    "name": "kWh",
+    "description": "Kilowatt-hour",
+    "created_at": "2020-11-26T14:06:17.220Z",
+    "updated_at": "2020-11-26T14:06:17.220Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "dfc8db64-241e-464d-9cfa-21c5a66a7d58",
+  "fields": {
+    "name": "mm³",
+    "description": "",
+    "created_at": "2020-11-26T13:59:47.247Z",
+    "updated_at": "2020-11-26T13:59:47.247Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "eadf9ca3-49ff-43e3-97b1-dadbf07ba0f7",
+  "fields": {
+    "name": "mm",
+    "description": "",
+    "created_at": "2020-11-26T13:59:42.937Z",
+    "updated_at": "2020-11-26T13:59:42.937Z"
+  }
+},
+{
+  "model": "core.unit",
+  "pk": "ff159bb7-f298-40d6-bf5d-bf38dad8f02c",
+  "fields": {
+    "name": "l",
+    "description": "Liter",
+    "created_at": "2020-11-26T14:03:40.112Z",
+    "updated_at": "2020-11-26T14:03:40.112Z"
+  }
+},
+{
+  "model": "core.category",
+  "pk": "e72f20dc-5a43-4877-87ae-7c6d56bd7631",
+  "fields": {
+    "name": "Material",
+    "description": "Material related property",
+    "created_at": "2020-11-26T14:18:53.451Z",
+    "updated_at": "2020-11-26T14:18:53.451Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "11224ca2-1a77-41a6-8d08-1e27202cb7d8",
+  "fields": {
+    "manufacturing_process": "Separation",
+    "description": "",
+    "unit": "811e1b1f-d83d-46c9-bd2b-a3384b7d2cf8",
+    "created_at": "2020-11-26T14:00:30.203Z",
+    "updated_at": "2020-11-26T14:00:30.203Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "17e84fd0-4bd3-4870-bb15-9e417900eeb1",
+  "fields": {
+    "manufacturing_process": "Joining",
+    "description": "",
+    "unit": "811e1b1f-d83d-46c9-bd2b-a3384b7d2cf8",
+    "created_at": "2020-11-26T14:00:41.628Z",
+    "updated_at": "2020-11-26T14:00:41.628Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "3196a9ab-0536-4a24-9d23-a7165b2ba8ab",
+  "fields": {
+    "manufacturing_process": "Forming",
+    "description": "",
+    "unit": "eadf9ca3-49ff-43e3-97b1-dadbf07ba0f7",
+    "created_at": "2020-11-26T14:00:10.699Z",
+    "updated_at": "2020-11-26T14:00:10.699Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "3dd1b189-99e7-41e0-b66e-ff3990ec69b4",
+  "fields": {
+    "manufacturing_process": "Changing material properties",
+    "description": "",
+    "unit": "811e1b1f-d83d-46c9-bd2b-a3384b7d2cf8",
+    "created_at": "2020-11-26T14:00:54.969Z",
+    "updated_at": "2020-11-26T14:00:54.969Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "452dd1e3-103e-4045-a9af-752131ca4f9e",
+  "fields": {
+    "manufacturing_process": "Coating",
+    "description": "",
+    "unit": "811e1b1f-d83d-46c9-bd2b-a3384b7d2cf8",
+    "created_at": "2020-11-26T14:00:47.404Z",
+    "updated_at": "2020-11-26T14:00:47.404Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "88a2f9cc-904a-4f5d-9d01-3f9f0da22777",
+  "fields": {
+    "manufacturing_process": "Primary shaping",
+    "description": "",
+    "unit": "dfc8db64-241e-464d-9cfa-21c5a66a7d58",
+    "created_at": "2020-11-26T13:59:57.214Z",
+    "updated_at": "2020-11-26T13:59:57.214Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "a95765f2-08ed-4ad0-ae35-93f458fdd004",
+  "fields": {
+    "manufacturing_process": "Separation",
+    "description": "",
+    "unit": "eadf9ca3-49ff-43e3-97b1-dadbf07ba0f7",
+    "created_at": "2020-11-26T14:00:17.211Z",
+    "updated_at": "2020-11-26T14:00:17.211Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "d7dd9f6b-a806-4da8-810f-1f5487689cc4",
+  "fields": {
+    "manufacturing_process": "Joining",
+    "description": "",
+    "unit": "eadf9ca3-49ff-43e3-97b1-dadbf07ba0f7",
+    "created_at": "2020-11-26T14:00:36.339Z",
+    "updated_at": "2020-11-26T14:00:36.339Z"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": "d932b075-7db7-4464-b340-c4d8b2bed3d5",
+  "fields": {
+    "manufacturing_process": "Separation",
+    "description": "",
+    "unit": "dfc8db64-241e-464d-9cfa-21c5a66a7d58",
+    "created_at": "2020-11-26T14:00:23.092Z",
+    "updated_at": "2020-11-26T14:00:23.092Z"
+  }
+},
+{
+  "model": "core.skill",
+  "pk": "8f6be04a-507e-4e22-b59b-0dc68e668076",
+  "fields": {
+    "name": "Raw material",
+    "description": "",
+    "process_step": "88a2f9cc-904a-4f5d-9d01-3f9f0da22777",
+    "created_at": "2020-11-26T14:34:37.910Z",
+    "updated_at": "2020-11-26T14:34:37.910Z"
+  }
+},
+{
+  "model": "core.skill",
+  "pk": "f22ccf4c-6e5c-433a-8f7b-9c5d7d553da3",
+  "fields": {
+    "name": "Printing",
+    "description": "",
+    "process_step": "88a2f9cc-904a-4f5d-9d01-3f9f0da22777",
+    "created_at": "2020-11-26T14:02:02.486Z",
+    "updated_at": "2020-11-26T14:02:02.486Z"
+  }
+},
+{
+  "model": "core.part",
+  "pk": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+  "fields": {
+    "part": "uploads/parts/test_good_9aFvNwy.stl",
+    "is_valid": true,
+    "volume": 63993.0,
+    "bounding_box_x": 39.998,
+    "bounding_box_y": 40.0,
+    "bounding_box_z": 39.998,
+    "evaluation_method": 3,
+    "price_importance": 1,
+    "time_importance": 1,
+    "co2_importance": 1,
+    "created_at": "2020-11-26T14:25:26.210Z",
+    "updated_at": "2020-11-26T14:40:57.229Z"
+  }
+},
+{
+  "model": "core.resource",
+  "pk": "c6087674-1c8d-4469-b17f-94622fac368c",
+  "fields": {
+    "name": "PLA",
+    "manufacturer": "",
+    "description": "Raw material",
+    "postal_code": 70174,
+    "street": "Seidenstr. 36",
+    "city": "Stuttgart",
+    "country": "DE",
+    "created_at": "2020-11-26T14:34:59.945Z",
+    "updated_at": "2020-11-26T14:34:59.945Z"
+  }
+},
+{
+  "model": "core.resource",
+  "pk": "ce18fd6c-f975-49c7-89c1-6872eeed179a",
+  "fields": {
+    "name": "test machine",
+    "manufacturer": "test manufacturer",
+    "description": "this is just a test machine",
+    "postal_code": 70174,
+    "street": "Seidenstr. 36",
+    "city": "Stuttgart",
+    "country": "DE",
+    "created_at": "2020-11-26T13:53:55.065Z",
+    "updated_at": "2020-11-26T14:02:48.186Z"
+  }
+},
+{
+  "model": "core.consumable",
+  "pk": "1bea2af9-e3e8-4dc4-89fc-c27ae2865f78",
+  "fields": {
+    "name": "Argon",
+    "unit": "ff159bb7-f298-40d6-bf5d-bf38dad8f02c",
+    "description": "",
+    "created_at": "2020-11-26T14:15:38.231Z",
+    "updated_at": "2020-11-26T14:15:38.231Z"
+  }
+},
+{
+  "model": "core.consumable",
+  "pk": "1d4e1104-d194-478e-8e00-842dbd486d94",
+  "fields": {
+    "name": "Compressed Air",
+    "unit": "ff159bb7-f298-40d6-bf5d-bf38dad8f02c",
+    "description": "",
+    "created_at": "2020-11-26T14:10:52.682Z",
+    "updated_at": "2020-11-26T14:10:52.682Z"
+  }
+},
+{
+  "model": "core.consumable",
+  "pk": "2b06d994-cc08-411a-b2ac-9ffe09410d02",
+  "fields": {
+    "name": "Energy",
+    "unit": "d17bd2f2-3ee3-48fe-aeb8-68e150e3e3d7",
+    "description": "Energy Consumption",
+    "created_at": "2020-11-26T14:07:16.018Z",
+    "updated_at": "2020-11-26T14:07:16.018Z"
+  }
+},
+{
+  "model": "core.consumable",
+  "pk": "cc5a2bac-8138-49b7-874e-4f8a23038d7f",
+  "fields": {
+    "name": "Water",
+    "unit": "ff159bb7-f298-40d6-bf5d-bf38dad8f02c",
+    "description": "",
+    "created_at": "2020-11-26T14:03:46.173Z",
+    "updated_at": "2020-11-26T14:03:46.173Z"
+  }
+},
+{
+  "model": "core.requirement",
+  "pk": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+  "fields": {
+    "name": "Material",
+    "description": "Processable material",
+    "unit": "bcd2a33f-0e5a-46f8-bd61-7d3addb897ac",
+    "category": "e72f20dc-5a43-4877-87ae-7c6d56bd7631",
+    "created_at": "2020-11-26T14:24:00.226Z",
+    "updated_at": "2020-11-26T14:24:17.331Z"
+  }
+},
+{
+  "model": "core.requirement",
+  "pk": "73c1618b-35b0-4a2b-8623-fdd30512c2c6",
+  "fields": {
+    "name": "Surface roughness",
+    "description": "",
+    "unit": "99d4dc4c-5eb6-4e81-84f6-c88315bf55e7",
+    "category": "e72f20dc-5a43-4877-87ae-7c6d56bd7631",
+    "created_at": "2020-11-26T14:19:43.343Z",
+    "updated_at": "2020-11-26T14:19:43.343Z"
+  }
+},
+{
+  "model": "core.resourceskill",
+  "pk": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+  "fields": {
+    "skill": "f22ccf4c-6e5c-433a-8f7b-9c5d7d553da3",
+    "resource": "ce18fd6c-f975-49c7-89c1-6872eeed179a",
+    "description": "Basic printing",
+    "fixed_price": 1.0,
+    "fixed_time": 1.5,
+    "fixed_co2": 2.0,
+    "variable_price": 0.7,
+    "variable_time": 0.8,
+    "variable_co2": -0.5,
+    "created_at": "2020-11-26T14:02:48.188Z",
+    "updated_at": "2020-11-26T18:01:25.186Z"
+  }
+},
+{
+  "model": "core.resourceskill",
+  "pk": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+  "fields": {
+    "skill": "8f6be04a-507e-4e22-b59b-0dc68e668076",
+    "resource": "c6087674-1c8d-4469-b17f-94622fac368c",
+    "description": "This a raw material",
+    "fixed_price": 12.0,
+    "fixed_time": 0.0,
+    "fixed_co2": 33.43,
+    "variable_price": 1.2,
+    "variable_time": 0.0,
+    "variable_co2": 4.43,
+    "created_at": "2020-11-26T14:34:59.946Z",
+    "updated_at": "2020-11-26T14:36:38.001Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "4c30520b-ec52-4c65-a9d9-639ea0f1efdf",
+  "fields": {
+    "resource_skill": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+    "consumable": "2b06d994-cc08-411a-b2ac-9ffe09410d02",
+    "description": "For providing the material",
+    "quantity": 2.0,
+    "fixed_price": 0.4,
+    "fixed_co2": 3.532,
+    "variable_price": 2.21,
+    "variable_co2": 1.34,
+    "created_at": "2020-11-26T14:35:58.814Z",
+    "updated_at": "2020-11-26T14:36:38.003Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "6c27198b-9c86-4d5b-8c58-94d329e21d34",
+  "fields": {
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "consumable": "2b06d994-cc08-411a-b2ac-9ffe09410d02",
+    "description": "Energy consumption of the heating system",
+    "quantity": 0.32,
+    "fixed_price": 0.0,
+    "fixed_co2": 0.0,
+    "variable_price": 2.1,
+    "variable_co2": 12.2,
+    "created_at": "2020-11-26T14:22:42.380Z",
+    "updated_at": "2020-11-26T14:22:42.380Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "7f42a325-1e48-4c17-b1bf-21f0d159624b",
+  "fields": {
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "consumable": "1bea2af9-e3e8-4dc4-89fc-c27ae2865f78",
+    "description": "Coolant",
+    "quantity": 1.4,
+    "fixed_price": 2.0,
+    "fixed_co2": 44.0,
+    "variable_price": 4.2,
+    "variable_co2": 33.221,
+    "created_at": "2020-11-26T14:04:08.107Z",
+    "updated_at": "2020-11-26T14:21:19.720Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "84d9e677-9605-4520-aa5c-fcc02104932a",
+  "fields": {
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "consumable": "1d4e1104-d194-478e-8e00-842dbd486d94",
+    "description": "Coolant",
+    "quantity": 1.0,
+    "fixed_price": 12.0,
+    "fixed_co2": 12.0,
+    "variable_price": 0.4,
+    "variable_co2": 1.9,
+    "created_at": "2020-11-26T14:17:08.810Z",
+    "updated_at": "2020-11-26T14:21:19.716Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "90e03e0d-f784-4616-b385-ad1bbdc22bc0",
+  "fields": {
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "consumable": "2b06d994-cc08-411a-b2ac-9ffe09410d02",
+    "description": "Energy consumption of the machine",
+    "quantity": 1.2,
+    "fixed_price": 3.0,
+    "fixed_co2": 22.0,
+    "variable_price": 2.2,
+    "variable_co2": 4.3,
+    "created_at": "2020-11-26T14:16:15.966Z",
+    "updated_at": "2020-11-26T14:21:19.717Z"
+  }
+},
+{
+  "model": "core.skillconsumable",
+  "pk": "bd91089c-c6d5-4980-9027-f26addce03bb",
+  "fields": {
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "consumable": "cc5a2bac-8138-49b7-874e-4f8a23038d7f",
+    "description": "Coolant",
+    "quantity": 2.0,
+    "fixed_price": 33.0,
+    "fixed_co2": -3.0,
+    "variable_price": 45.33,
+    "variable_co2": 24.2,
+    "created_at": "2020-11-26T14:16:07.583Z",
+    "updated_at": "2020-11-26T14:21:19.718Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "8846bbe4-530f-4730-b07a-16da5251ac3d",
+  "fields": {
+    "requirement": "73c1618b-35b0-4a2b-8623-fdd30512c2c6",
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "description": "The minimal achievable surface roughness",
+    "value": "22",
+    "created_at": "2020-11-26T14:20:37.185Z",
+    "updated_at": "2020-11-26T14:20:37.185Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "9c826b52-904e-4d2e-b589-85159c85bda7",
+  "fields": {
+    "requirement": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "resource_skill": "a2669ff8-1ab5-4887-b67c-ed2327d167f6",
+    "description": "PLA",
+    "value": "plastic",
+    "created_at": "2020-11-26T14:36:38.004Z",
+    "updated_at": "2020-11-26T14:36:38.004Z"
+  }
+},
+{
+  "model": "core.ability",
+  "pk": "b419321b-9f2f-477b-8f77-56c504a3b1a8",
+  "fields": {
+    "requirement": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "resource_skill": "0de5cd2c-5142-4022-97fe-ae0a5300854d",
+    "description": "This machine can print metal",
+    "value": "metal",
+    "created_at": "2020-11-26T14:24:18.889Z",
+    "updated_at": "2020-11-26T18:01:25.188Z"
+  }
+},
+{
+  "model": "core.partmanufacturingprocessstep",
+  "pk": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+  "fields": {
+    "part": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "process_step": "88a2f9cc-904a-4f5d-9d01-3f9f0da22777",
+    "description": "Create the holder",
+    "required_quantity": 25000.0,
+    "manufacturing_possibility": 1,
+    "manufacturing_sequence_number": 3,
+    "created_at": "2020-11-26T14:40:07.559Z",
+    "updated_at": "2020-11-26T14:42:21.225Z"
+  }
+},
+{
+  "model": "core.partmanufacturingprocessstep",
+  "pk": "6ab3c7e0-355b-45fc-b6f3-3deb987001f1",
+  "fields": {
+    "part": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "process_step": "88a2f9cc-904a-4f5d-9d01-3f9f0da22777",
+    "description": "The raw shape",
+    "required_quantity": 70000.0,
+    "manufacturing_possibility": 1,
+    "manufacturing_sequence_number": 1,
+    "created_at": "2020-11-26T14:37:05.694Z",
+    "updated_at": "2020-11-26T14:38:17.330Z"
+  }
+},
+{
+  "model": "core.partmanufacturingprocessstep",
+  "pk": "b6d2a937-384d-483e-8f6e-5f65fa3cdce8",
+  "fields": {
+    "part": "5bb18817-0b9b-4e8c-b497-eba0fe78c933",
+    "process_step": "d932b075-7db7-4464-b340-c4d8b2bed3d5",
+    "description": "Remove the inner material",
+    "required_quantity": 50000.0,
+    "manufacturing_possibility": 1,
+    "manufacturing_sequence_number": 2,
+    "created_at": "2020-11-26T14:38:17.331Z",
+    "updated_at": "2020-11-26T14:38:48.538Z"
+  }
+},
+{
+  "model": "core.constraint",
+  "pk": "2c453d72-57e1-49c0-91d2-77c4ad6deb20",
+  "fields": {
+    "requirement": "73c1618b-35b0-4a2b-8623-fdd30512c2c6",
+    "part_manufacturing_process_step": "b6d2a937-384d-483e-8f6e-5f65fa3cdce8",
+    "description": "",
+    "value": "55",
+    "operator": "<=",
+    "optional": false,
+    "created_at": "2020-11-26T14:38:48.540Z",
+    "updated_at": "2020-11-26T14:38:48.540Z"
+  }
+},
+{
+  "model": "core.constraint",
+  "pk": "6858ee60-47d9-4288-808f-12ec5c67abb2",
+  "fields": {
+    "requirement": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "part_manufacturing_process_step": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+    "description": "Can be made out of plastic",
+    "value": "plastic",
+    "operator": "=",
+    "optional": true,
+    "created_at": "2020-11-26T14:41:09.950Z",
+    "updated_at": "2020-11-26T14:42:21.226Z"
+  }
+},
+{
+  "model": "core.constraint",
+  "pk": "c412f2f9-2e4c-4472-bec9-7fc4c9654d06",
+  "fields": {
+    "requirement": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "part_manufacturing_process_step": "5de25cea-9852-4dd6-bbc5-e1f1586d2237",
+    "description": "Can be made out of metal",
+    "value": "metal",
+    "operator": "=",
+    "optional": true,
+    "created_at": "2020-11-26T14:42:21.227Z",
+    "updated_at": "2020-11-26T14:42:21.227Z"
+  }
+},
+{
+  "model": "core.constraint",
+  "pk": "f049380d-a753-4ce8-bef0-ec21541bd75e",
+  "fields": {
+    "requirement": "4b493a22-a35d-4154-9066-c8cdfb9d89f5",
+    "part_manufacturing_process_step": "6ab3c7e0-355b-45fc-b6f3-3deb987001f1",
+    "description": "",
+    "value": "plastic",
+    "operator": "=",
+    "optional": false,
+    "created_at": "2020-11-26T14:37:20.556Z",
+    "updated_at": "2020-11-26T14:37:20.556Z"
+  }
+},
+{
+  "model": "sites.site",
+  "pk": 1,
+  "fields": {
+    "domain": "example.com",
+    "name": "example.com"
+  }
+}
+]

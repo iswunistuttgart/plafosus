@@ -12,3 +12,9 @@ Ecologically Optimized Production Planning
 ```
 python manage.py dumpdata core.processstep --indent 2 > fixtures/processstep.json
 ```
+
+# Load data
+
+```
+python manage.py loaddata fixtures/processstep.json
+```

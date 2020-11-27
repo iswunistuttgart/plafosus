@@ -189,7 +189,7 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                         if ability.value > constraint.value:
                                             fulfilled = True
                                             break
-                                    elif constraint.operator >= "<=":
+                                    elif constraint.operator == "<=":
                                         if ability.value <= constraint.value:
                                             fulfilled = True
                                             break
@@ -216,7 +216,8 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                     # based on the same requirement, which is also optional and
                                     # which is fulfilled by the resource.
                                     for other_constraint in part_manufacturing_process_step.Constraint.all().filter(
-                                            requirement__pk=constraint.requirement.id).exclude(id=constraint.id):
+                                            requirement__pk=constraint.requirement.id,
+                                            optional=True).exclude(id=constraint.id):
                                         # Since we have multiple constraints with the same requirement.id,
                                         # these are double checked, but ok.
                                         # Now we check, if the other constraints are fulfilled.
@@ -243,7 +244,7 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                                     if ability.value > other_constraint.value:
                                                         fulfilled = True
                                                         break
-                                                elif other_constraint.operator >= "<=":
+                                                elif other_constraint.operator == "<=":
                                                     if ability.value <= other_constraint.value:
                                                         fulfilled = True
                                                         break
@@ -264,6 +265,7 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                         constraints_fulfilled.append(True)
                                     else:
                                         constraints_fulfilled.append(False)
+                                        break
 
                         # Save this resource if it does not already exist and the constraints are fulfilled.
                         if False not in constraints_fulfilled:

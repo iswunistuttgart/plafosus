@@ -473,10 +473,14 @@ class SkillConsumable(models.Model):
     description = models.CharField(max_length=254,
                                    help_text="Specific description of the used consumable.",
                                    blank=True)
-    quantity = models.FloatField(validators=[MinValueValidator(0)],
-                                 help_text="The quantity required in the consumable unit "
-                                           "to use the skill for one unit.",
-                                 default=0)
+    variable_quantity = models.FloatField(validators=[MinValueValidator(0)],
+                                          help_text="The quantity required in the consumable unit "
+                                                    "to use the skill for one unit.",
+                                          default=0)
+    fixed_quantity = models.FloatField(validators=[MinValueValidator(0)],
+                                       help_text="The quantity required in the consumable unit "
+                                                 "to use the skill.",
+                                       default=0)
     # Fixed costs.
     fixed_price = models.FloatField(validators=[MinValueValidator(0)],
                                     help_text="The fixed costs in € for this consumable.",
@@ -506,7 +510,8 @@ class SkillConsumable(models.Model):
         return reverse('skillconsumable-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
-        self.quantity = round(self.quantity, 3)
+        self.variable_quantity = round(self.variable_quantity, 3)
+        self.fixed_quantity = round(self.fixed_quantity, 3)
         self.fixed_price = round(self.fixed_price, 3)
         self.fixed_co2 = round(self.fixed_co2, 3)
         self.variable_price = round(self.variable_price, 3)

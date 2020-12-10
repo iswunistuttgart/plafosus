@@ -258,7 +258,8 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                                     logger.error(
                                                         "Could not find a matching operator for given operator '{0}' "
                                                         "of constraint '{1}'."
-                                                        .format(str(other_constraint.operator), str(other_constraint)))
+                                                            .format(str(other_constraint.operator),
+                                                                    str(other_constraint)))
 
                                     # Check if there was at least one ability, which fulfills the constraint.
                                     if fulfilled:
@@ -383,11 +384,11 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                     # The costs are the sum of the fixed costs and the variable costs
                     # multiplied with the required quantity.
                     resource_skill_price = resource_skill.fixed_price + part_manufacturing_process_steps[
-                                               i].required_quantity * resource_skill.variable_price
+                        i].required_quantity * resource_skill.variable_price
                     resource_skill_co2 = resource_skill.fixed_co2 + part_manufacturing_process_steps[
-                                               i].required_quantity * resource_skill.variable_co2
+                        i].required_quantity * resource_skill.variable_co2
                     resource_skill_time = resource_skill.fixed_time + part_manufacturing_process_steps[
-                                               i].required_quantity * resource_skill.variable_time
+                        i].required_quantity * resource_skill.variable_time
 
                     # Add the costs of this resource to the permutation metadata.
                     permutation_price += resource_skill_price
@@ -410,16 +411,26 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                             for resource_skill_consumable in resource_skill.SkillConsumable.filter(
                                     consumable=consumable_object):
                                 # If yes, we calculate the meta data for this consumable.
-                                consumable_quantity += resource_skill_consumable.quantity * \
-                                                       part_manufacturing_process_steps[i].required_quantity
+                                # Variable quantity.
+                                consumable_variable_quantity = resource_skill_consumable.variable_quantity * \
+                                                               part_manufacturing_process_steps[i].required_quantity
+                                # Complete quantity (incl. fixed_quantity).
+                                consumable_quantity += consumable_variable_quantity + \
+                                                       resource_skill_consumable.fixed_quantity
+
                                 # Variable costs.
-                                consumable_price += consumable_quantity * resource_skill_consumable.variable_price
+                                consumable_price += consumable_variable_quantity * \
+                                                    resource_skill_consumable.variable_price
                                 # Fixed costs.
-                                consumable_price += resource_skill_consumable.fixed_price
+                                consumable_price += resource_skill_consumable.fixed_quantity * \
+                                                    resource_skill_consumable.fixed_price
+
                                 # Variable co2.
-                                consumable_co2 += consumable_quantity * resource_skill_consumable.variable_co2
+                                consumable_co2 += consumable_variable_quantity * \
+                                                  resource_skill_consumable.variable_co2
                                 # Fixed co2.
-                                consumable_co2 += resource_skill_consumable.fixed_co2
+                                consumable_co2 += resource_skill_consumable.fixed_quantity * \
+                                                  resource_skill_consumable.fixed_co2
                         else:
                             # Otherwise, we set everything 0.
                             consumable_quantity = 0

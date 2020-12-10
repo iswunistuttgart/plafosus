@@ -1,20 +1,22 @@
 # EOPP
 
-Ecologically Optimized Production Planning
+**Ecologically Optimized Production Planning**
 
-# TODO
+This Python Django application enables the modeling of resources and part manufacturing process steps. 
+Subsequently, 
 
-- makemigrations, migrate, createsuperuser, install fixtures when installing
-- dockerize everything
+## General
 
-# Dump data
+
+
+### Dump data
 
 ```
 python manage.py dumpdata core.processstep --indent 2 > fixtures/processstep.json
 ```
 
-# Load data
+### Load data
 
 ```
-python manage.py loaddata fixtures/processstep.json
+python manage.py loaddata fixtures/fixture.json
 ```

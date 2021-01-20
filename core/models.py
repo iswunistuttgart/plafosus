@@ -26,6 +26,13 @@ OPERATORS = (
     ('<=', '<='),
 )
 
+DATATYPES = (
+    ('str', 'str'),
+    ('bool', 'bool'),
+    ('int', 'int'),
+    ('float', 'float'),
+)
+
 
 # Method for uploading parts.
 def model_upload_path(instance, filename):
@@ -355,6 +362,10 @@ class Requirement(models.Model):
     description = models.CharField(max_length=254,
                                    help_text="Specific description of the requirement.",
                                    blank=True)
+    data_type = models.CharField(max_length=50,
+                                 choices=DATATYPES,
+                                 default="str",
+                                 help_text="The data type of the value.")
     unit = models.ForeignKey(Unit,
                              on_delete=models.CASCADE,
                              related_name='Requirement',
@@ -542,7 +553,7 @@ class Ability(models.Model):
                                        "how much this requirement can be fulfilled. "
                                        "Please see the description and unit of the selected "
                                        "requirement for information.",
-                             blank=False)
+                             blank=False,)
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -552,6 +563,9 @@ class Ability(models.Model):
     class Meta:
         ordering = ['-created_at']
         verbose_name_plural = "Abilities"
+
+    def clean(self):
+        validations.validate_data_type_of_value(self)
 
     def __str__(self):
         return str(self.id)
@@ -645,6 +659,7 @@ class Constraint(models.Model):
                              blank=False)
     operator = models.CharField(max_length=50,
                                 choices=OPERATORS,
+                                default="=",
                                 help_text="Has the result to be equal, smaller, or bigger then this value.")
     optional = models.BooleanField(default=False,
                                    help_text="The optional flag is used, when one requirement must be met "
@@ -664,6 +679,9 @@ class Constraint(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    def clean(self):
+        validations.validate_data_type_of_value(self)
 
     def get_absolute_url(self):
         return reverse('constraint-detail', args=[str(self.id)])

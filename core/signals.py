@@ -14,10 +14,16 @@ import numpy as np
 import trimesh
 
 # Calculation.
-import json
 import itertools
 
 logger = logging.getLogger(__name__)
+
+TYPES = {
+    'int': int,
+    'float': float,
+    'str': str,
+    'bool': bool
+}
 
 
 @receiver(post_save, sender=core_models.Part)
@@ -171,30 +177,34 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                             for ability in resource_skill.Ability.all():
                                 # Check if the ability is based on the same requirement as the constraint.
                                 if ability.requirement == constraint.requirement:
+                                    # Convert the values to the data type defined in the requirement.
+                                    # Conversion is possible, already checked at model level.
+                                    ability_value = TYPES[ability.requirement.data_type](ability.value)
+                                    constraint_value = TYPES[constraint.requirement.data_type](constraint.value)
                                     # Check if the value of the ability satisfies the value of the constraint
                                     # in dependence of the defined operator.
                                     if constraint.operator == "=":
-                                        if ability.value == constraint.value:
+                                        if ability_value == constraint_value:
                                             fulfilled = True
                                             break
                                     elif constraint.operator == "!=":
-                                        if ability.value != constraint.value:
+                                        if ability_value != constraint_value:
                                             fulfilled = True
                                             break
                                     elif constraint.operator == "<":
-                                        if ability.value < constraint.value:
+                                        if ability_value < constraint_value:
                                             fulfilled = True
                                             break
                                     elif constraint.operator == ">":
-                                        if ability.value > constraint.value:
+                                        if ability_value > constraint_value:
                                             fulfilled = True
                                             break
                                     elif constraint.operator == "<=":
-                                        if ability.value <= constraint.value:
+                                        if ability_value <= constraint_value:
                                             fulfilled = True
                                             break
                                     elif constraint.operator == ">=":
-                                        if ability.value >= constraint.value:
+                                        if ability_value >= constraint_value:
                                             fulfilled = True
                                             break
                                     else:
@@ -226,30 +236,35 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                         for ability in resource_skill.Ability.all():
                                             # Check if the ability is based on the same requirement as the constraint.
                                             if ability.requirement == other_constraint.requirement:
+                                                # Convert the values to the data type defined in the requirement.
+                                                # Conversion is possible, already checked at model level.
+                                                ability_value = TYPES[ability.requirement.data_type](ability.value)
+                                                constraint_value = TYPES[other_constraint.requirement.data_type](
+                                                    constraint.value)
                                                 # Check if the value of the ability satisfies the value
                                                 # of the constraint in dependence of the defined operator.
                                                 if other_constraint.operator == "=":
-                                                    if ability.value == other_constraint.value:
+                                                    if ability_value == constraint_value:
                                                         fulfilled = True
                                                         break
                                                 elif other_constraint.operator == "!=":
-                                                    if ability.value != other_constraint.value:
+                                                    if ability_value != constraint_value:
                                                         fulfilled = True
                                                         break
                                                 elif other_constraint.operator == "<":
-                                                    if ability.value < other_constraint.value:
+                                                    if ability_value < constraint_value:
                                                         fulfilled = True
                                                         break
                                                 elif other_constraint.operator == ">":
-                                                    if ability.value > other_constraint.value:
+                                                    if ability_value > constraint_value:
                                                         fulfilled = True
                                                         break
                                                 elif other_constraint.operator == "<=":
-                                                    if ability.value <= other_constraint.value:
+                                                    if ability_value <= constraint_value:
                                                         fulfilled = True
                                                         break
                                                 elif other_constraint.operator == ">=":
-                                                    if ability.value >= other_constraint.value:
+                                                    if ability_value >= constraint_value:
                                                         fulfilled = True
                                                         break
                                                 else:
@@ -257,9 +272,8 @@ def select_machines_to_manufacture(sender, instance, created, **kwargs):
                                                     # This should never happen, since the operators are fixed.
                                                     logger.error(
                                                         "Could not find a matching operator for given operator '{0}' "
-                                                        "of constraint '{1}'."
-                                                            .format(str(other_constraint.operator),
-                                                                    str(other_constraint)))
+                                                        "of constraint '{1}'.".format(str(other_constraint.operator),
+                                                                                      str(other_constraint)))
 
                                     # Check if there was at least one ability, which fulfills the constraint.
                                     if fulfilled:

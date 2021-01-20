@@ -80,7 +80,7 @@ class ConstraintInline(admin.TabularInline):
     model = models.Constraint
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['unit_link']
+    readonly_fields = ['data_type_link', 'unit_link']
 
     def unit_link(self, instance):
         try:
@@ -90,6 +90,15 @@ class ConstraintInline(admin.TabularInline):
             return "-"
 
     unit_link.short_description = 'Unit'
+
+    def data_type_link(self, instance):
+        try:
+            data_type = str(instance.requirement.data_type)
+            return data_type
+        except:
+            return "-"
+
+    data_type_link.short_description = 'Data type'
 
 
 class SkillConsumableInline(admin.TabularInline):
@@ -114,7 +123,7 @@ class AbilityInline(admin.TabularInline):
     model = models.Ability
     extra = 0
     list_display = [field.name for field in model._meta.fields]
-    readonly_fields = ['unit_link']
+    readonly_fields = ['data_type_link', 'unit_link']
 
     def unit_link(self, instance):
         try:
@@ -124,6 +133,15 @@ class AbilityInline(admin.TabularInline):
             return "-"
 
     unit_link.short_description = 'Unit'
+
+    def data_type_link(self, instance):
+        try:
+            data_type = str(instance.requirement.data_type)
+            return data_type
+        except:
+            return "-"
+
+    data_type_link.short_description = 'Data type'
 
 
 @admin.register(models.Unit)

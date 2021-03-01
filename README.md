@@ -82,6 +82,8 @@ TODO: Makemigrations, migrate, createsuperuser
 
 ## General Usage
 
+![Models](docs/figures/models.png)
+
 ### Create Parts
 
 ### Create Resources

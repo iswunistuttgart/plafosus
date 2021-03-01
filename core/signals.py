@@ -40,7 +40,7 @@ def analyze_part(sender, instance, created, **kwargs):
     - PyMesh:       https://github.com/PyMesh/PyMesh
     - Numpy-STL:    https://github.com/WoLpH/numpy-stl/
     """
-    if created:
+    if created and instance.part:
         """        
         Import meshes from:
         - binary/ASCII STL

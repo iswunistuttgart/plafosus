@@ -178,9 +178,16 @@ class Part(models.Model):
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
+    name = models.CharField(max_length=254,
+                            help_text="The part name.")
+    description = models.CharField(max_length=254,
+                                   help_text="Description of the part.",
+                                   blank=True)
     part = models.FileField(upload_to=model_upload_path,
                             validators=[validations.validate_file_extension_3dpart],
-                            help_text="The uploaded 3d part.")
+                            help_text="The uploaded 3d part.",
+                            blank=True,
+                            null=True)
 
     # 3D part properties.
     is_valid = models.BooleanField(default=False,

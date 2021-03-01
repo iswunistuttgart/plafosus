@@ -187,7 +187,7 @@ class PartAdmin(admin.ModelAdmin):
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['is_valid', 'volume', 'bounding_box_x', 'bounding_box_y', 'bounding_box_z',
                        'created_at', 'updated_at']
-    search_fields = ['part']
+    search_fields = ['part', 'name']
     list_filter = ['is_valid']
     inlines = [PartManufacturingProcessInline]
 

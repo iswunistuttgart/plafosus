@@ -112,12 +112,12 @@ In the case of *material*, the values have to match (operator: *=*).
 **Ability:** An ability is the capability of a resource skill to fulfill constraints. 
 An ability can be for example *metal* for the requirement *material* and would fulfill the constraint mentioned above.
 
-**Process Step:** A process step is the generic representation of a manufacturing process according to DIN~8580. 
+**Process Step:** A process step is the generic representation of a manufacturing process according to DIN 8580. 
 Next to the name of the manufacturing process (e.g. separation), the unit of the process step is defined. 
-For example: separation in mm^2 (e.g. cutting) or separation in mm^3 (e.g. milling).
+For example: separation in mm² (e.g. cutting) or separation in mm³ (e.g. milling).
 
 **Part Process Step:** The part process step contains the required quantity of a process step 
-(e.g. 50 mm^3 of milling) as well as the specified constraints to create a part. 
+(e.g. 50 mm³ of milling) as well as the specified constraints to create a part. 
 Each part process step belongs to a manufacturing possibility. 
 Multiple possibilities to manufacture the part can be defined.
 

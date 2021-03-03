@@ -5,7 +5,7 @@ Source: D. Diakoulaki, G. Mavrotas, and L. Papayannakis:
         „Determining objective weights in multiple criteria problems: The CRITIC method“,
         Comput. Oper. Res., Bd. 22, Nr. 7, S. 763–770, 1995.
 """
-from django.db.models import Avg, Max, Min
+from django.db.models import Max, Min
 import operator
 import logging
 

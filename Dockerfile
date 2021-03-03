@@ -1,7 +1,15 @@
-FROM python:3.6.7-alpine
+FROM python:3.9-alpine
+
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-ADD requirements.txt /code/
+
+# This one is required to install numpy.
+RUN apk add g++
+RUN pip install --upgrade pip
+
+# Copy project.
+COPY ./ /src
+# Set work directory.
+WORKDIR /src
+# Install requirements.
 RUN pip install -r requirements.txt
-ADD ./ /code/

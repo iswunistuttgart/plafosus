@@ -3,12 +3,11 @@ from django.urls import path, re_path, reverse_lazy
 from django.views.generic import RedirectView
 
 
-admin.site.site_header = 'EOPP'
-admin.site.site_title = 'EOPP'
-admin.site.index_title = 'EOPP administration'
+admin.site.site_header = 'PLAFOSUS'
+admin.site.site_title = 'PLAFOSUS'
+admin.site.index_title = 'PLAFOSUS administration'
 
 urlpatterns = [
-
     # The Django admin page.
     path('admin/', admin.site.urls),
 

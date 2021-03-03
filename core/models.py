@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 import uuid
-from eopp import validations
+from plafosus import validations
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Third party packages

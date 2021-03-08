@@ -154,6 +154,10 @@ LOGGING = {
         'core': {
             'handlers': ['console', 'file_handler'],
             'level': 'DEBUG',
+        },
+        'solutions': {
+            'handlers': ['console', 'file_handler'],
+            'level': 'DEBUG',
         }
     }
 }

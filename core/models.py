@@ -260,10 +260,10 @@ class Part(models.Model):
         return reverse('part-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
-        self.volume = round(self.volume, 3)
-        self.bounding_box_x = round(self.bounding_box_x, 3)
-        self.bounding_box_y = round(self.bounding_box_y, 3)
-        self.bounding_box_z = round(self.bounding_box_z, 3)
+        self.volume = round(self.volume, 3) if self.volume else self.volume
+        self.bounding_box_x = round(self.bounding_box_x, 3) if self.bounding_box_x else self.bounding_box_x
+        self.bounding_box_y = round(self.bounding_box_y, 3) if self.bounding_box_y else self.bounding_box_y
+        self.bounding_box_z = round(self.bounding_box_z, 3) if self.bounding_box_z else self.bounding_box_z
         super(Part, self).save(*args, **kwargs)
 
 
@@ -463,12 +463,12 @@ class ResourceSkill(models.Model):
         return reverse('resourceskill-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
-        self.fixed_price = round(self.fixed_price, 3)
-        self.fixed_time = round(self.fixed_time, 3)
-        self.fixed_co2 = round(self.fixed_co2, 3)
-        self.variable_price = round(self.variable_price, 3)
-        self.variable_time = round(self.variable_time, 3)
-        self.variable_co2 = round(self.variable_co2, 3)
+        self.fixed_price = round(self.fixed_price, 3) if self.fixed_price else self.fixed_price
+        self.fixed_time = round(self.fixed_time, 3) if self.fixed_time else self.fixed_time
+        self.fixed_co2 = round(self.fixed_co2, 3) if self.fixed_co2 else self.fixed_co2
+        self.variable_price = round(self.variable_price, 3) if self.variable_price else self.variable_price
+        self.variable_time = round(self.variable_time, 3) if self.variable_time else self.variable_time
+        self.variable_co2 = round(self.variable_co2, 3) if self.variable_co2 else self.variable_co2
         super(ResourceSkill, self).save(*args, **kwargs)
 
 
@@ -528,12 +528,12 @@ class SkillConsumable(models.Model):
         return reverse('skillconsumable-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
-        self.variable_quantity = round(self.variable_quantity, 3)
-        self.fixed_quantity = round(self.fixed_quantity, 3)
-        self.fixed_price = round(self.fixed_price, 3)
-        self.fixed_co2 = round(self.fixed_co2, 3)
-        self.variable_price = round(self.variable_price, 3)
-        self.variable_co2 = round(self.variable_co2, 3)
+        self.variable_quantity = round(self.variable_quantity, 3) if self.variable_quantity else self.variable_quantity
+        self.fixed_quantity = round(self.fixed_quantity, 3) if self.fixed_quantity else self.fixed_quantity
+        self.fixed_price = round(self.fixed_price, 3) if self.fixed_price else self.fixed_price
+        self.fixed_co2 = round(self.fixed_co2, 3) if self.fixed_co2 else self.fixed_co2
+        self.variable_price = round(self.variable_price, 3) if self.variable_price else self.variable_price
+        self.variable_co2 = round(self.variable_co2, 3) if self.variable_co2 else self.variable_co2
         super(SkillConsumable, self).save(*args, **kwargs)
 
 
@@ -638,7 +638,7 @@ class PartManufacturingProcessStep(models.Model):
         return reverse('partmanufacturingprocessstep-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
-        self.required_quantity = round(self.required_quantity, 3)
+        self.required_quantity = round(self.required_quantity, 3) if self.required_quantity else self.required_quantity
         super(PartManufacturingProcessStep, self).save(*args, **kwargs)
 
 

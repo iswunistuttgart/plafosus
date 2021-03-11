@@ -173,7 +173,7 @@ class Part(models.Model):
     """
     A part is the abstract description of an object to be manufactured.
     The object is defined by process steps and constraints
-    (which are in combination a part manufacturing process step) to be performed.
+    (which are in combination a part process step) to be performed.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -240,7 +240,7 @@ class Part(models.Model):
 
     # Required skills to manufacture the part.
     process_steps = models.ManyToManyField(ProcessStep,
-                                           through='core.models.PartProcessStep',
+                                           through='PartProcessStep',
                                            related_name='Parts',
                                            help_text="Required skills to manufacture the part.")
 
@@ -270,7 +270,7 @@ class Part(models.Model):
 class Resource(models.Model):
     """
     A resource is an abstract representation of a machine or similar object in a production environment,
-    which has the skills (with abilities and skill consumables) to perform part manufacturing process steps.
+    which has the skills (with abilities and skill consumables) to perform part process steps.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -354,7 +354,7 @@ class Consumable(models.Model):
 class Requirement(models.Model):
     """
     A requirement describes abstract properties (without defining a specific value)
-    of part manufacturing process steps (constraints) or skills (abilities).
+    of part process steps (constraints) or skills (abilities).
 
     E.g. the requirement is 'material' -
     the constraint of the part is consequently material = metal,
@@ -615,7 +615,7 @@ class PartProcessStep(models.Model):
     constraints = models.ManyToManyField(Requirement,
                                          through='Constraint',
                                          related_name='PartProcessStep',
-                                         help_text="Constraints of the specific part manufacturing process step.")
+                                         help_text="Constraints of the specific part process step.")
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -640,7 +640,7 @@ class PartProcessStep(models.Model):
 
 class Constraint(models.Model):
     """
-    A constraint is the specific requirement of a part manufacturing process step, which has to be fulfilled.
+    A constraint is the specific requirement of a part process step, which has to be fulfilled.
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
@@ -648,9 +648,9 @@ class Constraint(models.Model):
     requirement = models.ForeignKey(Requirement,
                                     on_delete=models.CASCADE,
                                     related_name='Constraint')
-    part_manufacturing_process_step = models.ForeignKey(PartProcessStep,
-                                                        on_delete=models.CASCADE,
-                                                        related_name='Constraint')
+    part_process_step = models.ForeignKey(PartProcessStep,
+                                          on_delete=models.CASCADE,
+                                          related_name='Constraint')
     description = models.CharField(max_length=254,
                                    help_text="Specific description of the constraint.",
                                    blank=True)

@@ -239,7 +239,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(help_text='The unit of the process step.', on_delete=django.db.models.deletion.CASCADE, related_name='ProcessStep', to='core.unit'),
         ),
         migrations.CreateModel(
-            name='PartManufacturingProcessStep',
+            name='PartProcessStep',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('description', models.CharField(blank=True, help_text='Description of the manufacturing step.', max_length=254)),
@@ -248,9 +248,9 @@ class Migration(migrations.Migration):
                 ('manufacturing_sequence_number', models.PositiveIntegerField(default=1, help_text='The number of the manufacturing sequence this process step belongs to. Starting from 1.', validators=[django.core.validators.MinValueValidator(0)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('constraints', models.ManyToManyField(help_text='Constraints of the specific part manufacturing process step.', related_name='PartManufacturingProcessStep', through='core.Constraint', to='core.Requirement')),
-                ('part', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='PartManufacturingProcessStep', to='core.part')),
-                ('process_step', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='PartManufacturingProcessStep', to='core.processstep')),
+                ('constraints', models.ManyToManyField(help_text='Constraints of the specific part manufacturing process step.', related_name='PartProcessStep', through='core.Constraint', to='core.Requirement')),
+                ('part', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='PartProcessStep', to='core.part')),
+                ('process_step', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='PartProcessStep', to='core.processstep')),
             ],
             options={
                 'ordering': ['-created_at'],
@@ -260,7 +260,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='part',
             name='process_steps',
-            field=models.ManyToManyField(help_text='Required skills to manufacture the part.', related_name='Parts', through='core.PartManufacturingProcessStep', to='core.ProcessStep'),
+            field=models.ManyToManyField(help_text='Required skills to manufacture the part.', related_name='Parts', through='core.PartProcessStep', to='core.ProcessStep'),
         ),
         migrations.AddField(
             model_name='consumable',

@@ -44,9 +44,9 @@ class ResourceSkillInline(admin.TabularInline):
     unit_link.short_description = 'Unit'
 
 
-class PartManufacturingProcessInline(admin.TabularInline):
+class PartProcessInline(admin.TabularInline):
     view_on_site = False
-    model = models.PartManufacturingProcessStep
+    model = models.PartProcessStep
     extra = 0
     list_display = [field.name for field in model._meta.fields]
     readonly_fields = ['unit_link', 'edit_link']
@@ -189,7 +189,7 @@ class PartAdmin(admin.ModelAdmin):
                        'created_at', 'updated_at']
     search_fields = ['part', 'name']
     list_filter = ['is_valid']
-    inlines = [PartManufacturingProcessInline]
+    inlines = [PartProcessInline]
 
 
 @admin.register(models.Resource)
@@ -388,10 +388,10 @@ class AbilityAdmin(admin.ModelAdmin):
     requirement_link.short_description = 'Requirement'
 
 
-@admin.register(models.PartManufacturingProcessStep)
-class PartManufacturingProcessAdmin(admin.ModelAdmin):
+@admin.register(models.PartProcessStep)
+class PartProcessAdmin(admin.ModelAdmin):
     view_on_site = False
-    model = models.PartManufacturingProcessStep
+    model = models.PartProcessStep
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
     list_display.remove('part')
@@ -430,25 +430,25 @@ class ConstraintAdmin(admin.ModelAdmin):
     model = models.Constraint
     list_display = [field.name for field in model._meta.fields]
     # Remove the old element and replace it with a link.
-    list_display.remove('part_manufacturing_process_step')
-    list_display.insert(1, 'part_manufacturing_process_step_link')
+    list_display.remove('part_process_step')
+    list_display.insert(1, 'part_process_step_link')
     list_display.remove('requirement')
     list_display.insert(2, 'requirement_link')
 
     readonly_fields = ['created_at', 'updated_at']
-    search_fields = ['part_manufacturing_process_step__process_step__manufacturing_process', 'requirement__name']
+    search_fields = ['part_process_step__process_step__process', 'requirement__name']
 
-    def part_manufacturing_process_step_link(self, part_manufacturing_process_step):
+    def part_process_step_link(self, part_process_step):
         try:
-            url = reverse("admin:core_part_manufacturing_process_step_change",
-                          args=[part_manufacturing_process_step.part_manufacturing_process_step.id])
+            url = reverse("admin:core_part_process_step_change",
+                          args=[part_process_step.part_process_step.id])
             link = '<a href="%s">%s</a>' % (url,
-                                            part_manufacturing_process_step.part_manufacturing_process_step.process_step.manufacturing_process)
+                                            part_process_step.part_process_step.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
-    part_manufacturing_process_step_link.short_description = 'Part Manufacturing Process Step'
+    part_process_step_link.short_description = 'Part Process Step'
 
     def requirement_link(self, requirement):
         try:

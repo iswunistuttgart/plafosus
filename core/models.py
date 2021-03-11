@@ -240,7 +240,7 @@ class Part(models.Model):
 
     # Required skills to manufacture the part.
     process_steps = models.ManyToManyField(ProcessStep,
-                                           through='PartManufacturingProcessStep',
+                                           through='core.models.PartProcessStep',
                                            related_name='Parts',
                                            help_text="Required skills to manufacture the part.")
 
@@ -418,8 +418,7 @@ class ResourceSkill(models.Model):
                                              "(e.g. level/quality of the skill).",
                                    blank=True)
     # Fixed costs.
-    fixed_price = models.FloatField(validators=[MinValueValidator(0)],
-                                    help_text="The fixed costs in € to use the skill.",
+    fixed_price = models.FloatField(help_text="The fixed costs in € to use the skill.",
                                     default=0)
     fixed_time = models.FloatField(validators=[MinValueValidator(0)],
                                    help_text="The fixed time in s to use the skill "
@@ -428,8 +427,7 @@ class ResourceSkill(models.Model):
     fixed_co2 = models.FloatField(help_text="The fixed CO2-e to use the skill.",
                                   default=0)
     # Variable costs.
-    variable_price = models.FloatField(validators=[MinValueValidator(0)],
-                                       help_text="The variable costs in € to use the skill.",
+    variable_price = models.FloatField(help_text="The variable costs in € to use the skill.",
                                        default=0)
     variable_time = models.FloatField(validators=[MinValueValidator(0)],
                                       help_text="The variable time in s to use the skill.",
@@ -500,14 +498,12 @@ class SkillConsumable(models.Model):
                                                  "to use the skill.",
                                        default=0)
     # Fixed costs.
-    fixed_price = models.FloatField(validators=[MinValueValidator(0)],
-                                    help_text="The fixed costs in € for this consumable.",
+    fixed_price = models.FloatField(help_text="The fixed costs in € for this consumable.",
                                     default=0)
     fixed_co2 = models.FloatField(help_text="The fixed CO2-e for this consumable.",
                                   default=0)
     # Variable Costs.
-    variable_price = models.FloatField(validators=[MinValueValidator(0)],
-                                       help_text="The variable costs in € for one unit of this consumable.",
+    variable_price = models.FloatField(help_text="The variable costs in € for one unit of this consumable.",
                                        default=0)
     variable_co2 = models.FloatField(help_text="The variable CO2-e for one unit of this consumable.",
                                      default=0)
@@ -560,7 +556,7 @@ class Ability(models.Model):
                                        "how much this requirement can be fulfilled. "
                                        "Please see the description and unit of the selected "
                                        "requirement for information.",
-                             blank=False,)
+                             blank=False, )
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
                                       editable=False)
@@ -581,7 +577,7 @@ class Ability(models.Model):
         return reverse('ability-detail', args=[str(self.id)])
 
 
-class PartManufacturingProcessStep(models.Model):
+class PartProcessStep(models.Model):
     """
     Through model for a specific process step of a part.
 
@@ -592,10 +588,10 @@ class PartManufacturingProcessStep(models.Model):
                           editable=False)
     part = models.ForeignKey(Part,
                              on_delete=models.CASCADE,
-                             related_name='PartManufacturingProcessStep')
+                             related_name='PartProcessStep')
     process_step = models.ForeignKey(ProcessStep,
                                      on_delete=models.CASCADE,
-                                     related_name='PartManufacturingProcessStep')
+                                     related_name='PartProcessStep')
     description = models.CharField(max_length=254,
                                    help_text="Description of the manufacturing step.",
                                    blank=True)
@@ -618,7 +614,7 @@ class PartManufacturingProcessStep(models.Model):
 
     constraints = models.ManyToManyField(Requirement,
                                          through='Constraint',
-                                         related_name='PartManufacturingProcessStep',
+                                         related_name='PartProcessStep',
                                          help_text="Constraints of the specific part manufacturing process step.")
 
     # Meta.
@@ -635,11 +631,11 @@ class PartManufacturingProcessStep(models.Model):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('partmanufacturingprocessstep-detail', args=[str(self.id)])
+        return reverse('partprocessstep-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
         self.required_quantity = round(self.required_quantity, 3) if self.required_quantity else self.required_quantity
-        super(PartManufacturingProcessStep, self).save(*args, **kwargs)
+        super(PartProcessStep, self).save(*args, **kwargs)
 
 
 class Constraint(models.Model):
@@ -652,7 +648,7 @@ class Constraint(models.Model):
     requirement = models.ForeignKey(Requirement,
                                     on_delete=models.CASCADE,
                                     related_name='Constraint')
-    part_manufacturing_process_step = models.ForeignKey(PartManufacturingProcessStep,
+    part_manufacturing_process_step = models.ForeignKey(PartProcessStep,
                                                         on_delete=models.CASCADE,
                                                         related_name='Constraint')
     description = models.CharField(max_length=254,

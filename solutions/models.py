@@ -24,8 +24,7 @@ class ConsumableCost(models.Model):
     quantity = models.FloatField(validators=[MinValueValidator(0)],
                                  help_text="The quantity in consumable unit.",
                                  default=0)
-    price = models.FloatField(validators=[MinValueValidator(0)],
-                              help_text="The costs in € for this consumable.",
+    price = models.FloatField(help_text="The costs in € for this consumable.",
                               default=0)
     co2 = models.FloatField(help_text="The co2-e for this consumable.",
                             default=0)
@@ -54,25 +53,24 @@ class ConsumableCost(models.Model):
 
 class Solution(models.Model):
     """
-    One solution (combination of a part_manufacturing_process_step and resource_skill).
+    One solution (combination of a part_process_step and resource_skill).
     """
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    part_manufacturing_process_step = models.ForeignKey(core_models.PartManufacturingProcessStep,
-                                                        on_delete=models.CASCADE,
-                                                        related_name='Solution')
+    part_process_step = models.ForeignKey(core_models.PartProcessStep,
+                                          on_delete=models.CASCADE,
+                                          related_name='Solution')
     resource_skill = models.ForeignKey(core_models.ResourceSkill,
                                        on_delete=models.CASCADE,
                                        related_name='Solution')
     manufacturing_sequence_number = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                                 help_text="The sequence number of the part "
-                                                                          "manufacturing process step.")
+                                                                          "process step.")
     quantity = models.FloatField(validators=[MinValueValidator(0)],
                                  help_text="The required quantity in the skill unit to manufacture the part.",
                                  default=0)
-    price = models.FloatField(validators=[MinValueValidator(0)],
-                              help_text="The overall costs in € to manufacture the part.",
+    price = models.FloatField(help_text="The overall costs in € to manufacture the part.",
                               default=0)
     time = models.FloatField(validators=[MinValueValidator(0)],
                              help_text="The overall time in s to manufacture the part.",
@@ -123,8 +121,7 @@ class Permutation(models.Model):
     manufacturing_possibility = models.PositiveIntegerField(validators=[MinValueValidator(0)],
                                                             help_text="The number of the manufacturing "
                                                                       "possibility the process steps belong to.")
-    price = models.FloatField(validators=[MinValueValidator(0)],
-                              help_text="The overall costs in € to manufacture the part.",
+    price = models.FloatField(help_text="The overall costs in € to manufacture the part.",
                               default=0)
     time = models.FloatField(validators=[MinValueValidator(0)],
                              help_text="The overall time in s to manufacture the part.",
@@ -137,7 +134,7 @@ class Permutation(models.Model):
                                          blank=True)
     solutions = models.ManyToManyField(Solution,
                                        related_name="Permutation",
-                                       help_text="The resource skill for one part manufacturing process step.",
+                                       help_text="The resource skill for one part process step.",
                                        blank=True)
 
     # Meta.

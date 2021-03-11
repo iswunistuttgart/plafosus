@@ -254,7 +254,7 @@ class PermutationSolutionsInline(admin.TabularInline):
     readonly_fields = list_display
     readonly_fields.append('resource_link')
     readonly_fields.append('resource_skill_link')
-    readonly_fields.append('part_manufacturing_process_step_link')
+    readonly_fields.append('part_process_step_link')
     readonly_fields.append('quantity_link')
     readonly_fields.append('unit_link')
     readonly_fields.append('price_link')
@@ -301,17 +301,17 @@ class PermutationSolutionsInline(admin.TabularInline):
 
     resource_skill_link.short_description = 'Resource Skill'
 
-    def part_manufacturing_process_step_link(self, instance):
+    def part_process_step_link(self, instance):
         try:
-            url = reverse("admin:core_partmanufacturingprocessstep_change",
-                          args=[instance.solution.part_manufacturing_process_step.id])
+            url = reverse("admin:core_partprocessstep_change",
+                          args=[instance.solution.part_process_step.id])
             link = '<a href="%s">%s</a>' % (
-            url, instance.solution.part_manufacturing_process_step.process_step.manufacturing_process)
+                url, instance.solution.part_process_step.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
-    part_manufacturing_process_step_link.short_description = 'Part Manufacturing Process Step'
+    part_process_step_link.short_description = 'Part Process Step'
 
     def show_link(self, instance):
         try:
@@ -412,14 +412,14 @@ class SolutionAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
-    list_display = ['id', 'resource_skill_link', 'part_manufacturing_process_step_link', 'quantity', 'price', 'time',
-                    'co2','unit_link', 'created_at', 'updated_at']
-    readonly_fields = ['part_manufacturing_process_step_link', 'resource_link', 'resource_skill_link', 'quantity',
+    list_display = ['id', 'resource_skill_link', 'part_process_step_link', 'quantity', 'price', 'time',
+                    'co2', 'unit_link', 'created_at', 'updated_at']
+    readonly_fields = ['part_process_step_link', 'resource_link', 'resource_skill_link', 'quantity',
                        'unit_link', 'price', 'time', 'co2', 'manufacturing_sequence_number', 'created_at', 'updated_at']
 
     fieldsets = (
         ('Solution', {
-            'fields': ('resource_link', 'resource_skill_link', 'part_manufacturing_process_step_link',
+            'fields': ('resource_link', 'resource_skill_link', 'part_process_step_link',
                        'manufacturing_sequence_number', 'quantity', 'unit_link', 'price', 'time', 'co2',)
         }),
         ('Optional Information', {
@@ -461,17 +461,17 @@ class SolutionAdmin(admin.ModelAdmin):
 
     resource_skill_link.short_description = 'Resource Skill'
 
-    def part_manufacturing_process_step_link(self, instance):
+    def part_process_step_link(self, instance):
         try:
-            url = reverse("admin:core_partmanufacturingprocessstep_change",
-                          args=[instance.part_manufacturing_process_step.id])
+            url = reverse("admin:core_partprocessstep_change",
+                          args=[instance.part_process_step.id])
             link = '<a href="%s">%s</a>' % (
-            url, instance.part_manufacturing_process_step.process_step.manufacturing_process)
+                url, instance.part_process_step.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
-    part_manufacturing_process_step_link.short_description = 'Part Manufacturing Process Step'
+    part_process_step_link.short_description = 'Part Process Step'
 
 
 @admin.register(models.Permutation)

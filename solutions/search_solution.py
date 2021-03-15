@@ -313,7 +313,7 @@ def calculate_costs_of_permutations(instance,
     # Now we try to create and calculate the single solutions.
     for manufacturing_possibility, process_steps_with_resource_skills in manufacturing_possibilities.items():
         try:
-            all_resource_skills_per_manufacturing_process_step = []
+            all_resource_skills_per_part_process_step = []
             """A list containing all lists with resource skills for each part process step 
             of a manufacturing possibility.
             Example:

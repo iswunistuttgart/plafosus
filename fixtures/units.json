@@ -103,7 +103,7 @@
   "model": "core.unit",
   "pk": "41b4b2cd-8332-43f3-8bf9-31f54e24829c",
   "fields": {
-    "name": "°C",
+    "name": "C",
     "description": "degree Celsius",
     "created_at": "2021-03-08T08:49:13.223Z",
     "updated_at": "2021-03-08T09:25:58.943Z"

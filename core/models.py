@@ -461,12 +461,14 @@ class ResourceSkill(models.Model):
         return reverse('resourceskill-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
+        """
         self.fixed_price = round(self.fixed_price, 3) if self.fixed_price else self.fixed_price
         self.fixed_time = round(self.fixed_time, 3) if self.fixed_time else self.fixed_time
         self.fixed_co2 = round(self.fixed_co2, 3) if self.fixed_co2 else self.fixed_co2
         self.variable_price = round(self.variable_price, 3) if self.variable_price else self.variable_price
         self.variable_time = round(self.variable_time, 3) if self.variable_time else self.variable_time
         self.variable_co2 = round(self.variable_co2, 3) if self.variable_co2 else self.variable_co2
+        """
         super(ResourceSkill, self).save(*args, **kwargs)
 
 
@@ -524,12 +526,14 @@ class SkillConsumable(models.Model):
         return reverse('skillconsumable-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
+        """
         self.variable_quantity = round(self.variable_quantity, 3) if self.variable_quantity else self.variable_quantity
         self.fixed_quantity = round(self.fixed_quantity, 3) if self.fixed_quantity else self.fixed_quantity
         self.fixed_price = round(self.fixed_price, 3) if self.fixed_price else self.fixed_price
         self.fixed_co2 = round(self.fixed_co2, 3) if self.fixed_co2 else self.fixed_co2
         self.variable_price = round(self.variable_price, 3) if self.variable_price else self.variable_price
         self.variable_co2 = round(self.variable_co2, 3) if self.variable_co2 else self.variable_co2
+        """
         super(SkillConsumable, self).save(*args, **kwargs)
 
 
@@ -634,7 +638,9 @@ class PartProcessStep(models.Model):
         return reverse('partprocessstep-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
+        """
         self.required_quantity = round(self.required_quantity, 3) if self.required_quantity else self.required_quantity
+        """
         super(PartProcessStep, self).save(*args, **kwargs)
 
 

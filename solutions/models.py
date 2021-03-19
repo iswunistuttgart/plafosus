@@ -45,9 +45,11 @@ class ConsumableCost(models.Model):
         return reverse('consumablecost-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
+        """
         self.quantity = round(self.quantity, 3) if self.quantity else self.quantity
         self.price = round(self.price, 3) if self.price else self.price
         self.co2 = round(self.co2, 3) if self.co2 else self.co2
+        """
         super(ConsumableCost, self).save(*args, **kwargs)
 
 
@@ -98,10 +100,12 @@ class Solution(models.Model):
         return reverse('solution-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
+        """
         self.quantity = round(self.quantity, 3) if self.quantity else self.quantity
         self.price = round(self.price, 3) if self.price else self.price
         self.time = round(self.time, 3) if self.time else self.time
         self.co2 = round(self.co2, 3) if self.co2 else self.co2
+        """
         super(Solution, self).save(*args, **kwargs)
 
 
@@ -154,9 +158,11 @@ class Permutation(models.Model):
 
     def save(self, *args, **kwargs):
         self.comparison_value = round(self.comparison_value, 3) if self.comparison_value else self.comparison_value
+        """
         self.price = round(self.price, 3) if self.price else self.price
         self.time = round(self.time, 3) if self.time else self.time
         self.co2 = round(self.co2, 3) if self.co2 else self.co2
+        """
         super(Permutation, self).save(*args, **kwargs)
 
 

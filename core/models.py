@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Third party packages
 from django_countries.fields import CountryField
 
+"""
 # Constants
 MANUFACTURING_PROCESSES = (
     ('Primary shaping', 'Primary shaping'),
@@ -16,6 +17,7 @@ MANUFACTURING_PROCESSES = (
     ('Coating', 'Coating'),
     ('Changing material properties', 'Changing material properties'),
 )
+"""
 
 OPERATORS = (
     ('=', '='),
@@ -109,8 +111,8 @@ class ProcessStep(models.Model):
                           default=uuid.uuid4,
                           editable=False)
     manufacturing_process = models.CharField(max_length=50,
-                                             choices=MANUFACTURING_PROCESSES,
-                                             help_text="The manufacturing process according to DIN 8580.")
+                                             # choices=MANUFACTURING_PROCESSES,
+                                             help_text="The manufacturing process.")
     description = models.CharField(max_length=254,
                                    help_text="Description of the manufacturing process.",
                                    blank=True)
@@ -218,7 +220,7 @@ class Part(models.Model):
                                                       "1: Ranking regarding single field values (e.g. price). "
                                                       "The highest importance weight is considered first. "
                                                       "2: Ranking regarding normalized and weighted criteria "
-                                                      "(price, time and co2). "
+                                                      "(price, time and CO2-eq.). "
                                                       "3: Ranking using the CRITIC method. "
                                                       "The importance weights are not considered.",
                                             default=3)
@@ -233,7 +235,7 @@ class Part(models.Model):
                                                     "Only used for evaluation method '2'.",
                                           default=1)
     co2_importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)],
-                                         help_text="The importance (weight) of the co2 for the "
+                                         help_text="The importance (weight) of the CO2-eq. for the "
                                                    "evaluation of the solutions. "
                                                    "Only used for evaluation method '2'.",
                                          default=1)
@@ -424,15 +426,15 @@ class ResourceSkill(models.Model):
                                    help_text="The fixed time in s to use the skill "
                                              "(e.g. initial machine preparation).",
                                    default=0)
-    fixed_co2 = models.FloatField(help_text="The fixed CO2-e to use the skill.",
+    fixed_co2 = models.FloatField(help_text="The fixed CO2-eq. to use the skill.",
                                   default=0)
     # Variable costs.
-    variable_price = models.FloatField(help_text="The variable costs in € to use the skill.",
+    variable_price = models.FloatField(help_text="The variable costs in € to use the skill per its unit.",
                                        default=0)
     variable_time = models.FloatField(validators=[MinValueValidator(0)],
-                                      help_text="The variable time in s to use the skill.",
+                                      help_text="The variable time in s to use the skill per its unit.",
                                       default=0)
-    variable_co2 = models.FloatField(help_text="The variable CO2-e to use the skill.",
+    variable_co2 = models.FloatField(help_text="The variable CO2-eq. to use the skill per its unit.",
                                      default=0)
 
     consumables = models.ManyToManyField(Consumable,
@@ -493,22 +495,18 @@ class SkillConsumable(models.Model):
                                    blank=True)
     variable_quantity = models.FloatField(validators=[MinValueValidator(0)],
                                           help_text="The quantity required in the consumable unit "
-                                                    "to use the skill for one unit.",
+                                                    "to use one unit of the skill "
+                                                    "(e.g. 1 mm³ milling requires 0.2 kWh).",
                                           default=0)
     fixed_quantity = models.FloatField(validators=[MinValueValidator(0)],
                                        help_text="The quantity required in the consumable unit "
-                                                 "to use the skill.",
+                                                 "to use the skill once (e.g. warm-up phase).",
                                        default=0)
     # Fixed costs.
-    fixed_price = models.FloatField(help_text="The fixed costs in € for this consumable.",
-                                    default=0)
-    fixed_co2 = models.FloatField(help_text="The fixed CO2-e for this consumable.",
-                                  default=0)
-    # Variable Costs.
-    variable_price = models.FloatField(help_text="The variable costs in € for one unit of this consumable.",
-                                       default=0)
-    variable_co2 = models.FloatField(help_text="The variable CO2-e for one unit of this consumable.",
-                                     default=0)
+    price = models.FloatField(help_text="The costs in € for one unit of this consumable (e.g. 0.29 € for 1 kWh).",
+                              default=0)
+    co2 = models.FloatField(help_text="The CO2-eq. for one unit of this consumable.",
+                            default=0)
 
     # Meta.
     created_at = models.DateTimeField(auto_now_add=True,
@@ -531,8 +529,6 @@ class SkillConsumable(models.Model):
         self.fixed_quantity = round(self.fixed_quantity, 3) if self.fixed_quantity else self.fixed_quantity
         self.fixed_price = round(self.fixed_price, 3) if self.fixed_price else self.fixed_price
         self.fixed_co2 = round(self.fixed_co2, 3) if self.fixed_co2 else self.fixed_co2
-        self.variable_price = round(self.variable_price, 3) if self.variable_price else self.variable_price
-        self.variable_co2 = round(self.variable_co2, 3) if self.variable_co2 else self.variable_co2
         """
         super(SkillConsumable, self).save(*args, **kwargs)
 

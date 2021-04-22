@@ -26,7 +26,7 @@ class ConsumableCost(models.Model):
                                  default=0)
     price = models.FloatField(help_text="The costs in € for this consumable.",
                               default=0)
-    co2 = models.FloatField(help_text="The co2-e for this consumable.",
+    co2 = models.FloatField(help_text="The CO2-eq. for this consumable.",
                             default=0)
 
     # Meta.
@@ -77,7 +77,7 @@ class Solution(models.Model):
     time = models.FloatField(validators=[MinValueValidator(0)],
                              help_text="The overall time in s to manufacture the part.",
                              default=0)
-    co2 = models.FloatField(help_text="The overall co2-e to manufacture the part.",
+    co2 = models.FloatField(help_text="The overall CO2-eq. to manufacture the part.",
                             default=0)
     consumables = models.ManyToManyField(ConsumableCost,
                                          related_name='Solution',
@@ -130,7 +130,7 @@ class Permutation(models.Model):
     time = models.FloatField(validators=[MinValueValidator(0)],
                              help_text="The overall time in s to manufacture the part.",
                              default=0)
-    co2 = models.FloatField(help_text="The overall co2-e to manufacture the part.",
+    co2 = models.FloatField(help_text="The overall CO2-eq. to manufacture the part.",
                             default=0)
     consumables = models.ManyToManyField(ConsumableCost,
                                          related_name='Permutation',

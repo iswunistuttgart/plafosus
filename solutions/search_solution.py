@@ -416,20 +416,23 @@ def calculate_costs_of_permutations(instance,
                                 consumable_variable_quantity = resource_skill_consumable.variable_quantity * \
                                                                part_process_steps[i].required_quantity
                                 # Complete quantity (incl. fixed_quantity).
+                                # TODO: remove all variables
                                 consumable_quantity += consumable_variable_quantity + \
                                                        resource_skill_consumable.fixed_quantity
 
                                 # Variable costs.
                                 consumable_price += consumable_variable_quantity * \
-                                                    resource_skill_consumable.variable_price
+                                                    resource_skill_consumable.price
                                 # Fixed costs.
-                                consumable_price += resource_skill_consumable.fixed_price
+                                consumable_price += resource_skill_consumable.fixed_quantity * \
+                                                    resource_skill_consumable.price
 
                                 # Variable co2.
                                 consumable_co2 += consumable_variable_quantity * \
                                                   resource_skill_consumable.variable_co2
                                 # Fixed co2.
-                                consumable_co2 += resource_skill_consumable.fixed_co2
+                                consumable_co2 += resource_skill_consumable.fixed_quantity * \
+                                                  resource_skill_consumable.fixed_co2
                         else:
                             # Otherwise, we set everything 0.
                             consumable_quantity = 0

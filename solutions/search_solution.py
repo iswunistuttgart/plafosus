@@ -202,7 +202,6 @@ def find_matching_resources(instance) -> dict:
                                             # these are double checked, but ok.
                                             # Now we check, if the other constraints are fulfilled.
                                             # Is there an ability, which fulfills this constraint.
-                                            fulfilled = False
                                             for ability in resource_skill.Ability.all():
                                                 # Check if the ability is based on the same requirement as the constraint.
                                                 if ability.requirement == other_constraint.requirement:
@@ -210,7 +209,7 @@ def find_matching_resources(instance) -> dict:
                                                     # Conversion is possible, already checked at model level.
                                                     ability_value = TYPES[ability.requirement.data_type](ability.value)
                                                     constraint_value = TYPES[other_constraint.requirement.data_type](
-                                                        constraint.value)
+                                                        other_constraint.value)
                                                     # Check if the value of the ability satisfies the value
                                                     # of the constraint in dependence of the defined operator.
                                                     if other_constraint.operator == "=":
@@ -241,10 +240,12 @@ def find_matching_resources(instance) -> dict:
                                                         # Operator does not exist.
                                                         # This should never happen, since the operators are fixed.
                                                         logger.error(
-                                                            "Could not find a matching operator for given operator '{0}' "
-                                                            "of constraint '{1}'.".format(
-                                                                str(other_constraint.operator),
-                                                                str(other_constraint)))
+                                                            "Could not find a matching operator for "
+                                                            "given operator '{0}' of constraint '{1}'."
+                                                                .format(str(other_constraint.operator),
+                                                                        str(other_constraint)))
+                                            if fulfilled:
+                                                break
 
                                         # Check if there was at least one ability, which fulfills the constraint.
                                         if fulfilled:
@@ -422,15 +423,13 @@ def calculate_costs_of_permutations(instance,
                                 consumable_price += consumable_variable_quantity * \
                                                     resource_skill_consumable.variable_price
                                 # Fixed costs.
-                                consumable_price += resource_skill_consumable.fixed_quantity * \
-                                                    resource_skill_consumable.fixed_price
+                                consumable_price += resource_skill_consumable.fixed_price
 
                                 # Variable co2.
                                 consumable_co2 += consumable_variable_quantity * \
                                                   resource_skill_consumable.variable_co2
                                 # Fixed co2.
-                                consumable_co2 += resource_skill_consumable.fixed_quantity * \
-                                                  resource_skill_consumable.fixed_co2
+                                consumable_co2 += resource_skill_consumable.fixed_co2
                         else:
                             # Otherwise, we set everything 0.
                             consumable_quantity = 0

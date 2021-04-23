@@ -13,8 +13,7 @@ class ResourceSkillInline(admin.TabularInline):
 
     def edit_link(self, instance):
         try:
-            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
-                                                  instance._meta.model_name),
+            url = reverse('admin:%s_%s_change' % (instance._meta.app_label, instance._meta.model_name),
                           args=[instance.pk])
             if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
                 return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
@@ -53,8 +52,7 @@ class PartProcessInline(admin.TabularInline):
 
     def edit_link(self, instance):
         try:
-            url = reverse('admin:%s_%s_change' % (instance._meta.app_label,
-                                                  instance._meta.model_name),
+            url = reverse('admin:%s_%s_change' % (instance._meta.app_label, instance._meta.model_name),
                           args=[instance.pk])
             if instance.pk and len(type(instance).objects.filter(pk=instance.pk)) == 1:
                 return mark_safe(u'<a href="{u}">Edit</a>'.format(u=url))
@@ -214,10 +212,10 @@ class ConsumableAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
     list_filter = ['unit__name']
 
-    def unit_link(self, unit):
+    def unit_link(self, instance):
         try:
-            url = reverse("admin:core_unit_change", args=[unit.unit.id])
-            link = '<a href="%s">%s</a>' % (url, unit.unit.name)
+            url = reverse("admin:core_unit_change", args=[instance.unit.id])
+            link = '<a href="%s">%s</a>' % (url, instance.unit.name)
             return mark_safe(link)
         except:
             return "-"
@@ -238,20 +236,20 @@ class RequirementAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_filter = ['unit__name']
 
-    def unit_link(self, unit):
+    def unit_link(self, instance):
         try:
-            url = reverse("admin:core_unit_change", args=[unit.unit.id])
-            link = '<a href="%s">%s</a>' % (url, unit.unit.name)
+            url = reverse("admin:core_unit_change", args=[instance.unit.id])
+            link = '<a href="%s">%s</a>' % (url, instance.unit.name)
             return mark_safe(link)
         except:
             return "-"
 
     unit_link.short_description = 'Unit'
 
-    def category_link(self, category):
+    def category_link(self, instance):
         try:
-            url = reverse("admin:core_category_change", args=[category.category.id])
-            link = '<a href="%s">%s</a>' % (url, category.category.name)
+            url = reverse("admin:core_category_change", args=[instance.category.id])
+            link = '<a href="%s">%s</a>' % (url, instance.category.name)
             return mark_safe(link)
         except:
             return "-"
@@ -276,30 +274,30 @@ class ResourceSkillAdmin(admin.ModelAdmin):
     search_fields = ['resource__name', 'skill__name']
     inlines = [SkillConsumableInline, AbilityInline]
 
-    def resource_link(self, resource):
+    def resource_link(self, instance):
         try:
-            url = reverse("admin:core_resource_change", args=[resource.resource.id])
-            link = '<a href="%s">%s</a>' % (url, resource.resource.name)
+            url = reverse("admin:core_resource_change", args=[instance.resource.id])
+            link = '<a href="%s">%s</a>' % (url, instance.resource.name)
             return mark_safe(link)
         except:
             return "-"
 
     resource_link.short_description = 'Resource'
 
-    def skill_link(self, skill):
+    def skill_link(self, instance):
         try:
-            url = reverse("admin:core_skill_change", args=[skill.skill.id])
-            link = '<a href="%s">%s</a>' % (url, skill.skill.name)
+            url = reverse("admin:core_skill_change", args=[instance.skill.id])
+            link = '<a href="%s">%s</a>' % (url, instance.skill.name)
             return mark_safe(link)
         except:
             return "-"
 
     skill_link.short_description = 'Skill'
 
-    def process_step_link(self, processstep):
+    def process_step_link(self, instance):
         try:
-            url = reverse("admin:core_processstep_change", args=[processstep.skill.process_step.id])
-            link = '<a href="%s">%s</a>' % (url, processstep.skill.process_step.manufacturing_process)
+            url = reverse("admin:core_processstep_change", args=[instance.skill.process_step.id])
+            link = '<a href="%s">%s</a>' % (url, instance.skill.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
@@ -327,30 +325,40 @@ class SkillConsumableAdmin(admin.ModelAdmin):
     list_display.remove('consumable')
     list_display.insert(2, 'consumable_link')
 
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['unit_link', 'created_at', 'updated_at']
     search_fields = ['resource_skill__resource__name',
                      'resource_skill__skill__name',
                      'consumable__name']
 
-    def resource_skill_link(self, resourceskill):
+    def resource_skill_link(self, instance):
         try:
-            url = reverse("admin:core_resourceskill_change", args=[resourceskill.resourceskill.id])
-            link = '<a href="%s">%s</a>' % (url, resourceskill.resourceskill.name)
+            url = reverse("admin:core_resourceskill_change", args=[instance.resource_skill.id])
+            link = '<a href="%s">%s</a>' % (url, instance.resource_skill.resource.name +
+                                            " (" + instance.resource_skill.skill.name + " )")
             return mark_safe(link)
         except:
             return "-"
 
     resource_skill_link.short_description = 'Resource Skill'
 
-    def consumable_link(self, consumable):
+    def consumable_link(self, instance):
         try:
-            url = reverse("admin:core_consumable_change", args=[consumable.consumable.id])
-            link = '<a href="%s">%s</a>' % (url, consumable.consumable.name)
+            url = reverse("admin:core_consumable_change", args=[instance.consumable.id])
+            link = '<a href="%s">%s</a>' % (url, instance.consumable.name)
             return mark_safe(link)
         except:
             return "-"
 
     consumable_link.short_description = 'Consumable'
+
+    def unit_link(self, instance):
+        try:
+            unit = str(instance.consumable.unit)
+            return unit
+        except:
+            return "-"
+
+    unit_link.short_description = 'Unit'
 
 
 @admin.register(models.Ability)
@@ -367,20 +375,21 @@ class AbilityAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['resource_skill__skill__name', 'resource_skill__resource__name', 'requirement__name']
 
-    def resource_skill_link(self, resourceskill):
+    def resource_skill_link(self, instance):
         try:
-            url = reverse("admin:core_resourceskill_change", args=[resourceskill.resourceskill.id])
-            link = '<a href="%s">%s</a>' % (url, resourceskill.resourceskill.name)
+            url = reverse("admin:core_resourceskill_change", args=[instance.resource_skill.id])
+            link = '<a href="%s">%s</a>' % (url, instance.resource_skill.resource.name +
+                                            " (" + instance.resource_skill.skill.name + " )")
             return mark_safe(link)
         except:
             return "-"
 
     resource_skill_link.short_description = 'Resource Skill'
 
-    def requirement_link(self, requirement):
+    def requirement_link(self, instance):
         try:
-            url = reverse("admin:core_requirement_change", args=[requirement.requirement.id])
-            link = '<a href="%s">%s</a>' % (url, requirement.requirement.name)
+            url = reverse("admin:core_requirement_change", args=[instance.requirement.id])
+            link = '<a href="%s">%s</a>' % (url, instance.requirement.name)
             return mark_safe(link)
         except:
             return "-"
@@ -403,20 +412,20 @@ class PartProcessAdmin(admin.ModelAdmin):
     search_fields = ['process_step__manufacturing_process']
     inlines = [ConstraintInline]
 
-    def part_link(self, part):
+    def part_link(self, instance):
         try:
-            url = reverse("admin:core_part_change", args=[part.part.id])
-            link = '<a href="%s">%s</a>' % (url, part.part.id)
+            url = reverse("admin:core_part_change", args=[instance.part.id])
+            link = '<a href="%s">%s</a>' % (url, instance.part.id)
             return mark_safe(link)
         except:
             return "-"
 
     part_link.short_description = 'Part'
 
-    def process_step_link(self, process_step):
+    def process_step_link(self, instance):
         try:
-            url = reverse("admin:core_skill_change", args=[process_step.process_step.id])
-            link = '<a href="%s">%s</a>' % (url, process_step.process_step.manufacturing_process)
+            url = reverse("admin:core_skill_change", args=[instance.process_step.id])
+            link = '<a href="%s">%s</a>' % (url, instance.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
@@ -438,22 +447,22 @@ class ConstraintAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at', 'updated_at']
     search_fields = ['part_process_step__process_step__process', 'requirement__name']
 
-    def part_process_step_link(self, part_process_step):
+    def part_process_step_link(self, instance):
         try:
-            url = reverse("admin:core_part_process_step_change",
-                          args=[part_process_step.part_process_step.id])
+            url = reverse("admin:core_partprocessstep_change",
+                          args=[instance.part_process_step.id])
             link = '<a href="%s">%s</a>' % (url,
-                                            part_process_step.part_process_step.process_step.manufacturing_process)
+                                            instance.part_process_step.process_step.manufacturing_process)
             return mark_safe(link)
         except:
             return "-"
 
     part_process_step_link.short_description = 'Part Process Step'
 
-    def requirement_link(self, requirement):
+    def requirement_link(self, instance):
         try:
-            url = reverse("admin:core_requirement_change", args=[requirement.requirement.id])
-            link = '<a href="%s">%s</a>' % (url, requirement.requirement.name)
+            url = reverse("admin:core_requirement_change", args=[instance.requirement.id])
+            link = '<a href="%s">%s</a>' % (url, instance.requirement.name)
             return mark_safe(link)
         except:
             return "-"
